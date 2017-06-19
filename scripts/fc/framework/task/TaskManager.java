@@ -75,6 +75,7 @@ public abstract class TaskManager extends GoalManager
 		//execute current task
 		if(aT.shouldExecute() && aT.execute())
 		{
+			General.println(aT.getClass().getSimpleName() + " should execute.");
 			//get the task that we're anticipating....
 			PredictableInteraction pI = (PredictableInteraction)aT.getNext();
 			if(aT != null && pI != null)			
