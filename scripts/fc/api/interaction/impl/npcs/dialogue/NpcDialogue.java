@@ -1,9 +1,12 @@
 package scripts.fc.api.interaction.impl.npcs.dialogue;
 
+import org.tribot.api.Clicking;
 import org.tribot.api.General;
+import org.tribot.api2007.types.RSInterface;
 
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.NpcInteraction;
+import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.utils.NpcUtils;
 import scripts.fc.api.utils.PlayerUtils;
 import scripts.fc.api.wrappers.FCTiming;
@@ -39,6 +42,12 @@ public class NpcDialogue extends NpcInteraction
 			return false;
 		
 		General.println("Starting dialogueThread...");
+		
+		//check for abnormal click to continue interface
+		RSInterface abnormalClickToContinue = InterfaceUtils.findContainingText("Click to continue");
+		if(abnormalClickToContinue != null)
+			Clicking.click(abnormalClickToContinue);
+		
 		dialogueThread = new DialogueThread(npc, action, options);
 		dialogueThread.start();
 		currentExecutingThread = dialogueThread;
