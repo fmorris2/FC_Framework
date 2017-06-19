@@ -45,7 +45,7 @@ public class NpcDialogue extends NpcInteraction
 		
 		//check for abnormal click to continue interface
 		RSInterface abnormalClickToContinue = InterfaceUtils.findContainingText("Click to continue");
-		if(abnormalClickToContinue != null)
+		if(abnormalClickToContinue != null && !abnormalClickToContinue.isHidden())
 			Clicking.click(abnormalClickToContinue);
 		
 		dialogueThread = new DialogueThread(npc, action, options);
