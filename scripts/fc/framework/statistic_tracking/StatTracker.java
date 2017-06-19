@@ -51,7 +51,7 @@ public class StatTracker
 		//add sessionID to statsArgs
 		statsArgs += ",sessionId="+generateSessionId();
 		
-		//encrypt to RSA now -- This avoids illegal block size exceptions from converting long text args straight to RSA
+		//encrypt to RSA
 		byte[] encrypted = RSAEncryptionUtil.encrypt(statsArgs);
 		
 		//convert to base64 string (in case we're sending over the wire)
