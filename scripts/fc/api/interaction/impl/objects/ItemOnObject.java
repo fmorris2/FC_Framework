@@ -46,11 +46,11 @@ public class ItemOnObject extends ObjectInteraction
 		{
 			if(!Game.isUptext(action + " " + itemName + " ->"))
 			{
-				if(items[0].click(action))
-					Timing.waitCondition(FCConditions.uptextContains(action + " " + itemName + " -> " + name), 800);
+				if(items[0].click(action) && !Timing.waitCondition(FCConditions.uptextContains(action + " " + itemName + " -> " + name), 800))
+					return false;
 			}
 			
-			return AccurateMouse.click(object, "Use " + itemName);
+			return AccurateMouse.click(object, "Use");
 			//return DynamicClicking.clickRSObject(object, "Use " + itemName + " -> " + name);
 		}
 		

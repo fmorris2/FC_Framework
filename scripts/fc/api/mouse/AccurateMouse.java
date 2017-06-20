@@ -272,7 +272,7 @@ public class AccurateMouse {
         }
         List<RSMenuNode> list = Arrays.stream(menuNodes).filter(rsMenuNode -> {
             String target = rsMenuNode.getTarget(), action = rsMenuNode.getAction();
-            return target != null && action != null && Arrays.stream(clickActions).anyMatch(s -> {General.println("Action: " + action + ", target: " + target + ", targetName: " + targetName); return s.contains(action) && target.contains(targetName);});
+            return target != null && action != null && Arrays.stream(clickActions).anyMatch(s -> s.equals(action)) && target.contains(targetName);
         }).collect(Collectors.toList());
         
         return list.stream().filter(rsMenuNode -> rsMenuNode.correlatesTo(clickable)).findFirst().orElse(list.size() > 0 ? list.get(0) : null);
