@@ -272,6 +272,7 @@ public class AccurateMouse {
         }
         List<RSMenuNode> list = Arrays.stream(menuNodes).filter(rsMenuNode -> {
             String target = rsMenuNode.getTarget(), action = rsMenuNode.getAction();
+            General.println("Action: " + action + ", target: " + target + ", targetName: " + targetName);
             return target != null && action != null && Arrays.stream(clickActions).anyMatch(s -> s.contains(action)) && target.contains(targetName);
         }).collect(Collectors.toList());
         
