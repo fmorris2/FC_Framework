@@ -178,6 +178,8 @@ public class AccurateMouse {
 
         String regex = "(" + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())) + ")" + " (-> )?" + (targetName != null ? targetName : "") + "(.*)";
         General.println("regex: " + regex);
+        for(String s : ChooseOption.getOptions())
+        	General.println(s);
         if (WaitFor.condition(100, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
         	boolean multipleMatches = false;
 
@@ -272,7 +274,7 @@ public class AccurateMouse {
         }
         List<RSMenuNode> list = Arrays.stream(menuNodes).filter(rsMenuNode -> {
             String target = rsMenuNode.getTarget(), action = rsMenuNode.getAction();
-            return target != null && action != null && Arrays.stream(clickActions).anyMatch(s -> s.equals(action)) && target.contains(targetName);
+            return target != null && action != null && Arrays.stream(clickActions).anyMatch(s -> s.equals(action));
         }).collect(Collectors.toList());
         
         return list.stream().filter(rsMenuNode -> rsMenuNode.correlatesTo(clickable)).findFirst().orElse(list.size() > 0 ? list.get(0) : null);
