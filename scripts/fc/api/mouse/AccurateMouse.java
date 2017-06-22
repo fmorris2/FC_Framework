@@ -176,7 +176,7 @@ public class AccurateMouse {
             return true;
         }
 
-        String regex = "(" + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())) + ")" + " (-> )?" + (targetName != null ? targetName : "") + "(.*)";
+        String regex = "(" + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())) + ")" + " (\\w* )?(-> )?" + (targetName != null ? targetName : "") + "(.*)";
         General.println("regex: " + regex);
         for(String s : ChooseOption.getOptions())
         	General.println(s);
