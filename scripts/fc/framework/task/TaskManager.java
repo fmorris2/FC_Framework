@@ -140,6 +140,9 @@ public abstract class TaskManager extends GoalManager
 	{
 		for(Task task : tasks)
 		{
+			if(task == null)
+				continue;
+			
 			if(task.shouldExecute())
 				return task;
 		}
