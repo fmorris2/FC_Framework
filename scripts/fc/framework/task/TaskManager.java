@@ -92,6 +92,10 @@ public abstract class TaskManager extends GoalManager
 	{
 		boolean success = false;
 		EntityInteraction interaction = pI.getInteractable();
+		
+		if(interaction == null)
+			return false;
+		
 		Clickable entity = interaction.findClickable();
 		
 		General.println("Preparing predictable interaction for task " + aT.getStatus());
