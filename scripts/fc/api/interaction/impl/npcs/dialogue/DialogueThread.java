@@ -75,7 +75,7 @@ public class DialogueThread extends Thread
 	private boolean handleDialogue()
 	{
 		//while any of the dialogue screens are up and we're in game
-		while(areDialogueInterfacesUp() && Login.getLoginState() == STATE.INGAME)
+		while((areDialogueInterfacesUp() || areCutsceneInterfacesUp()) && Login.getLoginState() == STATE.INGAME)
 		{
 			//check for option selection first
 			String[] dialogueOptions = NPCChat.getOptions();
@@ -92,7 +92,7 @@ public class DialogueThread extends Thread
 				sleep(600, 1200);
 				optionIndex++;
 			}
-			else //click continue interface
+			else if(areDialogueInterfacesUp()) //click continue interface
 			{
 				//first, check for abnormal click to continue interface
 				RSInterface abnormalClickToContinue = InterfaceUtils.findContainingText("Click to continue");
@@ -164,13 +164,18 @@ public class DialogueThread extends Thread
 	private boolean areDialogueInterfacesUp()
 	{
 		RSInterface continueInter = InterfaceUtils.findContainingText("to continue");
-		RSInterface dialogueMaster = Interfaces.get(DIALOGUE_MASTER);
-		RSInterface playerDialogueMaster = Interfaces.get(PLAYER_DIALOGUE_MASTER);
 		
 		return (continueInter != null && !continueInter.isHidden())
 				|| NPCChat.getName() != null
-				|| NPCChat.getSelectOptionInterface() != null
-				|| (dialogueMaster != null && !dialogueMaster.isHidden())
+				|| NPCChat.getSelectOptionInterface() != null;
+	}
+	
+	private boolean areCutsceneInterfacesUp()
+	{
+		RSInterface dialogueMaster = Interfaces.get(DIALOGUE_MASTER);
+		RSInterface playerDialogueMaster = Interfaces.get(PLAYER_DIALOGUE_MASTER);
+		
+		return (dialogueMaster != null && !dialogueMaster.isHidden())
 				|| (playerDialogueMaster != null && !playerDialogueMaster.isHidden());
 	}
 	
