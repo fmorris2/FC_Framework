@@ -111,7 +111,7 @@ public class DialogueThread extends Thread
 				}
 			}
 			
-			sleep(600, 1200);
+			FCTiming.waitCondition(() -> areDialogueInterfacesUp() || areCutsceneInterfacesUp(), General.random(600, 1200));
 		}
 		
 		//assume we've gone through the dialogue successfully
