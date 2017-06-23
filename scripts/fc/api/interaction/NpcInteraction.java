@@ -25,6 +25,8 @@ public abstract class NpcInteraction extends EntityInteraction
 	{
 		super(action, npc);
 		this.npc = npc;
+		entity = npc;
+		position = npc;
 	}
 	
 	public NpcInteraction(String action, String name, boolean isRightClicking, int searchDistance)
