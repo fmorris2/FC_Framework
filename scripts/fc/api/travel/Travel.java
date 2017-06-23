@@ -17,7 +17,7 @@ public class Travel
 	public static boolean webWalkTo(Positionable p, Condition c)
 	{
 		return !WebWalker.walkTo(p.getPosition(), () -> {return c.active() ? WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS : WalkingCondition.State.EXIT_OUT_WALKER_FAIL;})
-				? WebWalking.walkTo(p, c, 10) : true;
+				? WebWalking.walkTo(p, c, 600) : true;
 	}
 	
 	public static boolean walkToBank()

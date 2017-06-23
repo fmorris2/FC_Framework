@@ -6,6 +6,7 @@ import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.input.Mouse;
+import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
 import org.tribot.api2007.NPCChat;
@@ -22,6 +23,9 @@ import scripts.fc.api.wrappers.FCTiming;
 
 public class DialogueThread extends Thread
 {	
+	private static final int DIALOGUE_MASTER = 231;
+	private static final int PLAYER_DIALOGUE_MASTER = 217;
+	
 	private int[] options;
 	private int optionIndex;
 	
@@ -114,63 +118,6 @@ public class DialogueThread extends Thread
 		return true;
 	}
 	
-	/*
-	private void handleDialogue()
-	{	
-		//mouse
-		//boolean success = false;
-		
-		while(FCConditions.IN_DIALOGUE_CONDITION.active()
-				&& failedAttempts < FAILURE_THRESHOLD && Game.getGameState() == 30)
-		{
-			success = true;
-			
-			if(NPCChat.getSelectOptionInterface() != null)
-			{
-				String[] dialogueOptions = NPCChat.getOptions();
-				
-				if(options.length > 0 && dialogueOptions != null && optionIndex < options.length && dialogueOptions.length > options[optionIndex])
-				{
-					//keyboard:
-					General.println("Sending option: " + options[optionIndex] + 1);
-					Keyboard.sendType(Integer.toString(options[optionIndex] + 1).charAt(0));
-					sleep(400, 600);
-					
-					//mouse:
-					//success = NPCChat.selectOption(dialogueOptions[options[optionIndex]], true);
-					
-					optionIndex++;
-				}
-				else if(optionIndex >= options.length && options.length > 0 && dialogueOptions != null)
-				{
-					//keyboard:
-					Keyboard.sendType(Integer.toString(dialogueOptions.length).charAt(0));
-					sleep(400, 600);
-					
-					//mouse:
-					//success = NPCChat.selectOption(dialogueOptions[dialogueOptions.length - 1], true);
-				}
-			}
-			else //click continue
-			{			
-				//keyboard:
-				Keyboard.holdKey(' ', Keyboard.getKeyCode(' '), FCConditions.SPACEBAR_HOLD);
-				
-				//mouse:
-				//success = NPCChat.clickContinue(true);
-			}
-			
-			failedAttempts += !success ? 1 : 0;
-			
-			//keyboard:
-			sleep(10, 20);
-			
-			//mouse:
-			//General.sleep(600, 750);
-		}
-	}
-	*/
-	
 	private boolean needsToClickNpc()
 	{
 		//first, check if the choose option menu is up for this NPC
@@ -217,9 +164,14 @@ public class DialogueThread extends Thread
 	private boolean areDialogueInterfacesUp()
 	{
 		RSInterface continueInter = InterfaceUtils.findContainingText("to continue");
+		RSInterface dialogueMaster = Interfaces.get(DIALOGUE_MASTER);
+		RSInterface playerDialogueMaster = Interfaces.get(PLAYER_DIALOGUE_MASTER);
+		
 		return (continueInter != null && !continueInter.isHidden())
 				|| NPCChat.getName() != null
-				|| NPCChat.getSelectOptionInterface() != null;
+				|| NPCChat.getSelectOptionInterface() != null
+				|| (dialogueMaster != null && !dialogueMaster.isHidden())
+				|| (playerDialogueMaster != null && !playerDialogueMaster.isHidden());
 	}
 	
 	private boolean isInDialogueWithNpc()
