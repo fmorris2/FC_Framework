@@ -89,7 +89,7 @@ public class DialogueThread extends Thread
 				//send the appropriate option
 				General.println("Sending option: " + (options[optionIndex] + 1));
 				Keyboard.sendType(Integer.toString(options[optionIndex] + 1).charAt(0));
-				sleep(400, 600);
+				sleep(600, 1200);
 				optionIndex++;
 			}
 			else //click continue interface
