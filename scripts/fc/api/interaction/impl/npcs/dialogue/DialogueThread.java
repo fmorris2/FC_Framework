@@ -111,7 +111,7 @@ public class DialogueThread extends Thread
 				}
 			}
 			
-			sleep(10, 20);
+			sleep(600, 1200);
 		}
 		
 		//assume we've gone through the dialogue successfully
