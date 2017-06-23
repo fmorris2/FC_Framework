@@ -106,7 +106,7 @@ public abstract class TaskManager extends GoalManager
 		}
 		
 		//ABC2 CHECK
-		else if(/*fcScript.abc2.shouldHover() && */interaction.hoverEntity())
+		else if(fcScript.abc2.shouldHover() && interaction.hoverEntity())
 		{
 			General.println("[ABC2] Hover next anticipated");
 			success = true;
