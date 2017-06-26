@@ -15,6 +15,8 @@ import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 
 import scripts.fc.api.generic.FCConditions;
+import scripts.fc.framework.mission.Mission;
+import scripts.fc.framework.mission.impl.GEMission;
 import scripts.fc.framework.requirement.Requirement;
 import scripts.fc.framework.script.FCMissionScript;
 
@@ -50,12 +52,15 @@ public abstract class ItemRequirement extends Requirement
 			}
 			else if(!hasCheckedBank && !reqItems.isEmpty())
 				checkBank();
-			else
-			{	
-				addPreReqs();
-				hasCheckedReqs = true;
-			}
+			else //needs to gather items
+				gatherItems();
 		}
+	}
+	
+	private void gatherItems()
+	{	
+		addPreReqs();
+		hasCheckedReqs = true;
 	}
 	
 	private void checkBank()
@@ -100,11 +105,28 @@ public abstract class ItemRequirement extends Requirement
 	
 	private void addPreReqs()
 	{
+		List<ReqItem> geOrder = new ArrayList<>();
+		List<Mission> mustBeGatheredItems = new ArrayList<>();
+		
 		for(ReqItem req : reqItems)
 		{
-			General.println("Player does not have item requirement: (" + req.getId() + " x " + req.getAmt() + ")");
-			missions.addAll(Arrays.asList(req.getPreReqMissions()));
+			General.println("Player does not have item requirement: " + req);
+			if(req.shouldUseGE())
+			{
+				General.println("Will attempt to use GE for req " + req);
+				geOrder.add(req);
+			}
+			else
+			{
+				General.println("Will attempt to gather req " + req + " manually");
+				mustBeGatheredItems.addAll(Arrays.asList(req.getPreReqMissions()));
+			}
 		}
+		
+		//TODO ADD GE MISSION
+		missions.add(new GEMission(geOrder));
+		missions.addAll(mustBeGatheredItems);
+		
 	}
 
 }
