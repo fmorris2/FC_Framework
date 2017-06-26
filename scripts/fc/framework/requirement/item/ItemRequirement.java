@@ -11,10 +11,10 @@ import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 
 import scripts.fc.api.generic.FCConditions;
+import scripts.fc.api.travel.Travel;
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.mission.impl.GEMission;
 import scripts.fc.framework.requirement.Requirement;
@@ -66,7 +66,7 @@ public abstract class ItemRequirement extends Requirement
 	private void checkBank()
 	{
 		if(!Banking.isInBank())
-			WebWalking.walkToBank(FCConditions.IN_BANK_CONDITION, 600);
+			Travel.walkToBank();
 		else
 		{
 			RSItem[] cache = script.BANK_OBSERVER.getItemArray();
