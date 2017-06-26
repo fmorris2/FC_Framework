@@ -8,6 +8,7 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Equipment;
+import org.tribot.api2007.GrandExchange;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
@@ -78,6 +79,9 @@ public abstract class ItemRequirement extends Requirement
 			}
 			else
 			{
+				if(GrandExchange.getWindowState() != null)
+					GrandExchange.close();
+				
 				if(Banking.openBank())
 					Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 4500);
 			}

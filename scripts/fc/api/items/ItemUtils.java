@@ -1,5 +1,12 @@
 package scripts.fc.api.items;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.tribot.api.Clicking;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Filter;
@@ -78,5 +85,32 @@ public class ItemUtils
 			if(def != null && def.getActions().length > 1 && Clicking.click(items[0]))
 				Timing.waitCondition(FCConditions.isEquipped(items[0].getID()), 3500);
 		}
+	}
+	
+	public static String getName(int id)
+	{
+		try
+		{
+			Pattern pattern = Pattern.compile("Information about '{1}(.*)'{1}");
+			URLConnection con = new URL("https://www.runelocus.com/item-details/?item_id="+id).openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+			
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			while((inputLine = in.readLine()) != null)
+			{
+				Matcher m = pattern.matcher(inputLine);
+				if(m.find())
+					return m.group(1);
+			}
+			
+			in.close();		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

@@ -62,7 +62,7 @@ public class ReqItem
 	public void check(RSItem[] items)
 	{
 		for(RSItem i : items)
-			if(i.getID() == id)
+			if(i.getID() == id || i.getID() == id + 1)
 				playerAmt += i.getStack();
 	}
 	

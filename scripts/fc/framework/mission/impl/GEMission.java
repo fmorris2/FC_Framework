@@ -1,6 +1,5 @@
 package scripts.fc.framework.mission.impl;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class GEMission implements Mission
 			Mission[] gatherMissions = order.getGatherMissions();
 			for(Mission m : gatherMissions)
 			{
-				General.println("Adding gather mission: " + m.getMissionName()); 
+				General.println("Adding pre req gather mission: " + m.getMissionName()); 
 				((LinkedList<Mission>)script.getSetMissions()).addFirst(m);
 			}
 			
