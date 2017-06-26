@@ -1,5 +1,6 @@
 package scripts.fc.framework.mission.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.tribot.api.General;
@@ -8,15 +9,18 @@ import scripts.fc.framework.grand_exchange.GEOrder;
 import scripts.fc.framework.grand_exchange.GEOrder_Status;
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.requirement.item.ReqItem;
+import scripts.fc.framework.script.FCMissionScript;
 
 public class GEMission implements Mission
 {
 	private GEOrder order;
 	private boolean isDone;
+	private FCMissionScript script;
 	
-	public GEMission(List<ReqItem> reqItems)
+	public GEMission(FCMissionScript script, List<ReqItem> reqItems)
 	{
-		order = new GEOrder(reqItems);
+		this.script = script;
+		order = new GEOrder(script.BANK_OBSERVER, reqItems);
 	}
 	
 	@Override
@@ -34,7 +38,7 @@ public class GEMission implements Mission
 	@Override
 	public String getCurrentTaskName()
 	{
-		return "GE Order: " + order.STATUS;
+		return "GE Order: " + order.getStatus();
 	}
 
 	@Override
@@ -46,20 +50,22 @@ public class GEMission implements Mission
 	@Override
 	public String[] getMissionSpecificPaint()
 	{
-		return null;
+		return new String[]{};
 	}
 
 	@Override
 	public void execute()
 	{
-		if(order.STATUS == GEOrder_Status.IN_PROGRESS)
-			order.execute();
-		else if(order.STATUS == GEOrder_Status.SUCCESS)
+		if(order.getStatus() == GEOrder_Status.SUCCESS)
 			isDone = true;
-		else //have gather missions we need to execute
+		else if(order.getStatus() == GEOrder_Status.FAILED) //have gather missions we need to execute
 		{
 			General.println("Failed to purchase all items from GE. Initializing gather missions...");
+			Arrays.stream(order.getGatherMissions()).forEach(m -> script.getSetMissions().addFirst(m));
+			isDone = true;
 		}
+		else 
+			order.execute();
 	}
 
 	@Override

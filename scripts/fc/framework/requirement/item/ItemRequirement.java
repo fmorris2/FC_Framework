@@ -124,9 +124,8 @@ public abstract class ItemRequirement extends Requirement
 		}
 		
 		//TODO ADD GE MISSION
-		missions.add(new GEMission(geOrder));
-		missions.addAll(mustBeGatheredItems);
-		
+		missions.add(new GEMission(script, geOrder));
+		missions.addAll(mustBeGatheredItems);		
 	}
 
 }

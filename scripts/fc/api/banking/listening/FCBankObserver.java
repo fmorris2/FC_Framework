@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.tribot.api.General;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
@@ -83,7 +82,7 @@ public class FCBankObserver extends Thread
 				return i.getStack();
 		}
 		
-		return -1;
+		return 0;
 	}
 	
 	public RSItem[] getItemArray()

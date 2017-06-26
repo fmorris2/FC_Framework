@@ -2,7 +2,6 @@ package scripts.fc.framework.script;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.stream.Stream;
 
 import org.tribot.api.General;
@@ -20,7 +19,7 @@ import scripts.fc.framework.statistic_tracking.StatTracking;
 
 public abstract class FCMissionScript extends FCScript implements FCInventoryListener, Starting
 {
-	protected Queue<Mission> missions = getMissions();
+	protected LinkedList<Mission> missions = getMissions();
 	protected GoalList goalList;
 	protected Mission currentMission;
 	protected String username;
@@ -31,7 +30,7 @@ public abstract class FCMissionScript extends FCScript implements FCInventoryLis
 	
 	public boolean compilingPreReqs;
 	
-	protected abstract Queue<Mission> getMissions();
+	protected abstract LinkedList<Mission> getMissions();
 	
 	@Override	
 	protected int mainLogic()
@@ -153,7 +152,7 @@ public abstract class FCMissionScript extends FCScript implements FCInventoryLis
 		return currentMission;
 	}
 	
-	public Queue<Mission> getSetMissions()
+	public LinkedList<Mission> getSetMissions()
 	{
 		return missions;
 	}

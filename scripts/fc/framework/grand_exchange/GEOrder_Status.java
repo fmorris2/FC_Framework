@@ -2,7 +2,10 @@ package scripts.fc.framework.grand_exchange;
 
 public enum GEOrder_Status
 {
-	IN_PROGRESS,
+	GO_TO_GE,
+	WITHDRAW_GP,
+	BUY_ITEMS,
+	DEPOSIT_ITEMS,
 	FAILED,
 	SUCCESS;
 }
