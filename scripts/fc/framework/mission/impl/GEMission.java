@@ -2,6 +2,8 @@ package scripts.fc.framework.mission.impl;
 
 import java.util.List;
 
+import org.tribot.api.General;
+
 import scripts.fc.framework.grand_exchange.GEOrder;
 import scripts.fc.framework.grand_exchange.GEOrder_Status;
 import scripts.fc.framework.mission.Mission;
@@ -56,7 +58,7 @@ public class GEMission implements Mission
 			isDone = true;
 		else //have gather missions we need to execute
 		{
-			
+			General.println("Failed to purchase all items from GE. Initializing gather missions...");
 		}
 	}
 

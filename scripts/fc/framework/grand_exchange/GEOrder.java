@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.tribot.api.General;
+
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.requirement.item.ReqItem;
 
@@ -26,7 +28,7 @@ public class GEOrder
 	
 	public void execute()
 	{
-		
+		General.println("GEOrder#execute");
 	}
 		
 	/**
