@@ -1,6 +1,7 @@
 package scripts.fc.framework.mission.impl;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.tribot.api.General;
@@ -61,7 +62,13 @@ public class GEMission implements Mission
 		else if(order.getStatus() == GEOrder_Status.FAILED) //have gather missions we need to execute
 		{
 			General.println("Failed to purchase all items from GE. Initializing gather missions...");
-			Arrays.stream(order.getGatherMissions()).forEach(m -> script.getSetMissions().addFirst(m));
+			Mission[] gatherMissions = order.getGatherMissions();
+			for(Mission m : gatherMissions)
+			{
+				General.println("Adding gather mission: " + m.getMissionName()); 
+				((LinkedList<Mission>)script.getSetMissions()).addFirst(m);
+			}
+			
 			isDone = true;
 		}
 		else 
