@@ -1,13 +1,21 @@
 package scripts.fc.framework.task;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Clickable;
+import org.tribot.api2007.Banking;
 
+import scripts.fc.api.banking.FCBanking;
+import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.ItemInteraction;
+import scripts.fc.api.items.FCItem;
+import scripts.fc.api.items.FCItemList;
+import scripts.fc.api.travel.Travel;
 import scripts.fc.framework.goal.GoalManager;
 import scripts.fc.framework.script.FCScript;
 
@@ -50,6 +58,10 @@ public abstract class TaskManager extends GoalManager
 			if(currentTask == null)
 				return false;
 			
+			//check if this task requires items (used for quest stages)
+			if(currentTask instanceof ItemsRequiredTask && !handleItemsRequiredTask())
+				return false;
+			
 			//handle appropriate task type
 			if(isAnticipativeTask(currentTask))
 				success = handleAnticipativeTask((AnticipativeTask)currentTask);
@@ -61,6 +73,40 @@ public abstract class TaskManager extends GoalManager
 			
 			return success;
 		}
+	}
+	
+	private boolean handleItemsRequiredTask()
+	{
+		//first, check if we have the items in our inventory
+		ItemsRequiredTask reqTask = (ItemsRequiredTask)currentTask;
+		FCItem[] requiredItems = reqTask.getRequiredItems();
+		if(Arrays.stream(requiredItems).allMatch(req -> req.getInvCount(true) >= req.getAmt()))
+		{
+			General.println("We have the required items in our inventory!");
+			return true;
+		}
+		
+		return getRequiredItems(requiredItems);
+	}
+	
+	private boolean getRequiredItems(FCItem[] reqItems)
+	{
+		if(!Banking.isInBank())
+			Travel.walkToBank();
+		else if(Banking.isBankScreenOpen() || (Banking.openBank() && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 3500)))
+		{
+			//check if we don't have one of the required items
+			if(Arrays.stream(reqItems).anyMatch(req -> req.getInvCount(true) + FCBanking.getAmount(req.getIds()[0]) < req.getAmt()))
+			{
+				General.println("We don't have all of the required materials on the character!");
+				running = false;
+				return false;
+			}
+			
+			return FCBanking.withdraw(new FCItemList(reqItems));
+		}
+			
+		return false;
 	}
 	
 	private boolean isAnticipativeTask(Task t)

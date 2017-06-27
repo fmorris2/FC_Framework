@@ -1,5 +1,7 @@
 package scripts.fc.api.banking;
 
+import java.util.Arrays;
+
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
@@ -104,5 +106,12 @@ public class FCBanking
 	{
 		General.println("Open deposit box");
 		return new ClickObject("Deposit", DEPOSIT_BOX_NAME, distance).execute() && Timing.waitCondition(FCConditions.DEPOSIT_BOX_OPEN_CONDITION, 3500);
+	}
+	
+	public static int getAmount(int id)
+	{
+		RSItem[] items = Banking.find(id);
+		
+		return items.length == 0 ? 0 : items[0].getStack();
 	}
 }
