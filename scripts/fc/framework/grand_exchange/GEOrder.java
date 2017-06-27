@@ -36,11 +36,13 @@ public class GEOrder
 	private static final RSArea GE_AREA = new RSArea(new RSTile(3158, 3494, 0), new RSTile(3172, 3483, 0));
 	private static final int GE_BOOTH_ID = 10061;
 	private static final int MAX_F2P_INDEX = 2; //Can only use the first 3 GE slots if F2P
+	private static final long LAST_OFFER_THRESH = 600;
 	
 	private final List<GEOrderItem> ORDER_ITEMS;
 	private final FCBankObserver BANK_OBSERVER;
 	
 	private GEOrder_Status status = GEOrder_Status.GO_TO_GE;
+	private long lastOffer;
 	
 	public GEOrder(FCBankObserver obs, List<ReqItem> reqItems)
 	{
@@ -57,7 +59,7 @@ public class GEOrder
 	public void execute()
 	{
 		//first, check if we're done with the order
-		if(!ORDER_ITEMS.stream().anyMatch(o -> o.isPurchased()))
+		if(ORDER_ITEMS.stream().allMatch(o -> o.isPurchased()))
 			finishOrder();
 		//then, check if we have enough gold on account for at least one item
 		else if(!isWaitingToCollect() && BANK_OBSERVER.hasCheckedBank && (getTotalGpOnAccount() < getMinGpNeeded()))
@@ -114,13 +116,15 @@ public class GEOrder
 	{
 		General.println("Collecting items...");
 		
+		if(Timing.timeFromMark(lastOffer) < LAST_OFFER_THRESH)
+			General.sleep(1200, 2400);
+		
 		RSInterface collectButton = InterfaceUtils.findContainingText("Collect");
-		Stream<RSGEOffer> completedOffersStream = getCompletedOffersStream();
 		
 		if(collectButton != null && Clicking.click(collectButton))
 		{
 			getOfferedItemsStream()
-			.filter(c -> completedOffersStream.anyMatch(o -> c.ID == o.getItemID() && c.AMT == o.getQuantity()))
+			.filter(c -> getCompletedOffersStream().anyMatch(o -> c.ID == o.getItemID() && c.AMT == o.getQuantity()))
 			.forEach(purchased -> {General.println("Successfully purchased " + purchased); purchased.setPurchased(true);});
 			
 			FCTiming.waitCondition(() -> !shouldCollectItems(), 2400);
@@ -162,6 +166,7 @@ public class GEOrder
 				&& FCTiming.waitCondition(() -> oldEmptyOffers != getEmptyOffers(), 4000))
 		{
 			General.println("Successfully put in offer for " + toOffer);
+			lastOffer = Timing.currentTimeMillis();
 			toOffer.setOffered(true);
 		}
 	}
