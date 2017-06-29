@@ -41,7 +41,7 @@ public class OneTaskMission implements Mission
 	@Override
 	public String[] getMissionSpecificPaint()
 	{
-		return null;
+		return new String[]{};
 	}
 
 	@Override
