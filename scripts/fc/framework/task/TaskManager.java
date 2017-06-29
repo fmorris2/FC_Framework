@@ -33,7 +33,7 @@ public abstract class TaskManager extends GoalManager
 {		
 	protected List<Task> tasks;
 	protected Task currentTask;
-	protected boolean running;
+	protected boolean running = true;
 	public transient FCScript fcScript;
 	
 	public TaskManager(FCScript script)
@@ -46,6 +46,12 @@ public abstract class TaskManager extends GoalManager
 
 	public boolean executeTasks()
 	{
+		if(!running)
+		{
+			fcScript.setIsRunning(false);
+			return false;
+		}
+		
 		if(tasks == null)
 			return false;
 		

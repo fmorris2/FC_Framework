@@ -43,6 +43,12 @@ public abstract class QuestScriptManager extends MissionManager implements Missi
 				General.sleep(100);
 			}
 			
+			if(req.cannotContinue())
+			{
+				running = false;
+				return;
+			}
+			
 			preReqMissions.addAll(req.getMissions());
 		}
 	}

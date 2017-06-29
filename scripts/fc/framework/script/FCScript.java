@@ -32,6 +32,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	
 	protected abstract int mainLogic();
 	protected abstract String[] scriptSpecificPaint();
+	protected boolean isRunning = true;
 	private StatTracker statTracker;
 	
 	public void run()
@@ -47,7 +48,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 				println("VikingScripts statistic tracking server is down.");
 		}
 		
-		while(true)
+		while(isRunning)
 		{
 			try
 			{
@@ -113,6 +114,11 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	public FCPaint getPaint()
 	{
 		return paint;
+	}
+	
+	public void setIsRunning(boolean b)
+	{
+		isRunning = b;
 	}
 	
 	protected void handleAbc2Reset()

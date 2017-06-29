@@ -11,6 +11,7 @@ public abstract class Requirement
 	protected List<Mission> missions = new ArrayList<Mission>(); //The list of missions that will satisfy the requirements
 	protected boolean hasCheckedReqs;
 	protected FCMissionScript script;
+	protected boolean cannotContinue;
 	
 	public abstract void checkReqs();
 	public abstract List<Mission> getReqMissions();
@@ -29,4 +30,10 @@ public abstract class Requirement
 	{
 		return hasCheckedReqs;
 	}
+	
+	public boolean cannotContinue()
+	{
+		return cannotContinue;
+	}
+	
 }

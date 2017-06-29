@@ -132,7 +132,11 @@ public abstract class ItemRequirement extends Requirement
 			else
 			{
 				General.println("Will attempt to gather req " + req + " manually");
-				mustBeGatheredItems.addAll(Arrays.asList(req.getPreReqMissions()));
+				Mission[] preReqMissions = req.getPreReqMissions();
+				if(preReqMissions == null)
+					cannotContinue = true;
+				else
+					mustBeGatheredItems.addAll(Arrays.asList(preReqMissions));
 			}
 		}
 	
