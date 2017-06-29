@@ -12,10 +12,12 @@ import org.tribot.api2007.GrandExchange;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
+import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.travel.Travel;
+import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.mission.impl.GEMission;
 import scripts.fc.framework.requirement.Requirement;
@@ -66,8 +68,8 @@ public abstract class ItemRequirement extends Requirement
 	
 	private void checkBank()
 	{
-		if(!Banking.isInBank())
-			Travel.walkToBank();
+		if(!Banking.isInBank() && Travel.walkToBank() && !FCTiming.waitCondition(() -> Banking.isInBank(), 4000))
+			WebWalking.walkToBank();
 		else
 		{
 			RSItem[] cache = script.BANK_OBSERVER.getItemArray();
@@ -109,6 +111,9 @@ public abstract class ItemRequirement extends Requirement
 	
 	private void addPreReqs()
 	{
+		if(reqItems.isEmpty()) //no need to add any pre reqs if reqItems is empty
+			return;
+		
 		List<ReqItem> geOrder = new ArrayList<>();
 		List<Mission> mustBeGatheredItems = new ArrayList<>();
 		
@@ -118,7 +123,8 @@ public abstract class ItemRequirement extends Requirement
 			if(req.shouldUseGE())
 			{
 				General.println("Will attempt to use GE for req " + req);
-				geOrder.add(req);
+				General.println("Needs to purchase " + req.getId() + "x" + (req.getAmt() - req.getPlayerAmt()));
+				geOrder.add(new ReqItem(req, (req.getAmt() - req.getPlayerAmt())));
 			}
 			else
 			{
@@ -126,8 +132,7 @@ public abstract class ItemRequirement extends Requirement
 				mustBeGatheredItems.addAll(Arrays.asList(req.getPreReqMissions()));
 			}
 		}
-		
-		//TODO ADD GE MISSION
+	
 		missions.add(new GEMission(script, geOrder));
 		missions.addAll(mustBeGatheredItems);		
 	}

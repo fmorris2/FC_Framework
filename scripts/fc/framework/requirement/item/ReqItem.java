@@ -22,6 +22,14 @@ public class ReqItem
 		shouldUseGE = useGE;
 	}
 	
+	public ReqItem(ReqItem old, int amt)
+	{
+		this.id = old.id;
+		this.shouldUseGE = old.shouldUseGE;
+		this.preReqMissions = old.preReqMissions;
+		this.amt = amt;
+	}
+	
 	public ReqItem(int id, int amt, boolean useGE, Mission... preReqMissions)
 	{
 		this(id, amt, useGE);
@@ -42,6 +50,11 @@ public class ReqItem
 	public int getAmt()
 	{
 		return amt;
+	}
+	
+	public int getPlayerAmt()
+	{
+		return playerAmt;
 	}
 	
 	public boolean isSatisfied()

@@ -91,6 +91,7 @@ public abstract class TaskManager extends GoalManager
 	
 	private boolean getRequiredItems(FCItem[] reqItems)
 	{
+		General.println("Getting required items for task");
 		if(!Banking.isInBank())
 			Travel.walkToBank();
 		else if(Banking.isBankScreenOpen() || (Banking.openBank() && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 3500)))
