@@ -140,7 +140,9 @@ public abstract class ItemRequirement extends Requirement
 			}
 		}
 	
-		missions.add(new GEMission(script, geOrder));
+		if(!geOrder.isEmpty())
+			missions.add(new GEMission(script, geOrder));
+		
 		missions.addAll(mustBeGatheredItems);		
 	}
 	

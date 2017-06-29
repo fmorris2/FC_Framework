@@ -39,7 +39,7 @@ public class ReqItem
 	public ReqItem(int id, int amt, boolean useGE, Task task)
 	{
 		this(id, amt, useGE);
-		preReqMissions = new Mission[]{new OneTaskMission(task, "Pre req mission: ("+id+"x"+amt+")")};
+		preReqMissions = task == null ? null : new Mission[]{new OneTaskMission(task, "Pre req mission: ("+id+"x"+amt+")")};
 	}
 	
 	public int getId()
