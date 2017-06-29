@@ -1,6 +1,8 @@
 package scripts.fc.framework.task;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Task - Represents a specific task for the bot to do. Ex. Banking, Chopping, Mining.
@@ -11,6 +13,7 @@ import java.io.Serializable;
 public abstract class Task implements Serializable
 {	
 	protected static final long serialVersionUID = 3065304610552397194L;
+	public final Map<String, Boolean> FLAGS = new HashMap<>(); 
 
 	/**
 	 * Executes / processes the task

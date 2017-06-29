@@ -63,6 +63,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 			catch(Exception e)
 			{
 				e.printStackTrace();
+				sleep(600);
 			}
 		}
 	}

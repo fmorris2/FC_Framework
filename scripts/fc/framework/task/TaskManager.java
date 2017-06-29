@@ -8,6 +8,8 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Clickable;
 import org.tribot.api2007.Banking;
+import org.tribot.api2007.Inventory;
+import org.tribot.api2007.WebWalking;
 
 import scripts.fc.api.banking.FCBanking;
 import scripts.fc.api.generic.FCConditions;
@@ -16,6 +18,7 @@ import scripts.fc.api.interaction.ItemInteraction;
 import scripts.fc.api.items.FCItem;
 import scripts.fc.api.items.FCItemList;
 import scripts.fc.api.travel.Travel;
+import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.goal.GoalManager;
 import scripts.fc.framework.script.FCScript;
 
@@ -58,6 +61,10 @@ public abstract class TaskManager extends GoalManager
 			if(currentTask == null)
 				return false;
 			
+			//check if this task requires a certain amount of inventory space
+			if(currentTask instanceof SpaceRequiredTask && !handleSpaceRequiredTask())
+				return false;
+			
 			//check if this task requires items (used for quest stages)
 			if(currentTask instanceof ItemsRequiredTask && !handleItemsRequiredTask())
 				return false;
@@ -73,6 +80,26 @@ public abstract class TaskManager extends GoalManager
 			
 			return success;
 		}
+	}
+	
+	private boolean handleSpaceRequiredTask()
+	{
+		SpaceRequiredTask t = (SpaceRequiredTask)currentTask;
+		if(currentTask.FLAGS.get("hasMadeSpace"+currentTask) != null || (28 - Inventory.getAll().length) >= t.getSpaceRequired())
+			return true;
+		
+		General.println("Creating inventory space for task");
+		
+		if(!Banking.isInBank())
+		{
+			if(Travel.walkToBank() && !FCTiming.waitCondition(() -> Banking.isInBank(), 3500))
+				WebWalking.walkToBank();
+		}
+		else if(Banking.isBankScreenOpen() || (Banking.openBank() && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 3500)))
+			if(Banking.depositAll() > 0 && FCTiming.waitCondition(() -> (28 - Inventory.getAll().length) >= t.getSpaceRequired(), 2400))
+				currentTask.FLAGS.put("hasMadeSpace"+currentTask, true);
+			
+		return false;
 	}
 	
 	private boolean handleItemsRequiredTask()

@@ -8,6 +8,7 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Equipment;
+import org.tribot.api2007.Game;
 import org.tribot.api2007.GrandExchange;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
@@ -25,6 +26,8 @@ import scripts.fc.framework.script.FCMissionScript;
 
 public abstract class ItemRequirement extends Requirement
 {
+	private static final int QUEST_POINT_LIMIT = 7;
+	
 	protected List<ReqItem> reqItems = new ArrayList<>(Arrays.asList(getReqItems()));
 	private boolean hasCheckedInv;
 	private boolean hasCheckedEquipment;
@@ -120,7 +123,7 @@ public abstract class ItemRequirement extends Requirement
 		for(ReqItem req : reqItems)
 		{
 			General.println("Player does not have item requirement: " + req);
-			if(req.shouldUseGE())
+			if(req.shouldUseGE() && getQuestPoints() >= QUEST_POINT_LIMIT)
 			{
 				General.println("Will attempt to use GE for req " + req);
 				General.println("Needs to purchase " + req.getId() + "x" + (req.getAmt() - req.getPlayerAmt()));
@@ -135,6 +138,11 @@ public abstract class ItemRequirement extends Requirement
 	
 		missions.add(new GEMission(script, geOrder));
 		missions.addAll(mustBeGatheredItems);		
+	}
+	
+	private int getQuestPoints()
+	{
+		return Game.getSetting(101);
 	}
 
 }
