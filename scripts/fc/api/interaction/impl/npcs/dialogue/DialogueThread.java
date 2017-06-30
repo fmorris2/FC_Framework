@@ -6,6 +6,7 @@ import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.input.Mouse;
+import org.tribot.api2007.Game;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
@@ -25,6 +26,7 @@ public class DialogueThread extends Thread
 {	
 	private static final int DIALOGUE_MASTER = 231;
 	private static final int PLAYER_DIALOGUE_MASTER = 217;
+	private static final int CUTSCENE_SETTING = 1021, CUTSCENE_VALUE = 192;
 	
 	private int[] options;
 	private int optionIndex;
@@ -75,7 +77,7 @@ public class DialogueThread extends Thread
 	private boolean handleDialogue()
 	{
 		//while any of the dialogue screens are up and we're in game
-		while((areDialogueInterfacesUp() || areCutsceneInterfacesUp()) && Login.getLoginState() == STATE.INGAME)
+		while((areDialogueInterfacesUp() || areCutsceneInterfacesUp() || isInCutscene()) && Login.getLoginState() == STATE.INGAME)
 		{
 			//check for option selection first
 			String[] dialogueOptions = NPCChat.getOptions();
@@ -110,12 +112,22 @@ public class DialogueThread extends Thread
 					log("Releasing spacebar...");
 				}
 			}
+			else if(isInCutscene())
+			{
+				log("In cutscene...");
+				sleep(600, 1200);
+			}
 			
-			FCTiming.waitCondition(() -> areDialogueInterfacesUp() || areCutsceneInterfacesUp(), General.random(600, 1200));
+			FCTiming.waitCondition(() -> areDialogueInterfacesUp() || areCutsceneInterfacesUp() || isInCutscene(), General.random(600, 1200));
 		}
 		
 		//assume we've gone through the dialogue successfully
 		return true;
+	}
+	
+	private boolean isInCutscene()
+	{
+		return Game.getSetting(CUTSCENE_SETTING) == CUTSCENE_VALUE;
 	}
 	
 	private boolean needsToClickNpc()
