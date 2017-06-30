@@ -39,7 +39,7 @@ public class GEOrder
 	private static final RSArea GE_AREA = new RSArea(new RSTile(3158, 3494, 0), new RSTile(3172, 3483, 0));
 	private static final int GE_BOOTH_ID = 10061;
 	private static final int MAX_F2P_INDEX = 2; //Can only use the first 3 GE slots if F2P
-	private static final long LAST_OFFER_THRESH = 600;
+	private static final long LAST_OFFER_THRESH = 1200;
 	
 	private final List<GEOrderItem> ORDER_ITEMS;
 	private final FCBankObserver BANK_OBSERVER;
@@ -85,7 +85,7 @@ public class GEOrder
 		if(ORDER_ITEMS.stream().allMatch(o -> o.isPurchased()))
 			finishOrder();
 		//then, check if we have enough gold on account for at least one item
-		else if(!isWaitingToCollect() && BANK_OBSERVER.hasCheckedBank && (getTotalGpOnAccount() < getMinGpNeeded()))
+		else if(!isWaitingToCollect() && BANK_OBSERVER.hasCheckedBank && (getTotalGpOnAccount() < getMinGpNeeded()) && GrandExchange.close())
 		{
 			General.println("Player does not have enough gold to complete GE order! Resorting to gather missions for unbought items...");
 			status = GEOrder_Status.FAILED;
@@ -240,8 +240,19 @@ public class GEOrder
 	 */
 	private void withdrawGold()
 	{
+		if(Timing.timeFromMark(lastOffer) < LAST_OFFER_THRESH)
+			return;
+		
+		if(shouldCollectItems())
+		{
+			collectItems();
+			return;
+		}
+		
 		status = GEOrder_Status.WITHDRAW_GP;
-		if(!Banking.isBankScreenOpen())
+		if(GrandExchange.getWindowState() != null)
+			GrandExchange.close();
+		else if(!Banking.isBankScreenOpen())
 		{
 			if(Banking.openBank())
 				Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 1200);

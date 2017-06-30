@@ -1,5 +1,6 @@
 package scripts.fc.framework.mission.impl;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,16 +63,14 @@ public class GEMission implements Mission
 		{
 			General.println("Failed to purchase all items from GE. Initializing gather missions...");
 			Mission[] gatherMissions = order.getGatherMissions();
-			if(gatherMissions == null) return;
+			if(gatherMissions == null || gatherMissions.length == 0 || Arrays.stream(gatherMissions).anyMatch(m -> m == null))
+			{
+				stopScript();
+				return;
+			}
 			
 			for(Mission m : gatherMissions)
 			{
-				if(m == null)
-				{
-					General.println("Could not purchase mandatory item from GE, and we don't have a gather mission for it! Ending script...");
-					script.setIsRunning(false);
-					return;
-				}
 				General.println("Adding pre req gather mission: " + m.getMissionName()); 
 				((LinkedList<Mission>)script.getSetMissions()).addFirst(m);
 			}
@@ -80,6 +79,12 @@ public class GEMission implements Mission
 		}
 		else 
 			order.execute();
+	}
+	
+	private void stopScript()
+	{
+		General.println("Could not purchase mandatory item from GE, and we don't have a gather mission for it! Ending script...");
+		script.setIsRunning(false);
 	}
 
 	@Override
