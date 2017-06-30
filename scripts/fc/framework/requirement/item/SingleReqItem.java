@@ -22,6 +22,7 @@ public class SingleReqItem extends ReqItem
 	{
 		this.id = id;
 		this.amt = amt;
+		this.needsItem = needsItem;
 		shouldUseGE = useGE;
 	}
 	

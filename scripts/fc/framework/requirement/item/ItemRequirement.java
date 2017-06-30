@@ -44,6 +44,7 @@ public abstract class ItemRequirement extends Requirement
 	@Override
 	public void checkReqs()
 	{
+		General.println("CheckReqs for item requirement");
 		if(Login.getLoginState() == STATE.INGAME)
 		{
 			if(!hasCheckedInv && !reqItems.isEmpty())
@@ -108,7 +109,10 @@ public abstract class ItemRequirement extends Requirement
 			ReqItem req = reqItems.get(i);
 			
 			if(req.isSatisfied())
+			{
+				General.println("req " + req + " is satisfied");
 				reqItems.remove(i);
+			}
 		}
 	}
 	

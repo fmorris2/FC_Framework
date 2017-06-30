@@ -54,4 +54,9 @@ public class CombinedReqItem extends ReqItem
 		OR,
 		AND;
 	}
+	
+	public String toString()
+	{
+		return "[" + one + " " + type + " " + two + "]";
+	}
 }
