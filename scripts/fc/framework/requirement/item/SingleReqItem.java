@@ -18,7 +18,7 @@ public class SingleReqItem extends ReqItem
 	private int amt;
 	private boolean needsItem;
 	
-	private SingleReqItem(int id, int amt, boolean useGE, boolean needsItem)
+	public SingleReqItem(int id, int amt, boolean useGE, boolean needsItem)
 	{
 		this.id = id;
 		this.amt = amt;
