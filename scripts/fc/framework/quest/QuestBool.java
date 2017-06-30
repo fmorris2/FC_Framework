@@ -16,5 +16,34 @@ public abstract class QuestBool
 		
 		return !value();
 	}
+	
+	public QuestBool and(QuestBool o, boolean normal)
+	{
+		QuestBool first = this;
+		return new QuestBool(normal)
+		{
+			@Override
+			public boolean value()
+			{
+				return first.value() && o.value();
+			}
+			
+		};
+	}
+	
+	public QuestBool or(QuestBool o, boolean normal)
+	{
+		QuestBool first = this;
+		return new QuestBool(normal)
+		{
+			@Override
+			public boolean value()
+			{
+				return first.value() || o.value();
+			}
+			
+		};
+	}
+	
 	public abstract boolean value();
 }
