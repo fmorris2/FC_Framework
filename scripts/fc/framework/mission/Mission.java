@@ -1,6 +1,5 @@
 package scripts.fc.framework.mission;
 
-
 public interface Mission
 {
 	public boolean hasReachedEndingCondition();

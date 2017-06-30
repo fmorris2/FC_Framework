@@ -3,6 +3,7 @@ package scripts.fc.api.banking.listening;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.types.RSItem;
@@ -52,37 +53,22 @@ public class FCBankObserver extends Thread
 	
 	public boolean containsItem(int id, int amt)
 	{
-		for(RSItem i : bankCache)
-		{
-			if(i.getID() == id && i.getStack() >= amt)
-				return true;
-		}
-		
-		return false;
+		return bankCache.stream().anyMatch(i -> i.getID() == id && i.getStack() >= amt);
 	}
 	
 	public boolean containsItem(String name, int amt)
 	{
-		for(RSItem i : bankCache)
+		return bankCache.stream().anyMatch(i -> 
 		{
-			RSItemDefinition def = i.getDefinition();
-			
-			if(def != null && def.getName().equals(name) && i.getStack() >= amt)
-				return true;
-		}
-		
-		return false;
+			RSItemDefinition def = i.getDefinition(); 
+			return def != null && def.getName().equals(name) && i.getStack() >= amt;
+		});
 	}
 	
 	public int getCount(int id)
 	{
-		for(RSItem i : bankCache)
-		{
-			if(i.getID() == id)
-				return i.getStack();
-		}
-		
-		return 0;
+		Optional<RSItem> opt = bankCache.stream().filter(i -> i.getID() == id).findFirst();
+		return opt.isPresent() ? opt.get().getStack() : 0;
 	}
 	
 	public RSItem[] getItemArray()

@@ -1,16 +1,18 @@
 package scripts.fc.api.inventory;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.tribot.api2007.Inventory;
-import org.tribot.api2007.types.RSItem;
 
 /**
  * 	This class will observe a player's inventory, and notify the inventory
  * 		listener of any changes
  * 
- * 	@author Freddy
+ * 	@author Freddy (FC)
  *
  */
 public class FCInventoryObserver extends Thread 
@@ -18,11 +20,11 @@ public class FCInventoryObserver extends Thread
 	private final int CYCLE_TIME = 400; //How long our run() method will sleep for every cycle
 	
 	//The listeners that have to be notified - No duplicates.
-	private HashSet<FCInventoryListener> listeners = new HashSet<>();
+	private Set<FCInventoryListener> listeners = new HashSet<>();
 	
 	//The inventory maps, so we can compare and see if the inventory changed
-	private HashMap<Integer, Integer> oldInventory = new HashMap<Integer, Integer>();
-	private HashMap<Integer, Integer> newInventory;	
+	private Map<Integer, Integer> oldInventory = new HashMap<Integer, Integer>();
+	private Map<Integer, Integer> newInventory;	
 	public boolean isRunning = true;
 	
 	public FCInventoryObserver(FCInventoryListener listener)
@@ -65,34 +67,28 @@ public class FCInventoryObserver extends Thread
 		{
 			e.printStackTrace();
 		}
-		
 	}
 	
-	public void fillInventoryMap(HashMap<Integer, Integer> map)
+	public void fillInventoryMap(Map<Integer, Integer> map)
 	{
 		map.clear();
-		
-		for(RSItem i : Inventory.getAll())
-			map.put(i.getID(), Inventory.getCount(i.getID()));	
+		Arrays.stream(Inventory.getAll()).forEach(i -> map.put(i.getID(), Inventory.getCount(i.getID())));
 	}
 
 	public void notifyListenersOfAddition(int id, int amt)
 	{
-		for(FCInventoryListener listener : listeners)
-			listener.inventoryAdded(id, amt);
+		listeners.stream().forEach(l -> l.inventoryAdded(id, amt));
 	}
 
 	public void notifyListenersOfRemoval(int id, int amt)
 	{
-		for(FCInventoryListener listener : listeners)
-			listener.inventoryRemoved(id, amt);
+		listeners.stream().forEach(l -> l.inventoryRemoved(id, amt));
 	}
 	
 	public void addListener(FCInventoryListener listener)
 	{
 		if(listener != null)
-			listeners.add(listener);
-		
+			listeners.add(listener);	
 	}
 	
 }

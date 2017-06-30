@@ -11,6 +11,7 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.GrandExchange;
+import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.WorldHopper;
@@ -33,6 +34,8 @@ import scripts.fc.framework.requirement.item.ReqItem;
 
 public class GEOrder
 {
+	private static final int COLLECTION_BOX_MASTER = 402, COLLECTION_BOX_CHILD = 2, COLLECTION_BOX_COMP = 11;
+	
 	private static final RSArea GE_AREA = new RSArea(new RSTile(3158, 3494, 0), new RSTile(3172, 3483, 0));
 	private static final int GE_BOOTH_ID = 10061;
 	private static final int MAX_F2P_INDEX = 2; //Can only use the first 3 GE slots if F2P
@@ -194,11 +197,22 @@ public class GEOrder
 	 */
 	private void openGe()
 	{
+		//Close collection box if necessary
+		closeCollectionBox();
+			
 		EntityInteraction inter = General.random(0, 1) == 0 
 				? new ClickNpc("Exchange", "Grand Exchange Clerk", 15) : new ClickObject("Exchange", GE_BOOTH_ID, 15);
 				
 		if(inter.execute())
 			FCTiming.waitCondition(() -> GrandExchange.getWindowState() != null, 3000);
+	}
+	
+	private void closeCollectionBox()
+	{
+		RSInterface collectionBox = Interfaces.get(COLLECTION_BOX_MASTER, COLLECTION_BOX_CHILD);
+		RSInterface closeButton = collectionBox == null ? null : collectionBox.getChild(COLLECTION_BOX_COMP);
+		if(closeButton != null)
+			Clicking.click(closeButton);	
 	}
 	
 	/**

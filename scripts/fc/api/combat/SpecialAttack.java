@@ -15,9 +15,9 @@ public class SpecialAttack
 	public static void activate()
 	{
 		openTab();
-		setSpec();
-		
+		setSpec();	
 	}
+	
 	public static int getSpecPercent() 
  	{
         return  (Game.getSetting(300)/10);

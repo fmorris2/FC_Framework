@@ -145,8 +145,6 @@ public class AccurateMouse {
 
         if (ChooseOption.isOpen()){
             RSMenuNode menuNode = getValidMenuNode(clickable, targetName, ChooseOption.getMenuNodes(), clickActions);
-            if(menuNode != null)
-            	General.println("Got menuNode for action: " + menuNode.getAction());
             if (handleMenuNode(menuNode, hover)){
                 return true;
             } else {
@@ -177,9 +175,7 @@ public class AccurateMouse {
         }
 
         String regex = "(" + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())) + ")" + " (\\w* )*?(-> )?" + (targetName != null ? targetName : "") + "(.*)";
-        General.println("regex: " + regex);
-        for(String s : ChooseOption.getOptions())
-        	General.println(s);
+        //General.println("regex: " + regex);
         if (WaitFor.condition(100, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
         	boolean multipleMatches = false;
 
@@ -200,19 +196,12 @@ public class AccurateMouse {
 
             click(3);
             RSMenuNode menuNode = getValidMenuNode(clickable, targetName, ChooseOption.getMenuNodes(), clickActions);
-            if(menuNode != null)
-            	General.println("Got valid menuNode for " + menuNode.getAction());
-            else
-            	General.println("Could not find valid menuNode");
             
             if (handleMenuNode(menuNode, hover)){
-            	General.println("handled menu node successfully");
                 return true;
             }
 
         }
-        
-        General.println("attemptAction returning false");
         return false;
     }
 
