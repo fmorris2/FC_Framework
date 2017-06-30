@@ -238,7 +238,7 @@ public class GEOrder
 	 */
 	public Mission[] getGatherMissions()
 	{
-		return ORDER_ITEMS.stream().filter(item -> !item.isPurchased())
+		return ORDER_ITEMS.stream().filter(item -> !item.isPurchased() && item.getGatherMissions() != null)
 				.flatMap(item -> Arrays.stream(item.getGatherMissions())).toArray(Mission[]::new);
 	}
 	

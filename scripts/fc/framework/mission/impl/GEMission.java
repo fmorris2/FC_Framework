@@ -62,15 +62,14 @@ public class GEMission implements Mission
 		{
 			General.println("Failed to purchase all items from GE. Initializing gather missions...");
 			Mission[] gatherMissions = order.getGatherMissions();
-			if(gatherMissions.length == 0)
-				endScript();
-			else
-				General.println("gatherMissions length: " + gatherMissions.length);
+			if(gatherMissions == null) return;
+			
 			for(Mission m : gatherMissions)
 			{
 				if(m == null)
 				{
-					endScript();
+					General.println("Could not purchase mandatory item from GE, and we don't have a gather mission for it! Ending script...");
+					script.setIsRunning(false);
 					return;
 				}
 				General.println("Adding pre req gather mission: " + m.getMissionName()); 
@@ -81,12 +80,6 @@ public class GEMission implements Mission
 		}
 		else 
 			order.execute();
-	}
-	
-	private void endScript()
-	{
-		General.println("Could not purchase mandatory item from GE, and we don't have a gather mission for it! Ending script...");
-		script.setIsRunning(false);
 	}
 
 	@Override
