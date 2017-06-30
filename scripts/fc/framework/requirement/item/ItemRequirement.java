@@ -122,24 +122,27 @@ public abstract class ItemRequirement extends Requirement
 		
 		for(ReqItem req : reqItems)
 		{
-			General.println("Player does not have item requirement: " + req);
-			if(req.shouldUseGE() && getQuestPoints() >= QUEST_POINT_LIMIT)
+			for(SingleReqItem r : req.getSingleReqItems())
 			{
-				for(SingleReqItem r : req.getSingleReqItems())
+				if(!r.needsItem())
+					continue;
+				
+				General.println("Player does not have item requirement: " + req);
+				if(r.shouldUseGE() && getQuestPoints() >= QUEST_POINT_LIMIT)
 				{
-					General.println("Will attempt to use GE for req " + req);
+					General.println("Will attempt to use GE for req " + r);
 					General.println("Needs to purchase " + r.getId() + "x" + (r.getAmt() - r.getPlayerAmt()));
 					geOrder.add(new SingleReqItem(r, (r.getAmt() - r.getPlayerAmt())));
 				}
-			}
-			else
-			{
-				General.println("Will attempt to gather req " + req + " manually");
-				Mission[] preReqMissions = req.getPreReqMissions();
-				if(preReqMissions == null)
-					cannotContinue = true;
 				else
-					mustBeGatheredItems.addAll(Arrays.asList(preReqMissions));
+				{
+					General.println("Will attempt to gather req " + r + " manually");
+					Mission[] preReqMissions = r.getPreReqMissions();
+					if(preReqMissions == null)
+						cannotContinue = true;
+					else
+						mustBeGatheredItems.addAll(Arrays.asList(preReqMissions));
+				}
 			}
 		}
 	

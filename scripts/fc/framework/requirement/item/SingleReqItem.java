@@ -16,8 +16,9 @@ public class SingleReqItem extends ReqItem
 	
 	private int id;
 	private int amt;
+	private boolean needsItem;
 	
-	private SingleReqItem(int id, int amt, boolean useGE)
+	private SingleReqItem(int id, int amt, boolean useGE, boolean needsItem)
 	{
 		this.id = id;
 		this.amt = amt;
@@ -28,19 +29,20 @@ public class SingleReqItem extends ReqItem
 	{
 		this.id = old.id;
 		this.shouldUseGE = old.shouldUseGE;
+		this.needsItem = old.needsItem;
 		this.preReqMissions = old.preReqMissions;
 		this.amt = amt;
 	}
 	
-	public SingleReqItem(int id, int amt, boolean useGE, Mission... preReqMissions)
+	public SingleReqItem(int id, int amt, boolean useGE, boolean needsItem, Mission... preReqMissions)
 	{
-		this(id, amt, useGE);
+		this(id, amt, useGE, needsItem);
 		this.preReqMissions = preReqMissions;
 	}
 	
-	public SingleReqItem(int id, int amt, boolean useGE, Task task)
+	public SingleReqItem(int id, int amt, boolean useGE, boolean needsItem, Task task)
 	{
-		this(id, amt, useGE);
+		this(id, amt, useGE, needsItem);
 		preReqMissions = task == null ? null : new Mission[]{new OneTaskMission(task, "Pre req mission: ("+id+"x"+amt+")")};
 	}
 	
@@ -57,6 +59,11 @@ public class SingleReqItem extends ReqItem
 	public int getPlayerAmt()
 	{
 		return playerAmt;
+	}
+	
+	public boolean needsItem()
+	{
+		return needsItem;
 	}
 	
 	@Override
