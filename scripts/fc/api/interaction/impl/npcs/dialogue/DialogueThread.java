@@ -16,6 +16,7 @@ import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.fc.api.generic.FCConditions;
+import scripts.fc.api.generic.FCFilters;
 import scripts.fc.api.mouse.AccurateMouse;
 import scripts.fc.api.utils.ChooseOptionUtils;
 import scripts.fc.api.utils.InterfaceUtils;
@@ -115,6 +116,12 @@ public class DialogueThread extends Thread
 			else if(isInCutscene())
 			{
 				log("In cutscene...");
+				
+				//for quest rewards when you're in a cutscene
+				RSInterface[] inter = InterfaceUtils.find(FCFilters.containsAction("Close"));
+				if(inter.length > 0)
+					Clicking.click(inter[0]);
+				
 				sleep(600, 1200);
 			}
 			

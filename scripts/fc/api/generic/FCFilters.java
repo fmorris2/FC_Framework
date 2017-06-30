@@ -1,10 +1,13 @@
 package scripts.fc.api.generic;
 
+import java.util.Arrays;
+
 import org.tribot.api.interfaces.Clickable;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.types.RSArea;
+import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSMenuNode;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
@@ -68,6 +71,18 @@ public class FCFilters
 				return node.getAction().contains(option);
 			}
 			
+		};
+	}
+	
+	public static Filter<RSInterface> containsAction(String action)
+	{
+		return new Filter<RSInterface>()
+		{
+			@Override
+			public boolean accept(RSInterface i)
+			{
+				return Arrays.stream(i.getActions()).anyMatch(a -> a.equalsIgnoreCase(action));
+			}
 		};
 	}
 	
