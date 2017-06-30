@@ -8,7 +8,7 @@ import org.tribot.api.General;
 import scripts.fc.framework.grand_exchange.GEOrder;
 import scripts.fc.framework.grand_exchange.GEOrder_Status;
 import scripts.fc.framework.mission.Mission;
-import scripts.fc.framework.requirement.item.ReqItem;
+import scripts.fc.framework.requirement.item.SingleReqItem;
 import scripts.fc.framework.script.FCMissionScript;
 
 public class GEMission implements Mission
@@ -17,7 +17,7 @@ public class GEMission implements Mission
 	private boolean isDone;
 	private FCMissionScript script;
 	
-	public GEMission(FCMissionScript script, List<ReqItem> reqItems)
+	public GEMission(FCMissionScript script, List<SingleReqItem> reqItems)
 	{
 		this.script = script;
 		order = new GEOrder(script.BANK_OBSERVER, reqItems);

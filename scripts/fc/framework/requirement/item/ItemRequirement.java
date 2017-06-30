@@ -117,7 +117,7 @@ public abstract class ItemRequirement extends Requirement
 		if(reqItems.isEmpty()) //no need to add any pre reqs if reqItems is empty
 			return;
 		
-		List<ReqItem> geOrder = new ArrayList<>();
+		List<SingleReqItem> geOrder = new ArrayList<>();
 		List<Mission> mustBeGatheredItems = new ArrayList<>();
 		
 		for(ReqItem req : reqItems)
@@ -125,9 +125,12 @@ public abstract class ItemRequirement extends Requirement
 			General.println("Player does not have item requirement: " + req);
 			if(req.shouldUseGE() && getQuestPoints() >= QUEST_POINT_LIMIT)
 			{
-				General.println("Will attempt to use GE for req " + req);
-				General.println("Needs to purchase " + req.getId() + "x" + (req.getAmt() - req.getPlayerAmt()));
-				geOrder.add(new ReqItem(req, (req.getAmt() - req.getPlayerAmt())));
+				for(SingleReqItem r : req.getSingleReqItems())
+				{
+					General.println("Will attempt to use GE for req " + req);
+					General.println("Needs to purchase " + r.getId() + "x" + (r.getAmt() - r.getPlayerAmt()));
+					geOrder.add(new SingleReqItem(r, (r.getAmt() - r.getPlayerAmt())));
+				}
 			}
 			else
 			{

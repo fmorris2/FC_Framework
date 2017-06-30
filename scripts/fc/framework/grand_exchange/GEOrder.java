@@ -30,7 +30,7 @@ import scripts.fc.api.travel.Travel;
 import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.mission.Mission;
-import scripts.fc.framework.requirement.item.ReqItem;
+import scripts.fc.framework.requirement.item.SingleReqItem;
 
 public class GEOrder
 {
@@ -47,7 +47,7 @@ public class GEOrder
 	private GEOrder_Status status = GEOrder_Status.GO_TO_GE;
 	private long lastOffer;
 	
-	public GEOrder(FCBankObserver obs, List<ReqItem> reqItems)
+	public GEOrder(FCBankObserver obs, List<SingleReqItem> reqItems)
 	{
 		BANK_OBSERVER = obs;
 		ORDER_ITEMS = reqItems.stream().map(reqItem -> new GEOrderItem(reqItem)).collect(Collectors.toList());

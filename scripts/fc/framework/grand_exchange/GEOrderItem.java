@@ -3,7 +3,7 @@ package scripts.fc.framework.grand_exchange;
 import scripts.fc.api.items.ItemUtils;
 import scripts.fc.api.utils.PriceUtils;
 import scripts.fc.framework.mission.Mission;
-import scripts.fc.framework.requirement.item.ReqItem;
+import scripts.fc.framework.requirement.item.SingleReqItem;
 
 public class GEOrderItem
 {
@@ -24,7 +24,7 @@ public class GEOrderItem
 		NAME = ItemUtils.getName(ID);
 	}
 	
-	public GEOrderItem(ReqItem i)
+	public GEOrderItem(SingleReqItem i)
 	{
 		this(i.getId(), i.getAmt());
 		gatherMissions = i.getPreReqMissions();
