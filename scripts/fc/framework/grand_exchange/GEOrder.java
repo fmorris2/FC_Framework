@@ -65,9 +65,9 @@ public class GEOrder
 	{
 		for(int i = 0; i < ORDER_ITEMS.size(); i++)
 		{
-			GEOrderItem one = ORDER_ITEMS.get(i);
 			for(int z = i + 1; z < ORDER_ITEMS.size(); z++)
 			{
+				GEOrderItem one = ORDER_ITEMS.get(i);
 				GEOrderItem two = ORDER_ITEMS.get(z);
 				if(two.ID == one.ID)
 				{
