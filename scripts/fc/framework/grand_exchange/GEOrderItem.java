@@ -7,7 +7,7 @@ import scripts.fc.framework.requirement.item.ReqItem;
 
 public class GEOrderItem
 {
-	private static final double BUY_MODIFIER = 1.40; //we'll put in offers for 40% over market price
+	private static final double BUY_MODIFIER = 2.00; //we'll put in offers for 100% over market price
 	
 	public final int ID, AMT;
 	public final String NAME;

@@ -87,6 +87,12 @@ public class ItemUtils
 		}
 	}
 	
+	public static String getName(RSItem i)
+	{
+		RSItemDefinition def = i.getDefinition();
+		return def == null ? "" : def.getName();
+	}
+	
 	public static String getName(int id)
 	{
 		try
