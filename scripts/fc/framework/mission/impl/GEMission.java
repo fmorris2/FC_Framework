@@ -64,6 +64,12 @@ public class GEMission implements Mission
 			Mission[] gatherMissions = order.getGatherMissions();
 			for(Mission m : gatherMissions)
 			{
+				if(m == null)
+				{
+					General.println("Could not purchase mandatory item from GE, and we don't have a gather mission for it! Ending script...");
+					script.setIsRunning(false);
+					return;
+				}
 				General.println("Adding pre req gather mission: " + m.getMissionName()); 
 				((LinkedList<Mission>)script.getSetMissions()).addFirst(m);
 			}

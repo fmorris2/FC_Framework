@@ -63,7 +63,10 @@ public class GEOrder
 			finishOrder();
 		//then, check if we have enough gold on account for at least one item
 		else if(!isWaitingToCollect() && BANK_OBSERVER.hasCheckedBank && (getTotalGpOnAccount() < getMinGpNeeded()))
+		{
+			General.println("Player does not have enough gold to complete GE order! Resorting to gather missions for unbought items...");
 			status = GEOrder_Status.FAILED;
+		}
 		else if(!isInGe()) //then, if we aren't in the GE, go there
 			goToGe();
 		else if(Inventory.getCount(995) < getMinGpNeeded()) //if we need to withdraw gold
