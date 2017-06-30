@@ -51,12 +51,32 @@ public class GEOrder
 	{
 		BANK_OBSERVER = obs;
 		ORDER_ITEMS = reqItems.stream().map(reqItem -> new GEOrderItem(reqItem)).collect(Collectors.toList());
+		attemptToCombine();
 	}
 	
 	public GEOrder(FCBankObserver obs, GEOrderItem... items)
 	{
 		BANK_OBSERVER = obs;
 		ORDER_ITEMS = Arrays.asList(items);
+		attemptToCombine();
+	}
+	
+	private void attemptToCombine()
+	{
+		for(int i = 0; i < ORDER_ITEMS.size(); i++)
+		{
+			GEOrderItem one = ORDER_ITEMS.get(i);
+			for(int z = i + 1; z < ORDER_ITEMS.size(); z++)
+			{
+				GEOrderItem two = ORDER_ITEMS.get(z);
+				if(two.ID == one.ID)
+				{
+					General.println("GEOrder: Able to combine " + one + " with " + two);
+					ORDER_ITEMS.set(i, new GEOrderItem(one.ID, (one.AMT + two.AMT), GEOrderItem.combineGatherMissions(one, two)));
+					ORDER_ITEMS.remove(z);
+				}
+			}
+		}
 	}
 	
 	public void execute()

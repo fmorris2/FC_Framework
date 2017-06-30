@@ -1,5 +1,8 @@
 package scripts.fc.framework.grand_exchange;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import scripts.fc.api.items.ItemUtils;
 import scripts.fc.api.utils.PriceUtils;
 import scripts.fc.framework.mission.Mission;
@@ -24,10 +27,26 @@ public class GEOrderItem
 		NAME = ItemUtils.getName(ID);
 	}
 	
+	public GEOrderItem(int id, int amt, Mission[] gatherMissions)
+	{
+		this(id, amt);
+		this.gatherMissions = gatherMissions;
+	}
+	
 	public GEOrderItem(SingleReqItem i)
 	{
 		this(i.getId(), i.getAmt());
 		gatherMissions = i.getPreReqMissions();
+	}
+	
+	public static Mission[] combineGatherMissions(GEOrderItem one, GEOrderItem two)
+	{
+		if(one.gatherMissions == null)
+			return two.gatherMissions;
+		else if(two.gatherMissions == null)
+			return one.gatherMissions;
+		
+		return Stream.concat(Arrays.stream(one.gatherMissions), Arrays.stream(two.gatherMissions)).toArray(Mission[]::new);
 	}
 	
 	public int getPrice()
