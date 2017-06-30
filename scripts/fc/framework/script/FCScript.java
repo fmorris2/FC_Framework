@@ -18,6 +18,7 @@ import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.banking.listening.FCBankObserver;
 import scripts.fc.framework.paint.FCPaint;
 import scripts.fc.framework.paint.FCPaintable;
+import scripts.fc.framework.quest.BankBool;
 import scripts.fc.framework.statistic_tracking.StatTracker;
 import scripts.fc.framework.statistic_tracking.StatTracking;
 
@@ -76,6 +77,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 			
 		General.useAntiBanCompliance(true);
 		ThreadSettings.get().setClickingAPIUseDynamic(true);
+		BankBool.bankObserver = BANK_OBSERVER;
 		println("Started " + MANIFEST.name() + " v" + MANIFEST.version() + " by " + MANIFEST.authors()[0]);
 	}
 	
