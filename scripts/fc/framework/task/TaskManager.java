@@ -131,7 +131,7 @@ public abstract class TaskManager extends GoalManager
 		else if(Banking.isBankScreenOpen() || (Banking.openBank() && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 3500)))
 		{
 			//check if we don't have one of the required items
-			if(Arrays.stream(reqItems).anyMatch(req -> req.getInvCount(true) + FCBanking.getAmount(req.getIds()[0]) < req.getAmt()))
+			if(Arrays.stream(reqItems).anyMatch(req -> (req.getInvCount(true) + FCBanking.getAmount(req.getIds()[0]) < req.getAmt()) && req.isRequired()))
 			{
 				General.println("We don't have all of the required materials on the character!");
 				running = false;

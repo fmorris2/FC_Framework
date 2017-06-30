@@ -18,7 +18,7 @@ public class FCItem
 	private String[] names = null;
 	private int[] ids = null;
 	private int amt;
-	private boolean isStackable;
+	private boolean isStackable, isRequired = true;
 	private Filter<RSItem> itemFilter;
 	
 	public FCItem(int amt, boolean isStackable, int... ids)
@@ -35,6 +35,17 @@ public class FCItem
 		this.amt = amt;
 		this.isStackable = isStackable;
 		this.itemFilter = itemFilter();
+	}
+	
+	public FCItem(int amt, boolean isStackable, boolean isRequired, int... ids)
+	{
+		this(amt, isStackable, ids);
+		this.isRequired = isRequired;
+	}
+	
+	public boolean isRequired()
+	{
+		return isRequired;
 	}
 	
 	public int[] getIds()
