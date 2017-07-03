@@ -81,7 +81,11 @@ public class FCFilters
 			@Override
 			public boolean accept(RSInterface i)
 			{
-				return Arrays.stream(i.getActions()).anyMatch(a -> a.equalsIgnoreCase(action));
+				String[] actions;
+				if(i == null || (actions = i.getActions()) == null)
+					return false;
+				
+				return Arrays.stream(actions).anyMatch(a -> a != null && a.equalsIgnoreCase(action));
 			}
 		};
 	}
