@@ -10,7 +10,9 @@ import scripts.fc.framework.requirement.item.SingleReqItem;
 
 public class GEOrderItem
 {
-	private static final double BUY_MODIFIER = 2.00; //we'll put in offers for 100% over market price
+	private static final double LOW_PRICE_BUY_MODIFIER = 2.00; //we'll put in offers for 100% over market price
+	private static final double HIGH_PRICE_BUY_MODIFIER = 1.30; //we'll put in offers for 30% over market price for high prices items
+	private static final int HIGH_PRICE_THRESH = 2000;
 	
 	public final int ID, AMT;
 	public final String NAME;
@@ -56,7 +58,7 @@ public class GEOrderItem
 	
 	public int getPricePer()
 	{
-		return (int)Math.ceil(GE_PRICE_PER * BUY_MODIFIER);
+		return (int)Math.ceil(GE_PRICE_PER * (GE_PRICE_PER < HIGH_PRICE_THRESH ? LOW_PRICE_BUY_MODIFIER : HIGH_PRICE_BUY_MODIFIER));
 	}
 	
 	public void setPurchased(boolean b)
