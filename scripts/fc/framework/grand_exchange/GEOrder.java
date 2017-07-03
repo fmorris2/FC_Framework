@@ -100,9 +100,12 @@ public class GEOrder
 	
 	private void finishOrder()
 	{
+		int invSpace = Inventory.getAll().length;
+		
 		if(GrandExchange.getWindowState() != null)
 			GrandExchange.close();
-		else if((Banking.isBankScreenOpen() || Banking.openBank()) && (Inventory.getAll().length == 0 || Banking.depositAll() > 0))
+		else if((Banking.isBankScreenOpen() || Banking.openBank()) && (Inventory.getAll().length == 0 
+				|| (Banking.depositAll() > 0 && Timing.waitCondition(FCConditions.inventoryChanged(invSpace), 3200))))
 			status = GEOrder_Status.SUCCESS;
 	}
 	

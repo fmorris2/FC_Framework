@@ -16,6 +16,15 @@ public class SingleReqItem extends ReqItem
 	
 	private int id;
 	private int amt;
+	/*
+	 * this is normally set to false for items that are required but are a combined sum of parts
+	 * For example, in Goblin Diplomacy, we need blue dyed mail. However, the requirement we use to check
+	 * for that is a combined requirement of the Dye + Normal mail, and then the actual dyed mail.
+	 * 
+	 * If we don't have either, we'll set needsItem to false for the dyed mail, and the framework will ignore it
+	 * when we go to gather the required items. Otherwise it would fail because we can't buy it through the GE, and we
+	 * also don't have a gather mission for it. But this is not the case for the 2 separate items that form the dyed mail
+	 */
 	private boolean needsItem;
 	
 	public SingleReqItem(int id, int amt, boolean useGE, boolean needsItem)
