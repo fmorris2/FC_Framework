@@ -1,13 +1,5 @@
 package scripts.webwalker_logic;
 
-import org.tribot.api2007.types.RSTile;
-import scripts.webwalker_logic.shared.GetPathResponseContainer;
-import scripts.webwalker_logic.shared.PlayerInformation;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -18,6 +10,17 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
+import org.tribot.api.General;
+import org.tribot.api2007.types.RSTile;
+
+import scripts.webwalker_logic.shared.GetPathResponseContainer;
+import scripts.webwalker_logic.shared.PlayerInformation;
 
 
 class WebPathCore {
@@ -106,9 +109,11 @@ class WebPathCore {
             }
         } catch (ConnectException ignored){
             //server offline or unable to connect
+        	General.println("DaxWeb server offline!");
         } catch (Exception e){
             e.printStackTrace();
         }
+      
         return null;
     }
 

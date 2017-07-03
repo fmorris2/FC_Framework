@@ -72,7 +72,8 @@ public abstract class ItemRequirement extends Requirement
 	
 	private void checkBank()
 	{
-		if(!Banking.isInBank() && Travel.walkToBank() && !FCTiming.waitCondition(() -> Banking.isInBank(), 4000))
+		if(script.BANK_OBSERVER.getItemArray().length == 0
+				&& !Banking.isInBank() && Travel.walkToBank() && !FCTiming.waitCondition(() -> Banking.isInBank(), 4000))
 			WebWalking.walkToBank();
 		else
 		{
