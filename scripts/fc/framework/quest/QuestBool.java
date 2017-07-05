@@ -17,31 +17,29 @@ public abstract class QuestBool
 		return !value();
 	}
 	
-	public QuestBool and(QuestBool o, boolean normal)
+	public QuestBool and(QuestBool o)
 	{
 		QuestBool first = this;
-		return new QuestBool(normal)
+		return new QuestBool(true)
 		{
 			@Override
 			public boolean value()
 			{
 				return first.value() && o.value();
-			}
-			
+			}		
 		};
 	}
 	
-	public QuestBool or(QuestBool o, boolean normal)
+	public QuestBool or(QuestBool o)
 	{
 		QuestBool first = this;
-		return new QuestBool(normal)
+		return new QuestBool(true)
 		{
 			@Override
 			public boolean value()
 			{
 				return first.value() || o.value();
-			}
-			
+			}			
 		};
 	}
 	
