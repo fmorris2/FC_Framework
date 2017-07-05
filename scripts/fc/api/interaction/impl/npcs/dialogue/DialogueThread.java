@@ -28,6 +28,7 @@ public class DialogueThread extends Thread
 	private static final int DIALOGUE_MASTER = 231;
 	private static final int PLAYER_DIALOGUE_MASTER = 217;
 	private static final int CUTSCENE_SETTING = 1021, CUTSCENE_VALUE = 192;
+	private static final int QUEST_REWARD_MASTER = 277, QUEST_REWARD_CLOSE = 15;
 	
 	private int[] options;
 	private int optionIndex;
@@ -125,8 +126,11 @@ public class DialogueThread extends Thread
 				
 				//for quest rewards when you're in a cutscene
 				RSInterface[] inter = InterfaceUtils.find(FCFilters.containsAction("Close"));
+				RSInterface questReward = Interfaces.get(QUEST_REWARD_MASTER, QUEST_REWARD_CLOSE);
 				if(inter.length > 0)
 					Clicking.click(inter[0]);
+				else if(questReward != null)
+					Clicking.click(questReward);
 				
 				sleep(600, 1200);
 			}
