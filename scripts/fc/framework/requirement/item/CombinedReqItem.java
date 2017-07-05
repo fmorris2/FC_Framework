@@ -28,6 +28,9 @@ public class CombinedReqItem extends ReqItem
 	@Override
 	public boolean isSatisfied()
 	{
+		if(!checkBools()) //our bools say we don't need this requirement, so mark it as satisfied
+			return true;
+		
 		return type == Type.OR ? one.isSatisfied() || two.isSatisfied() : one.isSatisfied() && two.isSatisfied();
 	}
 	

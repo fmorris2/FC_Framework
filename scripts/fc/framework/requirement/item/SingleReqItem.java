@@ -29,9 +29,6 @@ public class SingleReqItem extends ReqItem
 	 */
 	private boolean needsItem;
 	
-	//bools that describe if this requirement is needed at the moment
-	private QuestBool[] bools;
-	
 	public SingleReqItem(int id, int amt, boolean useGE, boolean needsItem)
 	{
 		this.id = id;
@@ -47,12 +44,6 @@ public class SingleReqItem extends ReqItem
 		this.needsItem = old.needsItem;
 		this.preReqMissions = old.preReqMissions;
 		this.amt = amt;
-	}
-	
-	public SingleReqItem when(QuestBool... bools)
-	{
-		this.bools = bools;
-		return this;
 	}
 	
 	public SingleReqItem(int id, int amt, boolean useGE, boolean needsItem, Mission... preReqMissions)
@@ -92,8 +83,7 @@ public class SingleReqItem extends ReqItem
 	@Override
 	public boolean isSatisfied()
 	{
-		//if not all of the required bools for this to execute are validated, we don't need this requirement
-		if(bools == null || !Arrays.stream(bools).allMatch(b -> b.validate()))
+		if(!checkBools()) //our bools say we don't need this requirement, so mark it as satisfied
 			return true;
 		
 		return amt <= getPlayerAmt();
