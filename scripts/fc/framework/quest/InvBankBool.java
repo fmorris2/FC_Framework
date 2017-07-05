@@ -34,7 +34,7 @@ public class InvBankBool extends QuestBool
 		}
 	}
 	
-	enum TYPE
+	public enum TYPE
 	{
 		NOT_IN_EITHER,
 		IN_ONE,
