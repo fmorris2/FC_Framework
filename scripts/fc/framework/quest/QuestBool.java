@@ -25,7 +25,7 @@ public abstract class QuestBool
 			@Override
 			public boolean value()
 			{
-				return first.value() && o.value();
+				return first.validate() && o.validate();
 			}		
 		};
 	}
@@ -38,7 +38,7 @@ public abstract class QuestBool
 			@Override
 			public boolean value()
 			{
-				return first.value() || o.value();
+				return first.validate() || o.validate();
 			}			
 		};
 	}
