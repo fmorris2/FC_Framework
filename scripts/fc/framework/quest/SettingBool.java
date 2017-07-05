@@ -23,4 +23,8 @@ public class SettingBool extends QuestBool
 		return order.evaluate(Game.getSetting(index), setting);
 	}
 
+	public String toString()
+	{
+		return "SettingBool for ("+index+","+setting+"): " + validate();
+	}
 }

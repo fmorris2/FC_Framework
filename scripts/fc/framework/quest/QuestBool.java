@@ -1,5 +1,7 @@
 package scripts.fc.framework.quest;
 
+import org.tribot.api.General;
+
 public abstract class QuestBool
 {
 	boolean normal;
@@ -25,6 +27,7 @@ public abstract class QuestBool
 			@Override
 			public boolean value()
 			{
+				General.println(first + " && " + o + ": " + (first.validate() && o.validate()));
 				return first.validate() && o.validate();
 			}		
 		};
@@ -38,6 +41,7 @@ public abstract class QuestBool
 			@Override
 			public boolean value()
 			{
+				General.println(first + " || " + o + ": " + (first.validate() || o.validate()));
 				return first.validate() || o.validate();
 			}			
 		};

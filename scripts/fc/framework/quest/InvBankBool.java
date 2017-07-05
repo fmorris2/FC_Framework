@@ -41,4 +41,9 @@ public class InvBankBool extends QuestBool
 		IN_BOTH
 	}
 	
+	public String toString()
+	{
+		return "InvBankBool for ("+id+"x"+amt+"), TYPE: " + type + ": " + validate();
+	}
+	
 }
