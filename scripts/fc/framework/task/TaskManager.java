@@ -113,7 +113,7 @@ public abstract class TaskManager extends GoalManager
 		//first, check if we have the items in our inventory
 		ItemsRequiredTask reqTask = (ItemsRequiredTask)currentTask;
 		FCItem[] requiredItems = reqTask.getRequiredItems();
-		if(Arrays.stream(requiredItems).allMatch(req -> req.getInvCount(true) >= req.getAmt()))
+		if(requiredItems.length == 0 || Arrays.stream(requiredItems).allMatch(req -> req.getInvCount(true) >= req.getAmt()))
 		{
 			General.println("We have the required items in our inventory!");
 			return true;
