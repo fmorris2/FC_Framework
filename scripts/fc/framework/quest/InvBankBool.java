@@ -13,7 +13,7 @@ public class InvBankBool extends QuestBool
 	@Override
 	public boolean value()
 	{
-		return bool.value();
+		return bool.validate();
 	}
 	
 }
