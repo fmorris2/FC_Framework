@@ -125,11 +125,15 @@ public abstract class TaskManager extends GoalManager
 	private boolean getRequiredItems(FCItem[] reqItems)
 	{
 		General.println("Getting required items for task");
+		boolean hasCheckedBank = fcScript.BANK_OBSERVER.hasCheckedBank;
 		
 		if(!Banking.isInBank())
 			Travel.walkToBank();
 		else if(Banking.isBankScreenOpen() || (Banking.openBank() && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 3500)))
 		{
+			if(!hasCheckedBank) //we won't immediately end the script if the bank observer hasn't been loaded yet
+				return false;
+			
 			//check if we don't have one of the required items
 			if(Arrays.stream(reqItems).anyMatch(req -> (req.getInvCount(true) + FCBanking.getAmount(req.getIds()[0]) < req.getAmt()) && req.isRequired()))
 			{
