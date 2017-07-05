@@ -9,6 +9,7 @@ import org.tribot.api2007.types.RSItemDefinition;
 
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.mission.impl.OneTaskMission;
+import scripts.fc.framework.quest.QuestBool;
 import scripts.fc.framework.task.Task;
 
 public class SingleReqItem extends ReqItem
@@ -28,6 +29,9 @@ public class SingleReqItem extends ReqItem
 	 */
 	private boolean needsItem;
 	
+	//bools that describe if this requirement is needed at the moment
+	private QuestBool[] bools;
+	
 	public SingleReqItem(int id, int amt, boolean useGE, boolean needsItem)
 	{
 		this.id = id;
@@ -45,6 +49,12 @@ public class SingleReqItem extends ReqItem
 		this.amt = amt;
 	}
 	
+	public SingleReqItem when(QuestBool... bools)
+	{
+		this.bools = bools;
+		return this;
+	}
+	
 	public SingleReqItem(int id, int amt, boolean useGE, boolean needsItem, Mission... preReqMissions)
 	{
 		this(id, amt, useGE, needsItem);
@@ -57,6 +67,7 @@ public class SingleReqItem extends ReqItem
 		preReqMissions = task == null ? null : new Mission[]{new OneTaskMission(task, "Pre req mission: ("+id+"x"+amt+")")};
 	}
 	
+		
 	public int getId()
 	{
 		return id;
@@ -81,6 +92,10 @@ public class SingleReqItem extends ReqItem
 	@Override
 	public boolean isSatisfied()
 	{
+		//if not all of the required bools for this to execute are validated, we don't need this requirement
+		if(bools == null || !Arrays.stream(bools).allMatch(b -> b.validate()))
+			return true;
+		
 		return amt <= getPlayerAmt();
 	}
 
