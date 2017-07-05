@@ -2,7 +2,9 @@ package scripts.fc.framework.requirement.item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
@@ -26,6 +28,8 @@ import scripts.fc.framework.script.FCMissionScript;
 
 public abstract class ItemRequirement extends Requirement
 {
+	public static Map<Integer, Integer> satisfiedReqs = new HashMap<>();
+	
 	private static final int QUEST_POINT_LIMIT = 7;
 	
 	protected List<ReqItem> reqItems = new ArrayList<>(Arrays.asList(getReqItems()));
@@ -105,13 +109,21 @@ public abstract class ItemRequirement extends Requirement
 	
 	private void checkForReqs()
 	{
+		General.println("CHECKING " + reqItems.size() + " REQS");
 		for(int i = reqItems.size() - 1; i >= 0; i--)
 		{
 			ReqItem req = reqItems.get(i);
 			
 			if(req.isSatisfied())
 			{
-				General.println("req " + req + " is satisfied");
+				General.println("req " + req + " SATISFIED");
+				
+				//if this req was satisfied by having a combined version of multiple items, don't add the single items to satisfiedReqs
+				if(!req.getSingleReqItems().stream().filter(it -> it.needsItem()).allMatch(item -> item.isSatisfied()))
+					req.getSingleReqItems().stream().forEach(item -> satisfiedReqs.put(item.getId(), satisfiedReqs.getOrDefault(item.getId(), 0) + 1));
+				else
+					General.println(req + " was satisfied by having the combined req instead of individual parts");
+				
 				reqItems.remove(i);
 			}
 		}
@@ -129,14 +141,19 @@ public abstract class ItemRequirement extends Requirement
 		{
 			for(SingleReqItem r : req.getSingleReqItems())
 			{
-				if(!r.needsItem())
+				General.println("Add prereqs for " + r + ", r.getAmt(): " + r.getAmt() + ", r.getPlayerAmt(): " + r.getPlayerAmt());
+				int amtNeeded = r.getAmt() - (r.getPlayerAmt() < 0 ? 0 : r.getPlayerAmt());
+				if(!r.needsItem() || amtNeeded <= 0)
 					continue;
 				
 				General.println("Player does not have item requirement: " + req);
 				if(r.shouldUseGE() && getQuestPoints() >= QUEST_POINT_LIMIT)
 				{
+					if(r.getAmt() - r.getPlayerAmt() <= 0)
+						continue;
+					
 					General.println("Will attempt to use GE for req " + r);
-					General.println("Needs to purchase " + r.getId() + "x" + (r.getAmt() - r.getPlayerAmt()));
+					General.println("Needs to purchase " + r.getId() + "x" + amtNeeded);
 					geOrder.add(new SingleReqItem(r, (r.getAmt() - r.getPlayerAmt())));
 				}
 				else
@@ -154,7 +171,8 @@ public abstract class ItemRequirement extends Requirement
 		if(!geOrder.isEmpty())
 			missions.add(new GEMission(script, geOrder));
 		
-		missions.addAll(mustBeGatheredItems);		
+		missions.addAll(mustBeGatheredItems);
+		satisfiedReqs.clear();
 	}
 	
 	private int getQuestPoints()

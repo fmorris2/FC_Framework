@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.RSItemDefinition;
 
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.mission.impl.OneTaskMission;
@@ -68,7 +69,8 @@ public class SingleReqItem extends ReqItem
 	
 	public int getPlayerAmt()
 	{
-		return playerAmt;
+		int amt = playerAmt - ItemRequirement.satisfiedReqs.getOrDefault(id, 0);
+		return amt < 0 ? 0 : amt;
 	}
 	
 	public boolean needsItem()
@@ -79,15 +81,18 @@ public class SingleReqItem extends ReqItem
 	@Override
 	public boolean isSatisfied()
 	{
-		return amt <= playerAmt;
+		return amt <= getPlayerAmt();
 	}
 
 	@Override
 	public void check(RSItem[] items)
 	{
 		for(RSItem i : items)
-			if(i.getID() == id || i.getID() == id + 1)
+		{
+			RSItemDefinition def = i.getDefinition();
+			if(i.getID() == id || (i.getID() == id + 1 && (def != null && def.isNoted())))
 				playerAmt += i.getStack();
+		}
 	}
 	
 	@Override

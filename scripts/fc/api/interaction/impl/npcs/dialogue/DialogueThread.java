@@ -32,7 +32,7 @@ public class DialogueThread extends Thread
 	private int[] options;
 	private int optionIndex;
 	
-	private boolean isSuccessful, isRunning = true;
+	private boolean isSuccessful, isRunning = true, ignoreChatName;
 	
 	private RSNPC npc;
 	private String npcName, action;
@@ -43,6 +43,12 @@ public class DialogueThread extends Thread
 		this.npcName = npc.getName();
 		this.action = action;
 		this.options = options;
+	}
+	
+	public DialogueThread ignoreChatName(boolean t)
+	{
+		ignoreChatName = t;
+		return this;
 	}
 	
 	public void run()
@@ -202,7 +208,7 @@ public class DialogueThread extends Thread
 	{
 		String npcChatName = NPCChat.getName();
 		
-		return npcChatName != null && (npcChatName.equals(npcName) || npcChatName.equals(Player.getRSPlayer().getName()));
+		return ignoreChatName || npcChatName != null && (npcChatName.equals(npcName) || npcChatName.equals(Player.getRSPlayer().getName()));
 	}
 	
 	private boolean isInteractingWithNpc()

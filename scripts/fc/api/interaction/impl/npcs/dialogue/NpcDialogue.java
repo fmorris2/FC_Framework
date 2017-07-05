@@ -7,8 +7,6 @@ import org.tribot.api2007.types.RSInterface;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.NpcInteraction;
 import scripts.fc.api.utils.InterfaceUtils;
-import scripts.fc.api.utils.NpcUtils;
-import scripts.fc.api.utils.PlayerUtils;
 import scripts.fc.api.wrappers.FCTiming;
 
 public class NpcDialogue extends NpcInteraction
@@ -17,7 +15,7 @@ public class NpcDialogue extends NpcInteraction
 	protected static Thread currentExecutingThread = null;
 	
 	private DialogueThread dialogueThread;
-	private boolean waitMainThread = true;
+	private boolean waitMainThread = true, ignoreChatName;
 	private int[] options;
 	
 	public NpcDialogue(String action, String name, int searchDistance, int... options)
@@ -48,7 +46,7 @@ public class NpcDialogue extends NpcInteraction
 		if(abnormalClickToContinue != null && !abnormalClickToContinue.isHidden())
 			Clicking.click(abnormalClickToContinue);
 		
-		dialogueThread = new DialogueThread(npc, action, options);
+		dialogueThread = new DialogueThread(npc, action, options).ignoreChatName(ignoreChatName);
 		dialogueThread.start();
 		currentExecutingThread = dialogueThread;
 		
@@ -64,17 +62,8 @@ public class NpcDialogue extends NpcInteraction
 		return FCTiming.waitCondition(() -> FCConditions.IN_DIALOGUE_CONDITION.active() || dialogueThread.isSuccessful(), 4000);
 	}
 	
-	private boolean isInteractingWithCorrectNpc()
+	public void setIgnoreChatName(boolean b)
 	{
-		//if name was used for this interaction, check that
-		if(name != null)
-		{
-			String interactingName = PlayerUtils.getInteractingCharacterName();
-			return interactingName != null && name.equals(interactingName);
-		}
-		
-		//if id was used, check that
-		int interactingId = NpcUtils.getInteractingNpcId();
-		return id == interactingId;
+		ignoreChatName = b;
 	}
 }
