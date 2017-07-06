@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.GrandExchange;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.WorldHopper;
-import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSGEOffer;
 import org.tribot.api2007.types.RSGEOffer.STATUS;
 import org.tribot.api2007.types.RSInterface;
@@ -36,7 +36,8 @@ public class GEOrder
 {
 	private static final int COLLECTION_BOX_MASTER = 402, COLLECTION_BOX_CHILD = 2, COLLECTION_BOX_COMP = 11;
 	
-	private static final RSArea GE_AREA = new RSArea(new RSTile(3158, 3494, 0), new RSTile(3172, 3483, 0));
+	private static final Positionable GE_TILE = new RSTile(3164, 3485, 0);
+	private static final int GE_DIST_THRESH = 12;
 	private static final int GE_BOOTH_ID = 10061;
 	private static final int MAX_F2P_INDEX = 2; //Can only use the first 3 GE slots if F2P
 	private static final long LAST_OFFER_THRESH = 1200;
@@ -111,13 +112,13 @@ public class GEOrder
 	
 	private boolean isInGe()
 	{
-		return GE_AREA.contains(Player.getPosition());
+		return Player.getPosition().distanceTo(GE_TILE) < GE_DIST_THRESH;
 	}
 	
 	private void goToGe()
 	{
 		status = GEOrder_Status.GO_TO_GE;
-		Travel.webWalkTo(GE_AREA.getRandomTile(), FCConditions.inAreaCondition(GE_AREA));
+		Travel.webWalkTo(GE_TILE, FCConditions.withinDistanceOfTile(GE_TILE, GE_DIST_THRESH));
 	}
 	
 	private void handleGeLogic()
@@ -191,7 +192,7 @@ public class GEOrder
 		General.println("Putting in buy offer for item " + toOffer);
 		
 		long oldEmptyOffers = getEmptyOffers();
-		if(GrandExchange.offer(toOffer.NAME, toOffer.getPricePer(), toOffer.AMT, false)
+		if(GrandExchange.offer(toOffer.NAME.trim(), toOffer.getPricePer(), toOffer.AMT, false)
 				&& FCTiming.waitCondition(() -> oldEmptyOffers != getEmptyOffers(), 4000))
 		{
 			General.println("Successfully put in offer for " + toOffer);
