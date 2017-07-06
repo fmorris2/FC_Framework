@@ -23,6 +23,7 @@ import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.banking.listening.FCBankObserver;
 import scripts.fc.api.generic.FCConditions;
+import scripts.fc.api.grand_exchange.FCGrandExchange;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.npcs.ClickNpc;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
@@ -192,7 +193,7 @@ public class GEOrder
 		General.println("Putting in buy offer for item " + toOffer);
 		
 		long oldEmptyOffers = getEmptyOffers();
-		if(GrandExchange.offer(toOffer.NAME.trim(), toOffer.getPricePer(), toOffer.AMT, false)
+		if(FCGrandExchange.offer(toOffer.NAME.trim(), toOffer.getPricePer(), toOffer.AMT, false)
 				&& FCTiming.waitCondition(() -> oldEmptyOffers != getEmptyOffers(), 4000))
 		{
 			General.println("Successfully put in offer for " + toOffer);
