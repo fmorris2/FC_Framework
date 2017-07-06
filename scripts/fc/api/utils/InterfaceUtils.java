@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.tribot.api.Clicking;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterface;
+
+import scripts.fc.api.wrappers.FCTiming;
 
 public class InterfaceUtils
 {
@@ -49,5 +52,32 @@ public class InterfaceUtils
 		}
 
 		return matches.toArray(new RSInterface[matches.size()]);
+	}
+	
+	public static boolean closeQuestInterface()
+	{
+		RSInterface[] closeQuestButton = find(getCloseQuestButton());
+		if(closeQuestButton.length > 0)
+			return Clicking.click(closeQuestButton[0]) && FCTiming.waitCondition(() -> !isQuestInterfaceUp(), 1800);
+		
+		return false;
+	}
+	
+	private static Filter<RSInterface> getCloseQuestButton()
+	{
+		return new Filter<RSInterface>()
+		{
+			@Override
+			public boolean accept(RSInterface i)
+			{
+				return i.getWidth() == 26 && i.getHeight() == 23;
+			}
+			
+		};
+	}
+	
+	public static boolean isQuestInterfaceUp()
+	{
+		return findContainingText("Congratulations!") != null && findContainingText("Quest Points:") != null;
 	}
 }

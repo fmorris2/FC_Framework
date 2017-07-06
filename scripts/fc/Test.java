@@ -1,29 +1,15 @@
 package scripts.fc;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
-import org.tribot.api.Clicking;
-import org.tribot.api.General;
-import org.tribot.api2007.GrandExchange;
-import org.tribot.api2007.GrandExchange.WINDOW_STATE;
-import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.MessageListener;
-import org.tribot.api2007.WorldHopper;
-import org.tribot.api2007.types.RSGEOffer;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSGEOffer.STATUS;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.Painting;
 import org.tribot.script.interfaces.Starting;
 
-import scripts.fc.api.generic.FCFilters;
-import scripts.fc.api.grand_exchange.FCGrandExchange;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
-import scripts.fc.api.wrappers.FCTiming;
+import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 
@@ -47,7 +33,9 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(FCGrandExchange.offer("Clay", 400, 1, false));
+		println(InterfaceUtils.isQuestInterfaceUp());
+		if(InterfaceUtils.isQuestInterfaceUp())
+			InterfaceUtils.closeQuestInterface();
 		return 600;
 	}
 	

@@ -10,6 +10,7 @@ import org.tribot.script.interfaces.Starting;
 
 import scripts.fc.api.inventory.FCInventoryListener;
 import scripts.fc.api.inventory.FCInventoryObserver;
+import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.framework.goal.Goal;
 import scripts.fc.framework.goal.GoalList;
 import scripts.fc.framework.mission.GoalMission;
@@ -70,6 +71,9 @@ public abstract class FCMissionScript extends FCScript implements FCInventoryLis
 		
 		if(currentMission.hasReachedEndingCondition())
 		{
+			if(InterfaceUtils.isQuestInterfaceUp())
+				InterfaceUtils.closeQuestInterface();
+			
 			reportStats();	
 			println(currentMission.getEndingMessage());
 			compilePreReqs();
