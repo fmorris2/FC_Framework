@@ -10,7 +10,7 @@ import scripts.fc.framework.mission.MissionManager;
 import scripts.fc.framework.requirement.Requirement;
 import scripts.fc.framework.script.FCMissionScript;
 
-public abstract class QuestScriptManager extends MissionManager implements Mission
+public abstract class QuestScriptManager extends MissionManager implements QuestMission
 {
 	private List<Mission> preReqMissions = new ArrayList<Mission>();
 	
