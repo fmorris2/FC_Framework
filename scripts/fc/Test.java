@@ -33,9 +33,6 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(InterfaceUtils.isQuestInterfaceUp());
-		if(InterfaceUtils.isQuestInterfaceUp())
-			InterfaceUtils.closeQuestInterface();
 		return 600;
 	}
 	

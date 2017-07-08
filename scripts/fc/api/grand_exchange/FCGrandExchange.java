@@ -65,8 +65,8 @@ public class FCGrandExchange
 		
 		//set price & quantity & confirm offer
 		return (General.random(0, 1) == 0 ?
-				GrandExchange.setPrice(price) && GrandExchange.setQuantity(quantity)
-				: GrandExchange.setQuantity(quantity) && GrandExchange.setPrice(price))
+				GrandExchange.setPrice(price) && (quantity == 1 || GrandExchange.setQuantity(quantity))
+				: (quantity == 1 || GrandExchange.setQuantity(quantity)) && GrandExchange.setPrice(price))
 				&& GrandExchange.confirmOffer();
 	}
 	

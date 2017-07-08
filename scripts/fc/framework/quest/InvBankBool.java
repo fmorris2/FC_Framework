@@ -18,6 +18,9 @@ public class InvBankBool extends QuestBool
 	@Override
 	public boolean value()
 	{
+		if(!BankBool.bankObserver.hasCheckedBank)
+			BankBool.checkBank(BankBool.bankObserver);
+		
 		boolean inBank = !BankBool.bankObserver.hasCheckedBank || BankBool.bankObserver.containsItem(id, amt);
 		boolean inInv = Inventory.getCount(id) >= amt;
 		
