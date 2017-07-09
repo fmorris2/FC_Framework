@@ -1,5 +1,6 @@
 package scripts.fc;
 
+import org.tribot.api2007.GrandExchange;
 import org.tribot.api2007.MessageListener;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
@@ -33,6 +34,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
+		GrandExchange.getOffers()[0].click("Abort offer");
 		return 600;
 	}
 	

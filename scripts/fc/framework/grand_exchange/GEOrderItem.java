@@ -3,6 +3,8 @@ package scripts.fc.framework.grand_exchange;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import org.tribot.api.General;
+
 import scripts.fc.api.items.ItemUtils;
 import scripts.fc.api.utils.PriceUtils;
 import scripts.fc.framework.mission.Mission;
@@ -10,8 +12,9 @@ import scripts.fc.framework.requirement.item.SingleReqItem;
 
 public class GEOrderItem
 {
-	private static final double LOW_PRICE_BUY_MODIFIER = 2.00; //we'll put in offers for 100% over market price for low priced items
-	private static final double HIGH_PRICE_BUY_MODIFIER = 1.30; //we'll put in offers for 30% over market price for high priced items
+	private static final double LOW_PRICE_BUY_MODIFIER = 2.00;//2.00; //we'll put in offers for 100% over market price for low priced items
+	private static final double HIGH_PRICE_BUY_MODIFIER = 1.30;//1.30; //we'll put in offers for 30% over market price for high priced items
+	private static final double RESUBMIT_STEP = .15; //price will go up 15% every time we resubmit
 	private static final int HIGH_PRICE_THRESH = 2000;
 	
 	public final int ID, AMT;
@@ -20,6 +23,7 @@ public class GEOrderItem
 	
 	private Mission[] gatherMissions; //in case we've failed to buy this item from the GE
 	private boolean isPurchased, isOffered;
+	private double resubmitModifier = 0.0;
 	
 	public GEOrderItem(int id, int amt)
 	{
@@ -51,6 +55,18 @@ public class GEOrderItem
 		return Stream.concat(Arrays.stream(one.gatherMissions), Arrays.stream(two.gatherMissions)).toArray(Mission[]::new);
 	}
 	
+	public void resubmit()
+	{
+		isOffered = false;
+		resubmitModifier += RESUBMIT_STEP;
+		General.println("Resubmitting " + this + " with higher price...");
+	}
+	
+	public int getResubmitPrice()
+	{
+		return getResubmitPricePer() - getPrice();
+	}
+	
 	public int getPrice()
 	{
 		return getPricePer() * AMT;
@@ -58,7 +74,12 @@ public class GEOrderItem
 	
 	public int getPricePer()
 	{
-		return (int)Math.ceil(GE_PRICE_PER * (GE_PRICE_PER < HIGH_PRICE_THRESH ? LOW_PRICE_BUY_MODIFIER : HIGH_PRICE_BUY_MODIFIER));
+		return (int)Math.ceil(GE_PRICE_PER * ((GE_PRICE_PER < HIGH_PRICE_THRESH ? LOW_PRICE_BUY_MODIFIER : HIGH_PRICE_BUY_MODIFIER) + resubmitModifier));
+	}
+	
+	private int getResubmitPricePer()
+	{
+		return (int)Math.ceil(GE_PRICE_PER * ((GE_PRICE_PER < HIGH_PRICE_THRESH ? LOW_PRICE_BUY_MODIFIER : HIGH_PRICE_BUY_MODIFIER) + (resubmitModifier + RESUBMIT_STEP)));
 	}
 	
 	public void setPurchased(boolean b)

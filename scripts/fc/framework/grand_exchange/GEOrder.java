@@ -139,8 +139,22 @@ public class GEOrder
 			offerItems();
 		else if(shouldCollectItems())
 			collectItems();
+		else if(shouldModifyPrice())
+			modifyPrice();
 		else
 			General.println("Waiting for transactions to complete...");
+	}
+	
+	private boolean shouldModifyPrice()
+	{
+		return getUnsoldOffers().length > 0;
+	}
+	
+	private void modifyPrice()
+	{
+		General.println("Modifying prices...");
+		Arrays.stream(getUnsoldOffers())
+			.forEach(unsold -> {GEOrderItem orderItem = getOrderItemForOffer(unsold); if(unsold.click("Abort offer") && orderItem != null){orderItem.resubmit();}});
 	}
 	
 	private void collectItems()
@@ -162,9 +176,22 @@ public class GEOrder
 		}
 	}
 	
+	private GEOrderItem getOrderItemForOffer(RSGEOffer offer)
+	{
+		return ORDER_ITEMS.stream().filter(i -> offer.getItemID() == i.ID && offer.getQuantity() == i.AMT).findFirst().orElse(null);
+	}
+	
 	private boolean shouldCollectItems()
 	{
 		return getAccessibleOffers().anyMatch(o -> o.getStatus() == STATUS.CANCELLED || o.getStatus() == STATUS.COMPLETED);
+	}
+	
+	private RSGEOffer[] getUnsoldOffers()
+	{
+		return getAccessibleOffers()
+				.filter(o -> o.getStatus() == STATUS.IN_PROGRESS && o.getTransferredAmount() == 0 
+					&& getOrderItemForOffer(o) != null && getOrderItemForOffer(o).getResubmitPrice() <= getTotalGpOnAccount())
+				.toArray(RSGEOffer[]::new);
 	}
 	
 	private boolean needsToOfferItems()

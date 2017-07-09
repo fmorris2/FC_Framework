@@ -37,7 +37,7 @@ public class StatTracker
 			General.println("VikingScripts connection not allowed");
 			status = STATUS.NOT_ALLOWED_FIREWALL;
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 			status = STATUS.SERVER_DOWN;

@@ -17,6 +17,7 @@ import scripts.fc.framework.mission.GoalMission;
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.quest.QuestScriptManager;
 import scripts.fc.framework.statistic_tracking.StatTracker;
+import scripts.fc.framework.statistic_tracking.StatTracker.STATUS;
 import scripts.fc.framework.statistic_tracking.StatTracking;
 
 public abstract class FCMissionScript extends FCScript implements FCInventoryListener, Starting
@@ -59,7 +60,7 @@ public abstract class FCMissionScript extends FCScript implements FCInventoryLis
 				if(currentMission instanceof StatTracking)
 				{
 					statTracker = new StatTracker();
-					if(!statTracker.reportOnline(currentMission.getMissionName()))
+					if(!statTracker.reportOnline(currentMission.getMissionName()) && statTracker.getStatus() == STATUS.NOT_ALLOWED_FIREWALL)
 					{
 						println("You must enable the connection to " + StatTracker.SOCKET_URL + " for statistic tracking purposes.");
 						statTrackingFailed = true;
