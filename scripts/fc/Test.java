@@ -1,7 +1,8 @@
 package scripts.fc;
 
-import org.tribot.api2007.GrandExchange;
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.MessageListener;
+import org.tribot.api2007.Player;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
@@ -10,7 +11,6 @@ import org.tribot.script.interfaces.Starting;
 
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
-import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 
@@ -34,7 +34,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		GrandExchange.getOffers()[0].click("Abort offer");
+		Positionable pos = Player.getPosition();
 		return 600;
 	}
 	

@@ -1,5 +1,6 @@
 package scripts.fc.framework.quest;
 
+import org.tribot.api.General;
 import org.tribot.api2007.Inventory;
 
 public class InvBankBool extends QuestBool
@@ -18,11 +19,13 @@ public class InvBankBool extends QuestBool
 	@Override
 	public boolean value()
 	{
-		if(!BankBool.bankObserver.hasCheckedBank)
+		boolean inInv = Inventory.getCount(id) >= amt;
+		
+		General.println("Type: " + type + ", inInv: " + inInv + ", " + id + "x" + amt);
+		if(!((type == TYPE.IN_ONE || type == TYPE.NOT_IN_EITHER) && inInv) && !BankBool.bankObserver.hasCheckedBank)
 			BankBool.checkBank(BankBool.bankObserver);
 		
 		boolean inBank = BankBool.bankObserver.containsItem(id, amt);
-		boolean inInv = Inventory.getCount(id) >= amt;
 		
 		switch(type)
 		{
