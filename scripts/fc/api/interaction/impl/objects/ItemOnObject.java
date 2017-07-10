@@ -1,5 +1,6 @@
 package scripts.fc.api.interaction.impl.objects;
 
+import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Game;
@@ -39,6 +40,7 @@ public class ItemOnObject extends ObjectInteraction
 	@Override
 	protected boolean interact()
 	{
+		General.println("ItemOnObject interact()");
 		this.name = object.getDefinition().getName();
 		RSItem[] items = itemName == null ? Inventory.find(itemId) : Inventory.find(itemName);
 		
@@ -46,10 +48,12 @@ public class ItemOnObject extends ObjectInteraction
 		{
 			if(!Game.isUptext(action + " " + itemName + " ->"))
 			{
-				if(items[0].click(action) && !Timing.waitCondition(FCConditions.uptextContains(action + " " + itemName + " -> " + name), 800))
+				General.println("Need to click item...");
+				if(items[0].click(action) && !Timing.waitCondition(FCConditions.uptextContains(action + " " + itemName + " ->"), 800))
 					return false;
 			}
 			
+			General.println("Object in ItemOnObject: " + object.getID());
 			return AccurateMouse.click(object, "Use");
 			//return DynamicClicking.clickRSObject(object, "Use " + itemName + " -> " + name);
 		}

@@ -2,7 +2,6 @@ package scripts.fc.api.travel;
 
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Condition;
-import org.tribot.api2007.WebWalking;
 
 import scripts.webwalker_logic.WebWalker;
 import scripts.webwalker_logic.local.walker_engine.WalkingCondition;
