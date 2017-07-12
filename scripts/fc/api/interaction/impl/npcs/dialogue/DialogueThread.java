@@ -126,7 +126,7 @@ public class DialogueThread extends Thread
 		return true;
 	}
 	
-	private static void doClickToContinue()
+	public static void doClickToContinue()
 	{
 		//first, check for abnormal click to continue interface
 		RSInterface abnormalClickToContinue = InterfaceUtils.findContainingText("Click to continue");
