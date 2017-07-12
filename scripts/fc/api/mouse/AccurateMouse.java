@@ -266,7 +266,7 @@ public class AccurateMouse {
             return target != null && action != null && Arrays.stream(clickActions).anyMatch(s -> s.equals(action));
         }).collect(Collectors.toList());
         
-        return list.stream().filter(rsMenuNode -> rsMenuNode.correlatesTo(clickable)).findFirst().orElse(list.size() > 0 ? list.get(0) : null);
+        return list.stream().filter(rsMenuNode -> rsMenuNode.correlatesTo(clickable) || rsMenuNode.getTarget().equals(targetName)).findFirst().orElse(list.size() > 0 ? list.get(0) : null);
     }
 
     public static State waitResponse(){

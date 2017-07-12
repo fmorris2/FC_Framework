@@ -9,6 +9,7 @@ import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.Painting;
 import org.tribot.script.interfaces.Starting;
 
+import scripts.fc.api.interaction.impl.grounditems.PickUpGroundItem;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
 import scripts.fc.framework.paint.FCPaintable;
@@ -34,7 +35,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		Positionable pos = Player.getPosition();
+		new PickUpGroundItem("Rat's tail").execute();
 		return 600;
 	}
 	
