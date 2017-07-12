@@ -103,23 +103,7 @@ public class DialogueThread extends Thread
 				optionIndex++;
 			}
 			else if(areDialogueInterfacesUp()) //click continue interface
-			{
-				//first, check for abnormal click to continue interface
-				RSInterface abnormalClickToContinue = InterfaceUtils.findContainingText("Click to continue");
-				
-				if(abnormalClickToContinue != null && !abnormalClickToContinue.isHidden())
-				{
-					log("Abnormal click continue interface up");
-					if(Clicking.click(abnormalClickToContinue)) //click abnormal interface and wait up to 2 gameticks for it to disappear
-						FCTiming.waitCondition(() -> InterfaceUtils.findContainingText("Click to continue") == null, 1200);
-				}
-				else //normal click to continue interface is up
-				{
-					log("Holding spacebar...");
-					Keyboard.holdKey(' ', Keyboard.getKeyCode(' '), FCConditions.SPACEBAR_HOLD);
-					log("Releasing spacebar...");
-				}
-			}
+				doClickToContinue();
 			else if(isInCutscene())
 			{
 				log("In cutscene...");
@@ -140,6 +124,25 @@ public class DialogueThread extends Thread
 		
 		//assume we've gone through the dialogue successfully
 		return true;
+	}
+	
+	private static void doClickToContinue()
+	{
+		//first, check for abnormal click to continue interface
+		RSInterface abnormalClickToContinue = InterfaceUtils.findContainingText("Click to continue");
+		
+		if(abnormalClickToContinue != null && !abnormalClickToContinue.isHidden())
+		{
+			log("Abnormal click continue interface up");
+			if(Clicking.click(abnormalClickToContinue)) //click abnormal interface and wait up to 2 gameticks for it to disappear
+				FCTiming.waitCondition(() -> InterfaceUtils.findContainingText("Click to continue") == null, 1200);
+		}
+		else //normal click to continue interface is up
+		{
+			log("Holding spacebar...");
+			Keyboard.holdKey(' ', Keyboard.getKeyCode(' '), FCConditions.SPACEBAR_HOLD);
+			log("Releasing spacebar...");
+		}
 	}
 	
 	private boolean isInCutscene()
@@ -190,7 +193,7 @@ public class DialogueThread extends Thread
 		return isInDialogueWithNpc();
 	}
 	
-	private boolean areDialogueInterfacesUp()
+	public static boolean areDialogueInterfacesUp()
 	{
 		RSInterface continueInter = InterfaceUtils.findContainingText("to continue");
 		
@@ -230,7 +233,7 @@ public class DialogueThread extends Thread
 		NpcDialogue.currentExecutingThread = null;
 	}
 	
-	private void log(String str)
+	private static void log(String str)
 	{
 		General.println("[DialogueThread] " + str);
 	}
