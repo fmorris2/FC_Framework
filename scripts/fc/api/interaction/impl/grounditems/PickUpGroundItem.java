@@ -14,7 +14,7 @@ public class PickUpGroundItem extends GroundItemInteraction
 	@Override
 	protected boolean interact()
 	{
-		return AccurateMouse.click(groundItem, "Take");
+		return AccurateMouse.click(groundItem, "Take " + name);
 		//return DynamicClicking.clickRSGroundItem(groundItem, "Take " + name);
 	}
 
