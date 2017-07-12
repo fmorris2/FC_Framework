@@ -147,6 +147,9 @@ public class GEOrder
 	
 	private boolean shouldModifyPrice()
 	{
+		if(Timing.timeFromMark(lastOffer) < LAST_OFFER_THRESH)
+			return false;
+		
 		return getUnsoldOffers().length > 0;
 	}
 	
