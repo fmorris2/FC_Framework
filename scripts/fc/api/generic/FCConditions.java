@@ -392,9 +392,9 @@ public class FCConditions
 				General.sleep(100);
 				RSCharacter target = Combat.getTargetEntity();
 				RSCharacter rangedTarget = Player.getRSPlayer().getInteractingCharacter();
-				return target != null && target.getHealth() <= 0 ||
+				return target != null && target.getHealthPercent() <= 0 ||
 						(rangedTarget != null && rangedTarget.isInCombat()
-						&& rangedTarget.isInteractingWithMe() && rangedTarget.getHealth() <= 0);
+						&& rangedTarget.isInteractingWithMe() && rangedTarget.getHealthPercent() <= 0);
 			}
 	
 		};

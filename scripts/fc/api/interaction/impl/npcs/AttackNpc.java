@@ -1,6 +1,5 @@
 package scripts.fc.api.interaction.impl.npcs;
 
-import org.tribot.api.DynamicClicking;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.PathFinding;

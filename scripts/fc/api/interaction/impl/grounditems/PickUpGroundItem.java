@@ -1,7 +1,5 @@
 package scripts.fc.api.interaction.impl.grounditems;
 
-import org.tribot.api.DynamicClicking;
-
 import scripts.fc.api.interaction.GroundItemInteraction;
 import scripts.fc.api.mouse.AccurateMouse;
 
