@@ -1,17 +1,16 @@
 package scripts.fc;
 
-import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.MessageListener;
-import org.tribot.api2007.Player;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.Painting;
 import org.tribot.script.interfaces.Starting;
 
-import scripts.fc.api.interaction.impl.grounditems.PickUpGroundItem;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
+import scripts.fc.api.settings.FCVarBitListener;
+import scripts.fc.api.settings.FCVarBitObserver;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 
@@ -26,16 +25,16 @@ import scripts.fc.framework.script.FCScript;
 		gameMode    = 1)
 	
 
-public class Test extends FCScript implements FCPaintable, Painting, Starting, Ending, FCSettingsListener, MessageListening07
+public class Test extends FCScript implements FCPaintable, Painting, Starting, Ending, FCSettingsListener, MessageListening07, FCVarBitListener
 {	
 	private static final int DIALOGUE_MASTER = 231;
 	private static final int PLAYER_DIALOGUE_MASTER = 217;
 	
 	private FCSettingsObserver settingsObserver = new FCSettingsObserver(this);
+	private FCVarBitObserver varbitObserver = new FCVarBitObserver(this);
 	
 	protected int mainLogic()
 	{
-		new PickUpGroundItem("Rat's tail").execute();
 		return 600;
 	}
 	
@@ -48,12 +47,13 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	@Override
 	public void settingChanged(int index, int oldValue, int newValue)
 	{
-		println("INDEX: " + index + ", OLD: " + oldValue + ", NEW: " + newValue);
+		println("SETTING INDEX: " + index + ", OLD: " + oldValue + ", NEW: " + newValue);
 	}
 
 	public void onEnd()
 	{
 		super.onEnd();
+		varbitObserver.isRunning = false;
 	}
 	
 	public void onStart()
@@ -93,6 +93,12 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	public void tradeRequestReceived(String arg0)
 	{
 		
+	}
+
+	@Override
+	public void varbitChanged(int index, int old, int newVal)
+	{
+		println("VARBIT INDEX: " + index + ", OLD: " + old + ", NEW: " + newVal);
 	}
 
 }
