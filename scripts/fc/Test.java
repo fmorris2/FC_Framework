@@ -9,8 +9,6 @@ import org.tribot.script.interfaces.Starting;
 
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
-import scripts.fc.api.settings.FCVarBitListener;
-import scripts.fc.api.settings.FCVarBitObserver;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 
@@ -25,13 +23,9 @@ import scripts.fc.framework.script.FCScript;
 		gameMode    = 1)
 	
 
-public class Test extends FCScript implements FCPaintable, Painting, Starting, Ending, FCSettingsListener, MessageListening07, FCVarBitListener
+public class Test extends FCScript implements FCPaintable, Painting, Starting, Ending, FCSettingsListener, MessageListening07
 {	
-	private static final int DIALOGUE_MASTER = 231;
-	private static final int PLAYER_DIALOGUE_MASTER = 217;
-	
 	private FCSettingsObserver settingsObserver = new FCSettingsObserver(this);
-	private FCVarBitObserver varbitObserver = new FCVarBitObserver(this);
 	
 	protected int mainLogic()
 	{
@@ -53,7 +47,6 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	public void onEnd()
 	{
 		super.onEnd();
-		varbitObserver.isRunning = false;
 	}
 	
 	public void onStart()
@@ -96,9 +89,9 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	}
 
 	@Override
-	public void varbitChanged(int index, int old, int newVal)
+	public void varBitChanged(int setting, int varbitIndex, int oldValue, int newValue)
 	{
-		println("VARBIT INDEX: " + index + ", OLD: " + old + ", NEW: " + newVal);
+		println("VARBIT " + varbitIndex + " FOR SETTING " + setting + " CHANGED FROM " + oldValue + " ---> " + newValue);
 	}
 
 }
