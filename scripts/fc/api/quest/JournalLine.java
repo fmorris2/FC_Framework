@@ -10,7 +10,7 @@ public class JournalLine
 	
 	public JournalLine(String unparsed)
 	{
-		text = parse(unparsed);
+		text = parse(unparsed).toLowerCase();
 		isComplete = isComplete(unparsed);
 	}
 	
@@ -29,12 +29,12 @@ public class JournalLine
 	
 	public boolean equals(String str)
 	{
-		return text.equals(str);
+		return text.equals(str.toLowerCase());
 	}
 	
 	public boolean contains(String str)
 	{
-		return text.contains(str);
+		return text.contains(str.toLowerCase());
 	}
 	
 	public boolean isComplete()
@@ -44,7 +44,7 @@ public class JournalLine
 	
 	public String toString()
 	{
-		return "Text: " + text + ", Complete: " + isComplete;
+		return "Text: " + text + " Complete: " + isComplete;
 	}
 	
 }
