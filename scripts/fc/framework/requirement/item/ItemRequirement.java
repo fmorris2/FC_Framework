@@ -170,10 +170,4 @@ public abstract class ItemRequirement extends Requirement
 		missions.addAll(mustBeGatheredItems);
 		satisfiedReqs.clear();
 	}
-	
-	private int getQuestPoints()
-	{
-		return Game.getSetting(101);
-	}
-
 }

@@ -6,6 +6,8 @@ import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSTile;
+
+import scripts.fc.api.utils.InterfaceUtils;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
 import scripts.webwalker_logic.local.walker_engine.local_pathfinding.PathAnalyzer;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.Charter;
@@ -303,6 +305,10 @@ public class WalkerEngine implements Loggable{
             Camera.setCameraRotation(General.random(0, 360));
         }
         log("Failed attempt on action.");
+        
+        if(InterfaceUtils.isQuestInterfaceUp())
+        	InterfaceUtils.closeQuestInterface();
+        
         WaitFor.milliseconds(350, 650);
         CollisionDataCollector.generateRealTimeCollision();
         return true;
