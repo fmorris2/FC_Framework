@@ -30,8 +30,6 @@ public abstract class ItemRequirement extends Requirement
 {
 	public static Map<Integer, Integer> satisfiedReqs = new HashMap<>();
 	
-	private static final int QUEST_POINT_LIMIT = 7;
-	
 	protected List<ReqItem> reqItems = new ArrayList<>(Arrays.asList(getReqItems()));
 	private boolean hasCheckedInv;
 	private boolean hasCheckedEquipment;
@@ -145,7 +143,7 @@ public abstract class ItemRequirement extends Requirement
 					continue;
 				
 				General.println("Player does not have item requirement: " + req);
-				if(r.shouldUseGE() && getQuestPoints() >= QUEST_POINT_LIMIT)
+				if(r.shouldUseGE())
 				{
 					if(r.getAmt() - r.getPlayerAmt() <= 0)
 						continue;

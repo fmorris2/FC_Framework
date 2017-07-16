@@ -7,8 +7,10 @@ import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.Painting;
 import org.tribot.script.interfaces.Starting;
 
+import scripts.fc.api.quest.QuestJournal;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
+import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 
@@ -29,7 +31,8 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		return 600;
+		//QuestJournal.getJournalContents("The Restless Ghost").stream().forEach(s -> println(s));
+		return 1500;
 	}
 	
 	@Override
