@@ -7,7 +7,7 @@ public class QuestJournalBool extends QuestBool
 {
 	private String quest;
 	private String line;
-	private boolean isComplete;
+	private boolean isComplete, needsCacheReset;
 	
 	public QuestJournalBool(String quest, String line, boolean isComplete, boolean normal)
 	{
@@ -20,8 +20,14 @@ public class QuestJournalBool extends QuestBool
 	@Override
 	public boolean value()
 	{
-		JournalContents contents = QuestJournal.getJournalContents(quest);
+		JournalContents contents = QuestJournal.getJournalContents(quest, needsCacheReset);
+		needsCacheReset = false;
 		return isComplete ? contents.hasLineCompleted(line, true) : contents.hasLineThatContains(line);
+	}
+	
+	public void resetCache()
+	{
+		needsCacheReset = true;
 	}
 
 }
