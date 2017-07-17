@@ -72,6 +72,7 @@ public class QuestJournal
 		);
 		
 		CACHE.put(name, contents);
+		InterfaceUtils.closeQuestInterface();
 		return contents;
 	}
 	
