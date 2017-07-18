@@ -1,15 +1,18 @@
 package scripts.fc;
 
+import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.MessageListener;
+import org.tribot.api2007.types.RSInterface;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.Painting;
 import org.tribot.script.interfaces.Starting;
 
-import scripts.fc.api.quest.QuestJournal;
+import scripts.fc.api.interaction.impl.objects.ItemOnObject;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
+import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 
@@ -30,8 +33,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(QuestJournal.getJournalContents("The Restless Ghost").hasLineThatContains("I must be unafraid of a Level 13 Skeleton."));
-		return 1500;
+		return 600;
 	}
 	
 	@Override

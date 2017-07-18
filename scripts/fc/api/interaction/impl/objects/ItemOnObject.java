@@ -19,6 +19,11 @@ public class ItemOnObject extends ObjectInteraction
 	private String itemName;
 	private int itemId;
 	
+	public ItemOnObject(String itemName, String objectName, int searchDistance)
+	{
+		this("Use", objectName, itemName, searchDistance);
+	}
+	
 	public ItemOnObject(String action, String name, String itemName, int searchDistance)
 	{
 		super(action, name, searchDistance);
