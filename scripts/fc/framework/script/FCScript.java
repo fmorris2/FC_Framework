@@ -16,6 +16,7 @@ import org.tribot.script.interfaces.Starting;
 
 import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.banking.listening.FCBankObserver;
+import scripts.fc.framework.Vars;
 import scripts.fc.framework.paint.FCPaint;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.quest.BankBool;
@@ -28,8 +29,8 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	public final FCBankObserver BANK_OBSERVER = new FCBankObserver();
 	
 	public FCPaint paint = new FCPaint(this, Color.WHITE);
-	public transient ABCUtil abc = new ABCUtil();
-	public transient PersistantABCUtil abc2 = new PersistantABCUtil();
+	public transient ABCUtil abc = Vars.get().abc;
+	public transient PersistantABCUtil abc2 = Vars.get().abc2;
 	
 	protected abstract int mainLogic();
 	protected abstract String[] scriptSpecificPaint();
