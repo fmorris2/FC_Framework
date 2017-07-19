@@ -21,14 +21,15 @@ import scripts.fc.api.interaction.impl.npcs.dialogue.NpcDialogue;
 import scripts.fc.api.mouse.AccurateMouse;
 import scripts.fc.api.utils.ChooseOptionUtils;
 import scripts.fc.api.viewport.ACamera;
+import scripts.fc.framework.data.Vars;
 
 public abstract class EntityInteraction
 {	
 	protected static final int DISTANCE_THRESHOLD = 20;
-	
-	public static ABCUtil abcOne = null;
+
 	public static ACamera aCamera = new ACamera();
 	
+	public ABCUtil abcOne = Vars.get().get("abc");
 	protected String name;
 	protected int id;
 	protected String action;
