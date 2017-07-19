@@ -3,19 +3,24 @@ package scripts.fc.api.abc;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.abc.ABCProperties;
-import org.tribot.api2007.Combat;
 
 import scripts.fc.framework.data.Vars;
 
 public class ABC2Reaction
 {
-	private boolean hasStarted, isFixed;
+	private boolean hasStarted, isFixed, underAttack;
 	private long startTime, estimatedWait;
 	
 	public ABC2Reaction(boolean isFixed, long estimatedWait)
 	{
 		this.isFixed = isFixed;
 		this.estimatedWait = estimatedWait;
+	}
+	
+	public ABC2Reaction underAttack()
+	{
+		this.underAttack = true;
+		return this;
 	}
 	
 	public void start()
@@ -53,7 +58,7 @@ public class ABC2Reaction
 		ABCProperties props = Vars.get().get("abc2Props");
 		props.setWaitingTime(((Long)(getWaitTime())).intValue());
 		props.setWaitingFixed(isFixed);
-		props.setUnderAttack(Combat.isUnderAttack());
+		props.setUnderAttack(underAttack);
 	}
 	
 	private long getWaitTime()
