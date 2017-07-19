@@ -7,6 +7,7 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.input.Mouse;
+import org.tribot.api.util.abc.ABCProperties;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Login;
@@ -153,7 +154,12 @@ public class DialogueThread extends Thread
 		long cutsceneStartTime = Vars.get().get(WAIT_START_VAR, new Long(-1));
 		if(cutsceneStartTime != -1) //we need to wait a reaction time
 		{
-			abc2.generateAndPerformReaction(Timing.timeFromMark(cutsceneStartTime));
+			ABCProperties props = Vars.get().get("abc2Props");
+			
+			props.setWaitingTime(((Long)(Timing.timeFromMark(cutsceneStartTime))).intValue());
+			props.setWaitingFixed(true);
+			
+			abc2.generateAndPerformReaction(props);
 			Vars.get().addOrUpdate(WAIT_START_VAR, new Long(-1));
 		}
 	}
@@ -177,7 +183,7 @@ public class DialogueThread extends Thread
 		}
 	}
 	
-	private boolean isInCutscene()
+	public static boolean isInCutscene()
 	{
 		RSInterface continueInter = InterfaceUtils.findContainingText("to continue");
 		
