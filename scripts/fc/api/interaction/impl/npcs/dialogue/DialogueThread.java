@@ -17,6 +17,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.generic.FCFilters;
@@ -39,6 +40,7 @@ public class DialogueThread extends Thread
 	private int[] options;
 	private int optionIndex;
 	private long lastCutsceneWait;
+	private ABC2Reaction cutsceneReaction = new ABC2Reaction("cutsceneReaction", true, EST_WAIT_TIME);
 	
 	private boolean isSuccessful, isRunning = true, ignoreChatName, wentThroughDialogue;
 	
@@ -139,35 +141,16 @@ public class DialogueThread extends Thread
 	
 	private void startAbc2Timing()
 	{
-		PersistantABCUtil abc2 = Vars.get().get("abc2");
 		if(Timing.timeFromMark(lastCutsceneWait) < CUTSCENE_WAIT_THRESH)
 			return;
 		
-		if(Vars.get().get(WAIT_START_VAR, new Long(-1)) == -1)
-		{
-			General.println("Started waiting for cutscene...");
-			Vars.get().addOrUpdate(WAIT_START_VAR, Timing.currentTimeMillis());
-			abc2.generateTrackers(EST_WAIT_TIME);
-		}
-		else //we've already began the process of waiting...
-			abc2.performTimedActions();
+		cutsceneReaction.start();
 	}
 	
 	private void handleAbc2Reaction()
 	{
-		PersistantABCUtil abc2 = Vars.get().get("abc2");
-		long cutsceneStartTime = Vars.get().get(WAIT_START_VAR, new Long(-1));
-		if(cutsceneStartTime != -1) //we need to wait a reaction time
-		{
-			ABCProperties props = Vars.get().get("abc2Props");
-			
-			props.setWaitingTime(((Long)(Timing.timeFromMark(cutsceneStartTime))).intValue());
-			props.setWaitingFixed(true);
-			
-			abc2.generateAndPerformReaction(props);
-			Vars.get().addOrUpdate(WAIT_START_VAR, new Long(-1));
-			lastCutsceneWait = Timing.currentTimeMillis();
-		}
+		cutsceneReaction.react();
+		lastCutsceneWait = Timing.currentTimeMillis();
 	}
 	
 	public static void doClickToContinue()
@@ -285,39 +268,6 @@ public class DialogueThread extends Thread
 	{
 		General.println("[DialogueThread] " + str);
 	}
-	
-	
-	/*
-	public void run()
-	{
-		General.println("Running dialogueThread");
-		String chatName = NPCChat.getName();
-		
-		if((chatName == null || npc == null || !chatName.equals(npc.getName())) 
-				&& !DynamicClicking.clickRSNPC(npc, action) || !Timing.waitCondition(FCConditions.IN_DIALOGUE_CONDITION, 4000))
-		{
-			General.println("dialogueThread not successful");
-			isSuccessful = false;
-			isRunning = false;
-			NpcDialogue.currentExecutingThread = null;
-			return;
-		}
-		
-		General.println("dialogueThread: in dialogue...");
-		
-		handleDialogue();
-		
-		General.println("Out of loop");
-		
-		isRunning = false;
-		isSuccessful = success && NPCChat.getClickContinueInterface() == null && NPCChat.getSelectOptionInterface() == null;
-		
-		if(!isSuccessful)
-			checkForOtherClickContinue();
-		
-		NpcDialogue.currentExecutingThread = null;
-	}
-	*/
 	
 	private void sleep(int min, int max)
 	{
