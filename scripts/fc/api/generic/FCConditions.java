@@ -26,6 +26,7 @@ import org.tribot.api2007.types.RSVarBit;
 
 import scripts.fc.api.trading.FCTrading;
 import scripts.fc.api.utils.InterfaceUtils;
+import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 public class FCConditions
 {
@@ -43,6 +44,20 @@ public class FCConditions
 	public static final Condition ENTER_AMOUNT_CONDITION = enterAmountCondition();
 	public static final Condition NOT_TRADING_CONDITION = notTradingCondition();
 	public static final Condition NOT_MOVING_CONDITION = notMovingCondition();
+	public static final Condition IN_BUILDING_CONDITION = inBuildingCondition();
+	
+	public static Condition inBuildingCondition()
+	{
+		return new Condition()
+		{
+			@Override
+			public boolean active()
+			{
+				General.sleep(30);
+				return BankHelper.isInBuilding(Player.getPosition().toLocalTile(), Game.getSceneFlags());
+			}
+		};
+	}
 	
 	public static Condition objectOnScreenCondition(final RSObject object)
 	{
