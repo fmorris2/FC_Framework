@@ -7,7 +7,6 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.input.Mouse;
-import org.tribot.api.util.abc.ABCProperties;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Login;
@@ -18,7 +17,6 @@ import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.fc.api.abc.ABC2Reaction;
-import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.generic.FCFilters;
 import scripts.fc.api.mouse.AccurateMouse;
@@ -26,7 +24,6 @@ import scripts.fc.api.utils.ChooseOptionUtils;
 import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.utils.PlayerUtils;
 import scripts.fc.api.wrappers.FCTiming;
-import scripts.fc.framework.data.Vars;
 
 public class DialogueThread extends Thread
 {	
@@ -34,13 +31,12 @@ public class DialogueThread extends Thread
 	private static final int PLAYER_DIALOGUE_MASTER = 217;
 	private static final int CUTSCENE_SETTING = 1021, CUTSCENE_VALUE = 192;
 	private static final int QUEST_REWARD_MASTER = 277, QUEST_REWARD_CLOSE = 15;
-	private static final String WAIT_START_VAR = "startCutscene";
 	private static final long EST_WAIT_TIME = 3000, CUTSCENE_WAIT_THRESH = 10000;
 	
 	private int[] options;
 	private int optionIndex;
 	private long lastCutsceneWait;
-	private ABC2Reaction cutsceneReaction = new ABC2Reaction("cutsceneReaction", true, EST_WAIT_TIME);
+	private ABC2Reaction cutsceneReaction = new ABC2Reaction(true, EST_WAIT_TIME);
 	
 	private boolean isSuccessful, isRunning = true, ignoreChatName, wentThroughDialogue;
 	

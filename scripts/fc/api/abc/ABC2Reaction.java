@@ -9,23 +9,21 @@ import scripts.fc.framework.data.Vars;
 
 public class ABC2Reaction
 {
-	private String name;
 	private boolean hasStarted, isFixed;
-	private long estimatedWait;
+	private long startTime, estimatedWait;
 	
-	public ABC2Reaction(String name, boolean isFixed, long estimatedWait)
+	public ABC2Reaction(boolean isFixed, long estimatedWait)
 	{
-		this.name = name;
 		this.isFixed = isFixed;
 		this.estimatedWait = estimatedWait;
 	}
 	
 	public void start()
 	{
-		if(getStartTime() == -1)
+		if(startTime == -1)
 		{
-			General.println("[ABC2]: Tracking reaction for " + name);
-			Vars.get().addOrUpdate(name, Timing.currentTimeMillis());
+			General.println("[ABC2]: Tracking reaction...");
+			startTime = Timing.currentTimeMillis();
 			setProfile(estimatedWait);
 			abc2().generateTrackers();
 		}
@@ -39,13 +37,13 @@ public class ABC2Reaction
 	
 	public void react()
 	{
-		if(hasStarted && getStartTime() != -1)
+		if(hasStarted && startTime != -1)
 		{
 			setProfile(getWaitTime());
 			long reactionTime = abc2().generateReactionTime();
 			General.println("[ABC2]: Performing reaction wait of " + reactionTime + "ms");
 			abc2().sleep(reactionTime);
-			Vars.get().addOrUpdate(name, new Long(-1));
+			startTime = -1;
 			hasStarted = false;
 		}
 	}
@@ -60,12 +58,7 @@ public class ABC2Reaction
 	
 	private long getWaitTime()
 	{
-		return Timing.timeFromMark(getStartTime());
-	}
-	
-	private long getStartTime()
-	{
-		return Vars.get().get(name, new Long(-1));
+		return Timing.timeFromMark(startTime);
 	}
 	
 	private PersistantABCUtil abc2()
