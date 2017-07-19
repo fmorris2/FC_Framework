@@ -1,11 +1,11 @@
 package scripts.fc.api.abc;
 
 import org.tribot.api.General;
-import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Clickable07;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Filter;
+import org.tribot.api.util.abc.ABCProperties;
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
@@ -287,6 +287,15 @@ public class PersistantABCUtil extends ABCUtil {
 	{
 		Long boxed = new Long(waitTime);
 		long reactionTime = (generateReactionTime(boxed.intValue()));
+		General.println("Performing wait of " + reactionTime + "ms for ABC2 reaction time");
+		generateTrackers(reactionTime);
+		sleep(reactionTime);
+		generateTrackers();
+	}
+	
+	public void generateAndPerformReaction(ABCProperties props)
+	{
+		long reactionTime = generateReactionTime();
 		General.println("Performing wait of " + reactionTime + "ms for ABC2 reaction time");
 		generateTrackers(reactionTime);
 		sleep(reactionTime);
