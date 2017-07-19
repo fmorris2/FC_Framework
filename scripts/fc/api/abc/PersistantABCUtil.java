@@ -280,5 +280,17 @@ public class PersistantABCUtil extends ABCUtil {
 		
 		return false;
 	}
+	
+	public void sleep(long ms)
+	{
+		try
+		{
+			super.sleep(ms);
+		}
+		catch(InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 }
