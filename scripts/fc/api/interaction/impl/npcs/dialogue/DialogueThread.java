@@ -34,10 +34,11 @@ public class DialogueThread extends Thread
 	private static final int CUTSCENE_SETTING = 1021, CUTSCENE_VALUE = 192;
 	private static final int QUEST_REWARD_MASTER = 277, QUEST_REWARD_CLOSE = 15;
 	private static final String WAIT_START_VAR = "startCutscene";
-	private static final long EST_WAIT_TIME = 3000;
+	private static final long EST_WAIT_TIME = 3000, CUTSCENE_WAIT_THRESH = 10000;
 	
 	private int[] options;
 	private int optionIndex;
+	private long lastCutsceneWait;
 	
 	private boolean isSuccessful, isRunning = true, ignoreChatName, wentThroughDialogue;
 	
@@ -139,6 +140,9 @@ public class DialogueThread extends Thread
 	private void startAbc2Timing()
 	{
 		PersistantABCUtil abc2 = Vars.get().get("abc2");
+		if(Timing.timeFromMark(lastCutsceneWait) < CUTSCENE_WAIT_THRESH)
+			return;
+		
 		if(Vars.get().get(WAIT_START_VAR, new Long(-1)) == -1)
 		{
 			General.println("Started waiting for cutscene...");
@@ -162,6 +166,7 @@ public class DialogueThread extends Thread
 			
 			abc2.generateAndPerformReaction(props);
 			Vars.get().addOrUpdate(WAIT_START_VAR, new Long(-1));
+			lastCutsceneWait = Timing.currentTimeMillis();
 		}
 	}
 	
