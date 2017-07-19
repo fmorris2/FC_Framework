@@ -234,8 +234,13 @@ public abstract class TaskManager extends GoalManager
 	
 	private boolean handleNormalTask(Task t)
 	{	
+		ABCProperties props = new ABCProperties();
+		
 		boolean success = t.execute();
-		Vars.get().addOrUpdate("abc2Props", new ABCProperties());
+		
+		props.setUnderAttack(Combat.isUnderAttack());
+		Vars.get().addOrUpdate("abc2Props", props);
+		
 		currentTask = findExecutableTask();
 		return success;
 	}
