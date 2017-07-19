@@ -45,6 +45,8 @@ public class ABC2Reaction
 			long reactionTime = abc2().generateReactionTime();
 			General.println("[ABC2]: Performing reaction wait of " + reactionTime + "ms");
 			abc2().sleep(reactionTime);
+			Vars.get().addOrUpdate(name, new Long(-1));
+			hasStarted = false;
 		}
 	}
 	
