@@ -33,7 +33,7 @@ public class DialogueThread extends Thread
 	private static final int CUTSCENE_SETTING = 1021, CUTSCENE_VALUE = 192;
 	private static final int QUEST_REWARD_MASTER = 277, QUEST_REWARD_CLOSE = 15;
 	private static final String WAIT_START_VAR = "startCutscene";
-	private static final long EST_WAIT_TIME = 10000;
+	private static final long EST_WAIT_TIME = 3000;
 	
 	private int[] options;
 	private int optionIndex;
