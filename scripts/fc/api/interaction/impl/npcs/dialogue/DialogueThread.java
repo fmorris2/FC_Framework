@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.Game;
@@ -15,6 +16,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
 
+import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.generic.FCFilters;
 import scripts.fc.api.mouse.AccurateMouse;
@@ -22,6 +24,7 @@ import scripts.fc.api.utils.ChooseOptionUtils;
 import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.utils.PlayerUtils;
 import scripts.fc.api.wrappers.FCTiming;
+import scripts.fc.framework.data.Vars;
 
 public class DialogueThread extends Thread
 {	
@@ -29,6 +32,8 @@ public class DialogueThread extends Thread
 	private static final int PLAYER_DIALOGUE_MASTER = 217;
 	private static final int CUTSCENE_SETTING = 1021, CUTSCENE_VALUE = 192;
 	private static final int QUEST_REWARD_MASTER = 277, QUEST_REWARD_CLOSE = 15;
+	private static final String WAIT_START_VAR = "startCutscene";
+	private static final long EST_WAIT_TIME = 10000;
 	
 	private int[] options;
 	private int optionIndex;
@@ -87,6 +92,8 @@ public class DialogueThread extends Thread
 		//while any of the dialogue screens are up and we're in game
 		while((areDialogueInterfacesUp() || areCutsceneInterfacesUp() || isInCutscene()) && Login.getLoginState() == STATE.INGAME)
 		{
+			handleAbc2Reaction();
+			
 			//check for option selection first
 			String[] dialogueOptions = NPCChat.getOptions();
 			if(dialogueOptions != null && dialogueOptions.length > 0)
@@ -106,7 +113,8 @@ public class DialogueThread extends Thread
 				doClickToContinue();
 			else if(isInCutscene())
 			{
-				log("In cutscene...");
+				log("In cutscene...");	
+				startAbc2Timing();
 				
 				//for quest rewards when you're in a cutscene
 				RSInterface[] inter = InterfaceUtils.find(FCFilters.containsAction("Close"));
@@ -124,6 +132,30 @@ public class DialogueThread extends Thread
 		
 		//assume we've gone through the dialogue successfully
 		return true;
+	}
+	
+	private void startAbc2Timing()
+	{
+		PersistantABCUtil abc2 = Vars.get().get("abc2");
+		if(Vars.get().get(WAIT_START_VAR, new Long(-1)) == -1)
+		{
+			General.println("Started waiting for cutscene...");
+			Vars.get().addOrUpdate(WAIT_START_VAR, Timing.currentTimeMillis());
+			abc2.generateTrackers(EST_WAIT_TIME);
+		}
+		else //we've already began the process of waiting...
+			abc2.performTimedActions();
+	}
+	
+	private void handleAbc2Reaction()
+	{
+		PersistantABCUtil abc2 = Vars.get().get("abc2");
+		long cutsceneStartTime = Vars.get().get(WAIT_START_VAR, new Long(-1));
+		if(cutsceneStartTime != -1) //we need to wait a reaction time
+		{
+			abc2.generateAndPerformReaction(Timing.timeFromMark(cutsceneStartTime));
+			Vars.get().addOrUpdate(WAIT_START_VAR, new Long(-1));
+		}
 	}
 	
 	public static void doClickToContinue()

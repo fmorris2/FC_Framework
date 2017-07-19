@@ -295,6 +295,7 @@ public class PersistantABCUtil extends ABCUtil {
 	
 	public void generateAndPerformReaction(ABCProperties props)
 	{
+		setProperties(props);
 		long reactionTime = generateReactionTime();
 		General.println("Performing wait of " + reactionTime + "ms for ABC2 reaction time");
 		generateTrackers(reactionTime);
