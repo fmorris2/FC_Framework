@@ -95,6 +95,8 @@ public abstract class TaskManager extends GoalManager
 			return true;
 		
 		General.println("Creating inventory space for task");
+		FCItem[] reqItems = t instanceof ItemsRequiredTask ? ((ItemsRequiredTask)t).getRequiredItems() : new FCItem[]{};
+		int[] ids = Arrays.stream(reqItems).mapToInt(i -> i.getIds()[0]).toArray();
 		
 		if(!Banking.isInBank())
 		{
@@ -102,7 +104,7 @@ public abstract class TaskManager extends GoalManager
 				WebWalking.walkToBank();
 		}
 		else if(Banking.isBankScreenOpen() || (Banking.openBank() && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 3500)))
-			if(Banking.depositAll() > 0 && FCTiming.waitCondition(() -> (28 - Inventory.getAll().length) >= t.getSpaceRequired(), 2400))
+			if(Banking.depositAllExcept(ids) > 0 && FCTiming.waitCondition(() -> (28 - Inventory.getAll().length) >= t.getSpaceRequired(), 2400))
 				currentTask.FLAGS.put("hasMadeSpace"+currentTask, true);
 			
 		return false;
