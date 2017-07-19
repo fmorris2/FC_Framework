@@ -179,7 +179,11 @@ public class DialogueThread extends Thread
 	
 	private boolean isInCutscene()
 	{
-		return Game.getSetting(CUTSCENE_SETTING) == CUTSCENE_VALUE;
+		RSInterface continueInter = InterfaceUtils.findContainingText("to continue");
+		
+		return Game.getSetting(CUTSCENE_SETTING) == CUTSCENE_VALUE
+					|| (continueInter == null && NPCChat.getSelectOptionInterface() == null
+							&& (NPCChat.getMessage() != null || NPCChat.getName() != null));
 	}
 	
 	private boolean needsToClickNpc()

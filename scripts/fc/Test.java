@@ -32,7 +32,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(BankHelper.isInBuilding(Player.getPosition().toLocalTile(), Game.getSceneFlags()));
+		println(Player.getRSPlayer().getInteractingCharacter() == null);
 		return 600;
 	}
 	
