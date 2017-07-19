@@ -11,7 +11,7 @@ import org.tribot.api2007.Camera;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 
-import scripts.fc.framework.script.FCScript;
+import scripts.fc.framework.data.Vars;
 
 /*
  *	Things that need to be done for ABC2 to be implemented:
@@ -40,9 +40,9 @@ public class ABC2Helper
 	private boolean hasCheckedMoveToAnticipated;
 	private boolean hasHovered;
 	
-	public ABC2Helper(FCScript script)
+	public ABC2Helper()
 	{
-		this.abc2 = script.abc2;
+		abc2 = Vars.get().get("abc2");
 		this.positions = new LinkedList<>();
 	}
 	
