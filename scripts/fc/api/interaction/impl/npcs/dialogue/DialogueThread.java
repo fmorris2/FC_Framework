@@ -39,7 +39,7 @@ public class DialogueThread extends Thread
 	private int[] options;
 	private int optionIndex;
 	
-	private boolean isSuccessful, isRunning = true, ignoreChatName;
+	private boolean isSuccessful, isRunning = true, ignoreChatName, wentThroughDialogue;
 	
 	private RSNPC npc;
 	private String npcName, action;
@@ -93,6 +93,7 @@ public class DialogueThread extends Thread
 		//while any of the dialogue screens are up and we're in game
 		while((areDialogueInterfacesUp() || areCutsceneInterfacesUp() || isInCutscene()) && Login.getLoginState() == STATE.INGAME)
 		{
+			wentThroughDialogue = true;
 			handleAbc2Reaction();
 			
 			//check for option selection first
@@ -328,6 +329,11 @@ public class DialogueThread extends Thread
 	public boolean isSuccessful()
 	{
 		return isSuccessful;
+	}
+	
+	public boolean wentThroughDialogue()
+	{
+		return wentThroughDialogue;
 	}
 	
 	public boolean isRunning()

@@ -66,4 +66,9 @@ public class NpcDialogue extends NpcInteraction
 	{
 		ignoreChatName = b;
 	}
+	
+	public boolean wentThroughDialogue()
+	{
+		return dialogueThread.wentThroughDialogue();
+	}
 }
