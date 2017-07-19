@@ -7,14 +7,15 @@ public class QuestJournalBool extends QuestBool
 {
 	private String quest;
 	private String line;
-	private boolean isComplete, needsCacheReset;
+	private boolean needsCacheReset;
+	private JOURNAL_STATUS status;
 	
-	public QuestJournalBool(String quest, String line, boolean isComplete, boolean normal)
+	public QuestJournalBool(String quest, String line, JOURNAL_STATUS status, boolean normal)
 	{
 		super(normal);
 		this.quest = quest;
 		this.line = line;
-		this.isComplete = isComplete;
+		this.status = status;
 	}
 
 	@Override
@@ -22,12 +23,18 @@ public class QuestJournalBool extends QuestBool
 	{
 		JournalContents contents = QuestJournal.getJournalContents(quest, needsCacheReset);
 		needsCacheReset = false;
-		return isComplete ? contents.hasLineCompleted(line, true) : contents.hasLineThatContains(line);
+		return status == JOURNAL_STATUS.HAS_COMPLETED ? contents.hasLineCompleted(line, true) : contents.hasLineThatContains(line);
 	}
 	
 	public void resetCache()
 	{
 		needsCacheReset = true;
+	}
+	
+	public enum JOURNAL_STATUS
+	{
+		CONTAINS_STRING,
+		HAS_COMPLETED
 	}
 
 }
