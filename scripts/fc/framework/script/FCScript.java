@@ -16,7 +16,7 @@ import org.tribot.script.interfaces.Starting;
 
 import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.banking.listening.FCBankObserver;
-import scripts.fc.framework.Vars;
+import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.paint.FCPaint;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.quest.BankBool;
@@ -29,8 +29,6 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	public final FCBankObserver BANK_OBSERVER = new FCBankObserver();
 	
 	public FCPaint paint = new FCPaint(this, Color.WHITE);
-	public transient ABCUtil abc = Vars.get().abc;
-	public transient PersistantABCUtil abc2 = Vars.get().abc2;
 	
 	protected abstract int mainLogic();
 	protected abstract String[] scriptSpecificPaint();
@@ -75,7 +73,9 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	{
 		if(this instanceof StatTracking)
 			statTracker = new StatTracker();
-			
+		
+		Vars.get().add("abc", new ABCUtil());
+		Vars.get().add("abc2", new PersistantABCUtil());
 		General.useAntiBanCompliance(true);
 		ThreadSettings.get().setClickingAPIUseDynamic(true);
 		BankBool.bankObserver = BANK_OBSERVER;
@@ -84,7 +84,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	
 	public void onEnd()
 	{
-		abc2.close();
+		((PersistantABCUtil)Vars.get().get("abc2")).close();
 		BANK_OBSERVER.isRunning = false;
 
 		//stat tracking
@@ -126,11 +126,11 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	
 	protected void handleAbc2Reset()
 	{
+		PersistantABCUtil abc2 = Vars.get().get("abc2");
 		if(abc2.needsReset()) //new RS account logs in
 		{
 			abc2.close();
-			Vars.get().abc2 = new PersistantABCUtil();
-			abc2 = Vars.get().abc2;
+			Vars.get().addOrUpdate("abc2", new PersistantABCUtil());
 		}
 	}
 	

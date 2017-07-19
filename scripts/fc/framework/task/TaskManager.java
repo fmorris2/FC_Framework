@@ -11,6 +11,7 @@ import org.tribot.api2007.Banking;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WebWalking;
 
+import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.banking.FCBanking;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.EntityInteraction;
@@ -19,6 +20,7 @@ import scripts.fc.api.items.FCItem;
 import scripts.fc.api.items.FCItemList;
 import scripts.fc.api.travel.Travel;
 import scripts.fc.api.wrappers.FCTiming;
+import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.goal.GoalManager;
 import scripts.fc.framework.script.FCScript;
 
@@ -186,6 +188,7 @@ public abstract class TaskManager extends GoalManager
 		Clickable entity = interaction.findClickable();
 		
 		General.println("Preparing predictable interaction for task " + aT.getStatus());
+		PersistantABCUtil abc2 = Vars.get().get("abc2");
 		
 		if(entity == null)
 		{
@@ -193,13 +196,13 @@ public abstract class TaskManager extends GoalManager
 		}
 		
 		//ABC2 CHECK
-		else if(fcScript.abc2.shouldHover() && interaction.hoverEntity())
+		else if(abc2.shouldHover() && interaction.hoverEntity())
 		{
 			General.println("[ABC2] Hover next anticipated");
 			success = true;
 			
 			//check for menu open -- NOT FOR ITEM INTERACTIONS....
-			if(!(interaction instanceof ItemInteraction) && fcScript.abc2.shouldOpenMenu())
+			if(!(interaction instanceof ItemInteraction) && abc2.shouldOpenMenu())
 			{
 				if(interaction.openMenu())
 					General.println("[ABC2] Opening menu on next anticipated");
@@ -216,8 +219,9 @@ public abstract class TaskManager extends GoalManager
 	private void resetAbc2()
 	{
 		General.println("Resetting abc2 shouldHover and shouldOpenMenu");
-		fcScript.abc2.resetShouldHover();
-		fcScript.abc2.resetShouldOpenMenu();
+		PersistantABCUtil abc2 = Vars.get().get("abc2");
+		abc2.resetShouldHover();
+		abc2.resetShouldOpenMenu();
 	}
 	
 	private boolean handleNormalTask(Task t)
