@@ -129,7 +129,8 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 		if(abc2.needsReset()) //new RS account logs in
 		{
 			abc2.close();
-			abc2 = new PersistantABCUtil();
+			Vars.get().abc2 = new PersistantABCUtil();
+			abc2 = Vars.get().abc2;
 		}
 	}
 	
