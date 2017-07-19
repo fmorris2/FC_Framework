@@ -80,7 +80,7 @@ public class BankHelper {
         return tiles;
     }
 
-    private static boolean isInBuilding(RSTile localRSTile, byte[][][] sceneFlags) {
+    public static boolean isInBuilding(RSTile localRSTile, byte[][][] sceneFlags) {
         return !(sceneFlags.length <= localRSTile.getPlane()
                     || sceneFlags[localRSTile.getPlane()].length <= localRSTile.getX()
                     || sceneFlags[localRSTile.getPlane()][localRSTile.getX()].length <= localRSTile.getY())
