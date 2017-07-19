@@ -1,5 +1,8 @@
 package scripts.fc.framework.quest;
 
+import org.tribot.api2007.Banking;
+import org.tribot.api2007.GrandExchange;
+
 import scripts.fc.api.quest.JournalContents;
 import scripts.fc.api.quest.QuestJournal;
 
@@ -21,6 +24,12 @@ public class QuestJournalBool extends QuestBool
 	@Override
 	public boolean value()
 	{
+		if(Banking.isBankScreenOpen())
+			Banking.close();
+		
+		if(GrandExchange.getWindowState() != null)
+			GrandExchange.close();
+		
 		JournalContents contents = QuestJournal.getJournalContents(quest, needsCacheReset);
 		needsCacheReset = false;
 		return status == JOURNAL_STATUS.HAS_COMPLETED ? contents.hasLineCompleted(line, true) : contents.hasLineThatContains(line);
