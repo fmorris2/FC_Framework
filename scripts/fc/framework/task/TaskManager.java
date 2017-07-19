@@ -7,7 +7,9 @@ import java.util.List;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Clickable;
+import org.tribot.api.util.abc.ABCProperties;
 import org.tribot.api2007.Banking;
+import org.tribot.api2007.Combat;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WebWalking;
 
@@ -186,8 +188,6 @@ public abstract class TaskManager extends GoalManager
 			return false;
 		
 		Clickable entity = interaction.findClickable();
-		
-		General.println("Preparing predictable interaction for task " + aT.getStatus());
 		PersistantABCUtil abc2 = Vars.get().get("abc2");
 		
 		if(entity == null)
@@ -198,6 +198,7 @@ public abstract class TaskManager extends GoalManager
 		//ABC2 CHECK
 		else if(abc2.shouldHover() && interaction.hoverEntity())
 		{
+			General.println("Preparing predictable interaction for task " + aT.getStatus());
 			General.println("[ABC2] Hover next anticipated");
 			success = true;
 			
@@ -210,6 +211,13 @@ public abstract class TaskManager extends GoalManager
 					success = false;
 			}
 		}
+		
+		ABCProperties props = new ABCProperties();
+		props.setHovering(abc2.shouldHover());
+		props.setMenuOpen(abc2.shouldOpenMenu());
+		props.setUnderAttack(Combat.isUnderAttack());
+		
+		Vars.get().addOrUpdate("abc2Props", props);
 		
 		General.println("Waiting for task to complete");
 		aT.waitForTaskComplete();
@@ -227,6 +235,7 @@ public abstract class TaskManager extends GoalManager
 	private boolean handleNormalTask(Task t)
 	{	
 		boolean success = t.execute();
+		Vars.get().addOrUpdate("abc2Props", new ABCProperties());
 		currentTask = findExecutableTask();
 		return success;
 	}
