@@ -283,9 +283,10 @@ public class PersistantABCUtil extends ABCUtil {
 		return false;
 	}
 	
-	public void generateAndPerformReaction(int waitTime)
+	public void generateAndPerformReaction(long waitTime)
 	{
-		long reactionTime = (generateReactionTime(waitTime));
+		Long boxed = new Long(waitTime);
+		long reactionTime = (generateReactionTime(boxed.intValue()));
 		General.println("Performing wait of " + reactionTime + "ms for ABC2 reaction time");
 		generateTrackers(reactionTime);
 		sleep(reactionTime);
