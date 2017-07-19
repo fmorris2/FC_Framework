@@ -9,7 +9,7 @@ import scripts.fc.framework.data.Vars;
 public class ABC2Reaction
 {
 	private boolean hasStarted, isFixed, underAttack;
-	private long startTime, estimatedWait;
+	private long startTime = -1, estimatedWait;
 	
 	public ABC2Reaction(boolean isFixed, long estimatedWait)
 	{
