@@ -40,7 +40,7 @@ public class ABC2Reaction
 		hasStarted = true;
 	}
 	
-	public void react()
+	public boolean react()
 	{
 		if(hasStarted && startTime != -1)
 		{
@@ -50,7 +50,10 @@ public class ABC2Reaction
 			abc2().sleep(reactionTime);
 			startTime = -1;
 			hasStarted = false;
+			return true;
 		}
+		
+		return false;
 	}
 	
 	private void setProfile(long waitTime)

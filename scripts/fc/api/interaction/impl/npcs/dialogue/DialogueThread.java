@@ -145,8 +145,8 @@ public class DialogueThread extends Thread
 	
 	private void handleAbc2Reaction()
 	{
-		cutsceneReaction.react();
-		lastCutsceneWait = Timing.currentTimeMillis();
+		if(cutsceneReaction.react())
+			lastCutsceneWait = Timing.currentTimeMillis();
 	}
 	
 	public static void doClickToContinue()
