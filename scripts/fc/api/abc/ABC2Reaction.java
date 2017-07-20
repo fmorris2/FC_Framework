@@ -30,7 +30,6 @@ public class ABC2Reaction
 			General.println("[ABC2]: Tracking reaction...");
 			startTime = Timing.currentTimeMillis();
 			setProfile(estimatedWait);
-			abc2().generateTrackers();
 		}
 		else if(abc2().performTimedActions())
 		{	
@@ -62,6 +61,7 @@ public class ABC2Reaction
 		props.setWaitingTime(((Long)(getWaitTime())).intValue());
 		props.setWaitingFixed(isFixed);
 		props.setUnderAttack(underAttack);
+		abc2().generateTrackers();
 	}
 	
 	private long getWaitTime()
