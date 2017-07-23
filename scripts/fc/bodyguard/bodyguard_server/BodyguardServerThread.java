@@ -11,11 +11,11 @@ import scripts.fc.bodyguard.bodyguard_client.Bodyguard;
 import scripts.fc.bodyguard.bodyguard_client.commands.RemoveBodyguard;
 import scripts.fc.bodyguard.requester_client.BodyguardRequest;
 
-public class BodyguardThread extends Thread
+public class BodyguardServerThread extends Thread
 {
 	private Socket socket = null;
 	
-	public BodyguardThread(Socket socket)
+	public BodyguardServerThread(Socket socket)
 	{
 		super("BodyguardThread");
 		this.socket = socket;
@@ -63,21 +63,19 @@ public class BodyguardThread extends Thread
 			while(true)
 			{
 				out.writeObject((new Integer(0)));
-				System.out.println("handleBodyguard: " + guard);
+				if(oldSize != guard.REQUESTS.size())
+				{
+					System.out.println("Bodyguard " + guard + " requests have changed! Updating client...");
+					out.writeObject(guard);
+					oldSize = guard.REQUESTS.size();
+				}
 				
-					if(oldSize != guard.REQUESTS.size())
-					{
-						System.out.println("Bodyguard " + guard + " requests have changed! Updating client...");
-						out.writeObject(guard);
-						oldSize = guard.REQUESTS.size();
-					}
-					
-					sleep(500);
+				sleep(500);
 			}
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("Socket has been closed for bodyguard: " + guard);
 		}
 	}
 	
