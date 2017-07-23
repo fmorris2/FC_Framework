@@ -1,20 +1,24 @@
 package scripts.fc.bodyguard.bodyguard_client;
 
+import java.io.Serializable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.tribot.api.General;
 import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.types.RSArea;
 
+import scripts.fc.api.wrappers.SerializablePositionable;
+import scripts.fc.api.wrappers.SerializableRSArea;
 import scripts.fc.bodyguard.requester_client.BodyguardRequest;
 
-public class Bodyguard
+public class Bodyguard implements Serializable
 {
+	private static final long serialVersionUID = 8705137561985831881L;
+	
 	public final String USERNAME;
 	public final Queue<BodyguardRequest> REQUESTS;
-	public final Positionable HOME_TILE;
-	public final RSArea HOME_AREA;
+	public final SerializablePositionable HOME_TILE;
+	public final SerializableRSArea HOME_AREA;
 	public final int RADIUS;
 	
 	private transient BodyguardClientThread updateThread;
@@ -22,10 +26,10 @@ public class Bodyguard
 	public Bodyguard(String username, Positionable homeTile, int radius)
 	{
 		USERNAME = username;
-		HOME_TILE = homeTile;
+		HOME_TILE = new SerializablePositionable(homeTile);
 		REQUESTS = new ConcurrentLinkedQueue<>();
 		RADIUS = radius;
-		HOME_AREA = new RSArea(HOME_TILE, RADIUS);
+		HOME_AREA = new SerializableRSArea(HOME_TILE, RADIUS);
 	}
 	
 	public void connect()
