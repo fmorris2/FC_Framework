@@ -44,36 +44,40 @@ public class BodyguardThread extends Thread
 				request = (BodyguardRequest)obj;
 				System.out.println("Bodyguard request received: " + request);
 				out.writeObject(createResponse(request));
-			}	
+			}
 			socket.close();
 		} 
 		catch (IOException | ClassNotFoundException e)
 		{
 			e.printStackTrace();
 		}
+		
+		System.out.println("BodyguardThread ended!");
 	}
 	
 	private void handleBodyguard(Bodyguard guard, ObjectOutputStream out, ObjectInputStream in)
 	{
 		int oldSize = -1;
-		
-		while(true)
+		try
 		{
-			try
+			while(true)
 			{
-				if(oldSize != guard.REQUESTS.size())
-				{
-					System.out.println("Bodyguard " + guard + " requests have changed! Updating client...");
-					out.writeObject(guard);
-					oldSize = guard.REQUESTS.size();
-				}
+				out.writeObject((new Integer(0)));
+				System.out.println("handleBodyguard: " + guard);
 				
-				sleep(500);
+					if(oldSize != guard.REQUESTS.size())
+					{
+						System.out.println("Bodyguard " + guard + " requests have changed! Updating client...");
+						out.writeObject(guard);
+						oldSize = guard.REQUESTS.size();
+					}
+					
+					sleep(500);
 			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 	

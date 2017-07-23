@@ -33,13 +33,17 @@ public class BodyguardClientThread extends Thread
 			{
 				try
 				{
-					Bodyguard updated = (Bodyguard)in.readObject();
-					int old = bodyguard.REQUESTS.size();
-					updated.REQUESTS.stream()
-						.filter(r -> !bodyguard.REQUESTS.contains(r))
-						.forEach(r -> bodyguard.REQUESTS.add(r));
-					
-					General.println("Bodyguard orders updated! " + (bodyguard.REQUESTS.size() - old) + " requests have been added.");
+					Object obj = in.readObject();
+					if(obj instanceof Bodyguard)
+					{
+						Bodyguard updated = (Bodyguard)obj;
+						int old = bodyguard.REQUESTS.size();
+						updated.REQUESTS.stream()
+							.filter(r -> !bodyguard.REQUESTS.contains(r))
+							.forEach(r -> bodyguard.REQUESTS.add(r));
+						
+						General.println("Bodyguard orders updated! " + (bodyguard.REQUESTS.size() - old) + " requests have been added.");
+					}
 					sleep(400);
 				}
 				catch(Exception e)
