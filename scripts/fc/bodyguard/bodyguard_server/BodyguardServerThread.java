@@ -126,7 +126,11 @@ public class BodyguardServerThread extends Thread
 					response.setStatus(ResponseStatus.IN_QUEUE);
 				
 				if(!guard.REQUESTS.contains(request))
+				{
 					guard.REQUESTS.add(request);
+					System.out.println("Added request for guard " + guard);
+					System.out.println("Requests size: " + guard.REQUESTS.size());
+				}
 			}
 		}
 		

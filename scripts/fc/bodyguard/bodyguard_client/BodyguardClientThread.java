@@ -49,6 +49,7 @@ public class BodyguardClientThread extends Thread
 				catch(Exception e)
 				{
 					e.printStackTrace();
+					break;
 				}
 			}
 		}

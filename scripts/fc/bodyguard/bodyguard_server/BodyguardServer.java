@@ -22,7 +22,7 @@ public class BodyguardServer
 			System.out.println("Running socket server on port " + PORT);
 			while(true)
 			{
-				new BodyguardThread(server.accept()).start();
+				new BodyguardServerThread(server.accept()).start();
 			}
 		} 
 		catch (IOException e)
