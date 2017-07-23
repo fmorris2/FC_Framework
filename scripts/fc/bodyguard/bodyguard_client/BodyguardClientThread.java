@@ -27,7 +27,7 @@ public class BodyguardClientThread extends Thread
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 		)
 		{
-			out.writeObject(this);
+			out.writeObject(bodyguard);
 			General.println("Successfully sent data to server... Waiting for first update!");
 			while(true)
 			{
