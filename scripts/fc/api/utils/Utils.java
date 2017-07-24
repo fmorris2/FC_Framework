@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.ChooseOption;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.GameTab;
@@ -20,8 +21,10 @@ import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSMenuNode;
+import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.generic.FCConditions;
+import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 public class Utils
 {
@@ -92,6 +95,12 @@ public class Utils
 	public static boolean isPlayerMember()
 	{
 		return WorldHopper.isMembers(WorldHopper.getWorld());
+	}
+	
+	public static boolean isInBuilding(Positionable p)
+	{
+		RSTile t = p.getPosition().toLocalTile();
+		return BankHelper.isInBuilding(t, Game.getSceneFlags());
 	}
 	
 	public static RSMenuNode getOption(String str)
