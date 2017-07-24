@@ -30,7 +30,7 @@ import scripts.fc.framework.script.FCScript;
 public class Test extends FCScript implements FCPaintable, Painting, Starting, Ending, FCSettingsListener, MessageListening07
 {	
 	private FCSettingsObserver settingsObserver = new FCSettingsObserver(this);
-	private BodyguardRequest request = new BodyguardRequest("Test", Player.getPosition(), 10, WorldHopper.getWorld(), "Jail guard");
+	private BodyguardRequest request = new BodyguardRequest("Test", Player.getPosition(), 30, WorldHopper.getWorld(), "Mugger");
 	
 	protected int mainLogic()
 	{

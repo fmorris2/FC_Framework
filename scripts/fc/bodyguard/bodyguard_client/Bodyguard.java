@@ -48,6 +48,11 @@ public class Bodyguard implements Serializable
 		updateThread.start();
 	}
 	
+	public BodyguardClientThread getThread()
+	{
+		return updateThread;
+	}
+	
 	public String toString()
 	{
 		return USERNAME + ", home: " + HOME_TILE + ", radius: " + RADIUS;

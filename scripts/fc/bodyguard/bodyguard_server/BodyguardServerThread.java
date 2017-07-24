@@ -131,6 +131,7 @@ public class BodyguardServerThread extends Thread
 		synchronized(BodyguardServer.bodyguards)
 		{
 			Bodyguard guard = BodyguardServer.bodyguards.stream()
+					.filter(b -> b.HOME_AREA.contains(requestPos))
 					.sorted((b1, b2) -> requestPos.distanceTo(b1.HOME_TILE.getPosition()) - requestPos.distanceTo(b2.HOME_TILE.getPosition()))
 					.findFirst().orElse(null);
 			

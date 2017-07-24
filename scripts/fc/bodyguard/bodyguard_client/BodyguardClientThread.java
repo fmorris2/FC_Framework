@@ -12,6 +12,8 @@ public class BodyguardClientThread extends Thread
 {
 	private Bodyguard bodyguard;
 	
+	private ObjectOutputStream out;
+	
 	public BodyguardClientThread(Bodyguard bodyguard)
 	{
 		this.bodyguard = bodyguard;
@@ -27,6 +29,7 @@ public class BodyguardClientThread extends Thread
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 		)
 		{
+			this.out = out;
 			out.reset();
 			out.writeObject(bodyguard);
 			out.flush();
@@ -55,6 +58,20 @@ public class BodyguardClientThread extends Thread
 					break;
 				}
 			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void writeObject(Object o)
+	{
+		try
+		{
+			out.reset();
+			out.writeObject(o);
+			out.flush();
 		}
 		catch(Exception e)
 		{

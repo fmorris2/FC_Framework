@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.types.RSArea;
+import org.tribot.api2007.types.RSTile;
 
 public class SerializableRSArea implements Serializable
 {
@@ -22,7 +23,18 @@ public class SerializableRSArea implements Serializable
 	
 	public RSArea getArea()
 	{
+		if(area == null)
+			area = new RSArea(centerTile.getPosition(), radius);
+		
 		return area;
+	}
+	
+	public boolean contains(Positionable p)
+	{
+		int x = p.getPosition().getX(), y = p.getPosition().getY();
+		int centerX = centerTile.getX(), centerY = centerTile.getY();
+		int minX = centerX - radius, maxX = centerX + radius, minY = centerY - radius, maxY = centerY + radius;
+		return minX <= x && maxX >= x && minY <= y && maxY >= y;
 	}
 	
 	public int getRadius()
