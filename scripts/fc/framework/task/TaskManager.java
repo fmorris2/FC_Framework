@@ -41,6 +41,9 @@ public abstract class TaskManager extends GoalManager
 	protected boolean running = true;
 	public transient FCScript fcScript;
 	
+	
+	private int availableSlots;
+	
 	public TaskManager(FCScript script)
 	{
 		this.tasks = getTaskList();
@@ -132,7 +135,6 @@ public abstract class TaskManager extends GoalManager
 	private boolean getRequiredItems(FCItem[] reqItems)
 	{
 		General.println("Getting required items for task");
-		List<FCItem> reqItemList = new ArrayList<>(Arrays.asList(reqItems));
 		
 		boolean hasCheckedBank = fcScript.BANK_OBSERVER.hasCheckedBank;
 		
@@ -152,15 +154,22 @@ public abstract class TaskManager extends GoalManager
 			}
 			
 			//check for items for future tasks that we can withdraw
-			reqItemList.addAll(getFutureItems());
+			FutureTaskPreparer preparer = currentTask instanceof FutureTaskPreparer ? (FutureTaskPreparer)currentTask : null;
+			List<FCItem> futureItems = new ArrayList<>();
+			if(preparer != null)
+				futureItems.addAll(getFutureItems(preparer));
 			
-			return FCBanking.withdraw(new FCItemList(reqItemList.toArray(new FCItem[reqItemList.size()])));
+			boolean mainReqs = FCBanking.withdraw(new FCItemList(reqItems));
+			if(futureItems.size() > 0)
+				FCBanking.withdraw(new FCItemList(futureItems.toArray(new FCItem[futureItems.size()])));
+			
+			return mainReqs;
 		}
 			
 		return false;
 	}
 	
-	private List<FCItem> getFutureItems()
+	private List<FCItem> getFutureItems(FutureTaskPreparer preparer)
 	{
 		SpaceRequiredTask spaceRequired = currentTask instanceof SpaceRequiredTask ? (SpaceRequiredTask)currentTask : null;
 		ItemsRequiredTask reqTask = (ItemsRequiredTask)currentTask;
@@ -170,12 +179,21 @@ public abstract class TaskManager extends GoalManager
 				Arrays.stream(reqTask.getRequiredItems())
 						.reduce(0, (sum, i) -> sum += i.getRequiredInvSpace(),  (sum1, sum2) -> sum1 + sum2);
 		
-		int availableSlots = spaceRequired == null ? 28 - currentSpaceRequired : (28 - currentSpaceRequired) - spaceRequired.getSpaceRequired();
+		availableSlots = spaceRequired == null ? 28 - currentSpaceRequired : (28 - currentSpaceRequired) - spaceRequired.getSpaceRequired();
 		if(availableSlots > 0) //we can withdraw more future items
 		{
 			General.println("We can withdraw a potential " + availableSlots + " items for future tasks...");
+			Arrays.stream(preparer.getFutureTasks())
+				.forEach(t -> {
+					if(availableSlots >= t.getRequiredItems().length)
+					{
+						availableSlots -= t.getRequiredItems().length;
+						futureItems.addAll(Arrays.asList(t.getRequiredItems()));
+					}
+				});
 		}
 			
+		General.println("Added " + futureItems.size() + " future task items to the items required");
 		return futureItems;
 	}
 	
