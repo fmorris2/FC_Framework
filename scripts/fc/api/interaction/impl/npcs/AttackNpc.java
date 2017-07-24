@@ -18,6 +18,13 @@ public class AttackNpc extends NpcInteraction
 	{
 		super(action, name, searchDistance);
 	}
+	
+	public AttackNpc(RSNPC npc)
+	{
+		super("Attack", npc.getName(), 10);
+		this.npc = npc;
+		position = npc;
+	}
 
 	@Override
 	protected boolean interact()
