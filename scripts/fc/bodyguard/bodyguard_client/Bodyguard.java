@@ -32,6 +32,15 @@ public class Bodyguard implements Serializable
 		HOME_AREA = new SerializableRSArea(HOME_TILE, RADIUS);
 	}
 	
+	public Bodyguard(Bodyguard o)
+	{
+		USERNAME = o.USERNAME;
+		HOME_TILE = o.HOME_TILE;
+		RADIUS = o.RADIUS;
+		REQUESTS = o.REQUESTS;
+		HOME_AREA = o.HOME_AREA;
+	}
+	
 	public void connect()
 	{
 		General.println("Initializing bodyguard: " + this);
