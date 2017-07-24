@@ -63,13 +63,16 @@ public class BodyguardServerThread extends Thread
 			while(true)
 			{
 				out.writeObject((new Integer(0)));
-				if(oldSize != guard.REQUESTS.size())
+				synchronized(BodyguardServer.bodyguards)
 				{
-					System.out.println("Bodyguard " + guard + " requests have changed! Updating client...");
-					out.writeObject(guard);
-					oldSize = guard.REQUESTS.size();
+					Bodyguard updated = BodyguardServer.bodyguards.get(BodyguardServer.bodyguards.indexOf(guard));
+					if(oldSize != updated.REQUESTS.size())
+					{
+						System.out.println("Bodyguard " + updated + " requests have changed! Updating client...");
+						out.writeObject(updated);
+						oldSize = updated.REQUESTS.size();
+					}
 				}
-				
 				sleep(500);
 			}
 		}
@@ -77,6 +80,13 @@ public class BodyguardServerThread extends Thread
 		{
 			System.out.println("Socket has been closed for bodyguard: " + guard);
 		}
+		
+		synchronized(BodyguardServer.bodyguards)
+		{
+			BodyguardServer.bodyguards.remove(guard);
+			System.out.println("Bodyguard removed: " + guard);
+			System.out.println("There are now " + BodyguardServer.bodyguards.size() + " registered bodyguards.");
+		}	
 	}
 	
 	private void removeBodyguard(RemoveBodyguard r)

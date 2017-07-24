@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.net.Socket;
 
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Positionable;
 
 import scripts.fc.api.wrappers.SerializablePositionable;
@@ -15,24 +16,30 @@ import scripts.fc.bodyguard.bodyguard_server.BodyguardServer;
 public class BodyguardRequest implements Serializable
 {
 	private static final long serialVersionUID = 8041399005009389103L;
+	private static final long UPDATE_THRESH = 5000;
 	
 	public final String REQUESTER_NAME;
 	public final SerializablePositionable REQUESTER_POS;
-	public final int RADIUS;
+	public final int RADIUS, WORLD;
 	public final String[] TARGETS;
 	
 	private BodyguardResponse response;
+	private long lastUpdate;
 	
-	public BodyguardRequest(String requesterName, Positionable requesterLocation, int radius, String... bodyguardTargets)
+	public BodyguardRequest(String requesterName, Positionable requesterLocation, int radius, int world, String... bodyguardTargets)
 	{
 		REQUESTER_NAME = requesterName;
 		REQUESTER_POS = new SerializablePositionable(requesterLocation);
 		RADIUS = radius;
+		WORLD = world;
 		TARGETS = bodyguardTargets;
 	}
 	
 	public BodyguardResponse send()
 	{
+		if(Timing.timeFromMark(lastUpdate) < UPDATE_THRESH)
+			return response;
+		
 		General.println("Attempting to send bodyguard request: " + this);
 		try
 		(
@@ -45,13 +52,14 @@ public class BodyguardRequest implements Serializable
 			General.println("Successfully sent bodyguard request to server. Waiting for response...");
 			response = (BodyguardResponse)in.readObject();
 			General.println("Bodyguard response received! Details: " + response);
+			lastUpdate = Timing.currentTimeMillis();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		
-		return null;
+		return response;
 	}
 	
 	public BodyguardResponse getResponse()

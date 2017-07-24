@@ -2,6 +2,7 @@ package scripts.fc;
 
 import org.tribot.api2007.MessageListener;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
@@ -29,7 +30,7 @@ import scripts.fc.framework.script.FCScript;
 public class Test extends FCScript implements FCPaintable, Painting, Starting, Ending, FCSettingsListener, MessageListening07
 {	
 	private FCSettingsObserver settingsObserver = new FCSettingsObserver(this);
-	private BodyguardRequest request = new BodyguardRequest("Test", Player.getPosition(), 10, "Jail guard");
+	private BodyguardRequest request = new BodyguardRequest("Test", Player.getPosition(), 10, WorldHopper.getWorld(), "Jail guard");
 	
 	protected int mainLogic()
 	{
