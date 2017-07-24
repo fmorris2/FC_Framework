@@ -27,7 +27,9 @@ public class BodyguardClientThread extends Thread
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 		)
 		{
+			out.reset();
 			out.writeObject(bodyguard);
+			out.flush();
 			General.println("Successfully sent data to server... Waiting for first update!");
 			while(true)
 			{
@@ -37,6 +39,7 @@ public class BodyguardClientThread extends Thread
 					if(obj instanceof Bodyguard)
 					{
 						Bodyguard updated = (Bodyguard)obj;
+						General.println("BODYGUARD REQUESTS SIZE FROM SERVER: " + updated.REQUESTS.size());
 						int old = bodyguard.REQUESTS.size();
 						updated.REQUESTS.stream()
 							.filter(r -> !bodyguard.REQUESTS.contains(r))

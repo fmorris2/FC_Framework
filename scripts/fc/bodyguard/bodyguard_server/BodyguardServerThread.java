@@ -43,7 +43,9 @@ public class BodyguardServerThread extends Thread
 			{
 				request = (BodyguardRequest)obj;
 				System.out.println("Bodyguard request received: " + request);
+				out.reset();
 				out.writeObject(createResponse(request));
+				out.flush();
 			}
 			socket.close();
 		} 
@@ -63,13 +65,17 @@ public class BodyguardServerThread extends Thread
 			while(true)
 			{
 				out.writeObject((new Integer(0)));
+				out.flush();
 				synchronized(BodyguardServer.bodyguards)
 				{
 					Bodyguard updated = BodyguardServer.bodyguards.get(BodyguardServer.bodyguards.indexOf(guard));
 					if(oldSize != updated.REQUESTS.size())
 					{
 						System.out.println("Bodyguard " + updated + " requests have changed! Updating client...");
+						System.out.println("Updated size: " + updated.REQUESTS.size());
+						out.reset();
 						out.writeObject(updated);
+						out.flush();
 						oldSize = updated.REQUESTS.size();
 					}
 				}
