@@ -44,13 +44,11 @@ public class Bodyguard implements Serializable
 	public void connect()
 	{
 		General.println("Initializing bodyguard: " + this);
+		if(updateThread != null)
+			updateThread.stopThread();
+		
 		updateThread = new BodyguardClientThread(this);
 		updateThread.start();
-	}
-	
-	public BodyguardClientThread getThread()
-	{
-		return updateThread;
 	}
 	
 	public String toString()

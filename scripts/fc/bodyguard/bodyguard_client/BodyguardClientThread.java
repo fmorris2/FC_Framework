@@ -13,6 +13,7 @@ public class BodyguardClientThread extends Thread
 	private Bodyguard bodyguard;
 	
 	private ObjectOutputStream out;
+	private boolean isRunning = true;
 	
 	public BodyguardClientThread(Bodyguard bodyguard)
 	{
@@ -34,7 +35,7 @@ public class BodyguardClientThread extends Thread
 			out.writeObject(bodyguard);
 			out.flush();
 			General.println("Successfully sent data to server... Waiting for first update!");
-			while(true)
+			while(isRunning)
 			{
 				try
 				{
@@ -65,17 +66,9 @@ public class BodyguardClientThread extends Thread
 		}
 	}
 	
-	public void writeObject(Object o)
+	public void stopThread()
 	{
-		try
-		{
-			out.reset();
-			out.writeObject(o);
-			out.flush();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		isRunning = false;
+		stop();
 	}
 }
