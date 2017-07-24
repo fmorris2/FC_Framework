@@ -1,5 +1,6 @@
 package scripts.fc.framework.task;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -131,6 +132,8 @@ public abstract class TaskManager extends GoalManager
 	private boolean getRequiredItems(FCItem[] reqItems)
 	{
 		General.println("Getting required items for task");
+		List<FCItem> reqItemList = new ArrayList<>(Arrays.asList(reqItems));
+		
 		boolean hasCheckedBank = fcScript.BANK_OBSERVER.hasCheckedBank;
 		
 		if(!Banking.isInBank())
@@ -148,10 +151,32 @@ public abstract class TaskManager extends GoalManager
 				return false;
 			}
 			
-			return FCBanking.withdraw(new FCItemList(reqItems));
+			//check for items for future tasks that we can withdraw
+			reqItemList.addAll(getFutureItems());
+			
+			return FCBanking.withdraw(new FCItemList(reqItemList.toArray(new FCItem[reqItemList.size()])));
 		}
 			
 		return false;
+	}
+	
+	private List<FCItem> getFutureItems()
+	{
+		SpaceRequiredTask spaceRequired = currentTask instanceof SpaceRequiredTask ? (SpaceRequiredTask)currentTask : null;
+		ItemsRequiredTask reqTask = (ItemsRequiredTask)currentTask;
+		
+		List<FCItem> futureItems = new ArrayList<>();
+		int currentSpaceRequired = 
+				Arrays.stream(reqTask.getRequiredItems())
+						.reduce(0, (sum, i) -> sum += i.getRequiredInvSpace(),  (sum1, sum2) -> sum1 + sum2);
+		
+		int availableSlots = spaceRequired == null ? 28 - currentSpaceRequired : (28 - currentSpaceRequired) - spaceRequired.getSpaceRequired();
+		if(availableSlots > 0) //we can withdraw more future items
+		{
+			General.println("We can withdraw a potential " + availableSlots + " items for future tasks...");
+		}
+			
+		return futureItems;
 	}
 	
 	private boolean isAnticipativeTask(Task t)
