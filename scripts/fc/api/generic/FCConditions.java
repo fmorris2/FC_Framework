@@ -339,8 +339,6 @@ public class FCConditions
 				RSInterface inter = Interfaces.get(BANK_AMT_MASTER, BANK_AMT_CHILD);
 				String text = inter == null || inter.isHidden() ? null : inter.getText();
 				int amt = text == null || text.length() == 0 ? -1 : Integer.parseInt(text);
-				
-				General.println("BANK LOADED CONDITION: " + amt + ":" + Banking.getAll().length);
 				return amt > 0 && amt == Banking.getAll().length;
 			}
 		};
