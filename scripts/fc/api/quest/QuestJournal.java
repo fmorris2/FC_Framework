@@ -32,6 +32,11 @@ public class QuestJournal
 		return getJournalContents(name, false);
 	}
 	
+	public static boolean isCached(String name)
+	{
+		return CACHE.get(name) != null;
+	}
+	
 	public static JournalContents getJournalContents(String name, boolean overrideCache)
 	{
 		RSInterface questJournal;

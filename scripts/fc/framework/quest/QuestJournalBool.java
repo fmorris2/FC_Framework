@@ -26,11 +26,15 @@ public class QuestJournalBool extends QuestBool
 	@Override
 	public boolean value()
 	{
-		if(Banking.isBankScreenOpen())
-			Banking.close();
 		
-		if(GrandExchange.getWindowState() != null)
-			GrandExchange.close();
+		if(!QuestJournal.isCached(quest) || needsCacheReset)
+		{
+			if(Banking.isBankScreenOpen())
+				Banking.close();
+			
+			if(GrandExchange.getWindowState() != null)
+				GrandExchange.close();
+		}
 		
 		JournalContents contents = QuestJournal.getJournalContents(quest, needsCacheReset);
 		if(!contents.isEmpty())
