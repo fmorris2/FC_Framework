@@ -11,6 +11,7 @@ import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterface;
 
+import scripts.fc.api.quest.QuestJournal;
 import scripts.fc.api.wrappers.FCTiming;
 
 public class InterfaceUtils
@@ -83,6 +84,7 @@ public class InterfaceUtils
 	
 	public static boolean isQuestInterfaceUp()
 	{
-		return findContainingText("Congratulations!") != null && findContainingText("Quest Points:") != null;
+		return Interfaces.get(QuestJournal.JOURNAL_MASTER) != null
+				|| (findContainingText("Congratulations!") != null && findContainingText("Quest Points:") != null);
 	}
 }

@@ -1,5 +1,6 @@
 package scripts.fc.framework.quest;
 
+import org.tribot.api.General;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.GrandExchange;
 
@@ -12,6 +13,7 @@ public class QuestJournalBool extends QuestBool
 	private String line;
 	private boolean needsCacheReset;
 	private JOURNAL_STATUS status;
+	private boolean failed;
 	
 	public QuestJournalBool(String quest, String line, JOURNAL_STATUS status, boolean normal)
 	{
@@ -31,12 +33,26 @@ public class QuestJournalBool extends QuestBool
 			GrandExchange.close();
 		
 		JournalContents contents = QuestJournal.getJournalContents(quest, needsCacheReset);
-		needsCacheReset = false;
+		if(!contents.isEmpty())
+		{
+			needsCacheReset = false;
+			failed = false;
+		}
+		else
+			failed = true;
+		
 		return status == JOURNAL_STATUS.HAS_COMPLETED ? contents.hasLineCompleted(line, true) : contents.hasLineThatContains(line);
+	}
+	
+	@Override
+	public boolean validate()
+	{
+		return super.validate() && !failed;
 	}
 	
 	public void resetCache()
 	{
+		General.println("QuestJournalBool for " + line + " needs cache reset");
 		needsCacheReset = true;
 	}
 	

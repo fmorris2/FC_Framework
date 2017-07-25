@@ -48,6 +48,7 @@ public class GEOrder
 	
 	private GEOrder_Status status = GEOrder_Status.GO_TO_GE;
 	private long lastOffer;
+	private boolean makingSpace;
 	
 	public GEOrder(FCBankObserver obs, List<SingleReqItem> reqItems)
 	{
@@ -130,7 +131,12 @@ public class GEOrder
 	private void handleGeLogic()
 	{
 		status = GEOrder_Status.BUY_ITEMS;
-		if(Banking.isBankScreenOpen())
+		
+		if(InterfaceUtils.isQuestInterfaceUp())
+			InterfaceUtils.closeQuestInterface();
+		else if(makingSpace)
+			makeSpace();
+		else if(Banking.isBankScreenOpen())
 			Banking.close();
 		else if(GrandExchange.getWindowState() == null)
 			openGe();
@@ -165,22 +171,60 @@ public class GEOrder
 			.forEach(unsold -> {GEOrderItem orderItem = getOrderItemForOffer(unsold); if(unsold.click("Abort offer") && orderItem != null){orderItem.resubmit();}});
 	}
 	
+	private boolean needsToMakeSpaceToCollect()
+	{
+		return 28 - Inventory.getAll().length < getCompletedOffersStream().count();
+	}
+	
 	private void collectItems()
 	{
 		General.println("Collecting items...");
 		
-		if(Timing.timeFromMark(lastOffer) < LAST_OFFER_THRESH)
-			General.sleep(1200, 2400);
-		
-		RSInterface collectButton = InterfaceUtils.findContainingText("Collect");
-		
-		if(collectButton != null && Clicking.click(collectButton))
+		if(needsToMakeSpaceToCollect())
 		{
-			getOfferedItemsStream()
-			.filter(c -> getCompletedOffersStream().anyMatch(o -> c.ID == o.getItemID() && c.AMT == o.getQuantity()))
-			.forEach(purchased -> {General.println("Successfully purchased " + purchased); purchased.setPurchased(true);});
+			makingSpace = true;
+			makeSpace();
+			return;
+		}
+		else if(Banking.isBankScreenOpen())
+			Banking.close();
+		else if(GrandExchange.getWindowState() == null)
+			openGe();
+		else
+		{
+			if(Timing.timeFromMark(lastOffer) < LAST_OFFER_THRESH)
+				General.sleep(1200, 2400);
 			
-			FCTiming.waitCondition(() -> !shouldCollectItems(), 2400);
+			RSInterface collectButton = InterfaceUtils.findContainingText("Collect");
+			
+			if(collectButton != null && Clicking.click(collectButton))
+			{
+				getOfferedItemsStream()
+				.filter(c -> getCompletedOffersStream().anyMatch(o -> c.ID == o.getItemID() && c.AMT == o.getQuantity()))
+				.forEach(purchased -> {General.println("Successfully purchased " + purchased); purchased.setPurchased(true);});
+				
+				FCTiming.waitCondition(() -> !shouldCollectItems(), 2400);
+			}
+		}
+	}
+	
+	private void makeSpace()
+	{
+		General.println("Making space to collect items...");
+		int goldInInv = Inventory.getCount(995);
+		int goldInBank = BANK_OBSERVER.getCount(995);
+		int invSpace = Inventory.getAll().length;
+		
+		if(GrandExchange.getWindowState() != null)
+			GrandExchange.close();
+		else if((Banking.isBankScreenOpen() || Banking.openBank()) && (Inventory.getAll().length == 0 
+				|| (Banking.depositAll() > 0 && Timing.waitCondition(FCConditions.inventoryChanged(invSpace), 3200))))
+		{
+			if(goldInInv > 0)
+				FCTiming.waitCondition(() -> BANK_OBSERVER.getCount(995) > goldInBank, 2400);
+			
+			General.println("Successfully made space to collect items...");
+			makingSpace = false;
 		}
 	}
 	
@@ -224,7 +268,7 @@ public class GEOrder
 	
 	private void offerItems()
 	{
-		GEOrderItem toOffer = ORDER_ITEMS.stream().filter(i -> !i.isOffered()).findAny().get();
+		GEOrderItem toOffer = ORDER_ITEMS.stream().filter(i -> !i.isOffered() && Inventory.getCount(995) >= i.getPrice()).findAny().get();
 		General.println("Putting in buy offer for item " + toOffer);
 		
 		long oldEmptyOffers = getEmptyOffers();
