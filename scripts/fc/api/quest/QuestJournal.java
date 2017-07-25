@@ -48,9 +48,13 @@ public class QuestJournal
 			return parseJournal(name, questJournal);
 		
 		//if the kourend favor tab is open
-		RSInterface kourend = Interfaces.get(KOUREND_MASTER, QUEST_CHILD);
-		if(kourend != null)
-			Clicking.click(kourend);
+		RSInterface kourendMain = InterfaceUtils.findContainingText("Favour Overlay");
+		if(kourendMain != null && !kourendMain.isHidden())
+		{
+			RSInterface kourend = Interfaces.get(KOUREND_MASTER, QUEST_CHILD);
+			if(kourend != null)
+				Clicking.click(kourend);
+		}
 		
 		//if we failed to open the quest tab, return
 		if(!GameTab.open(TABS.QUESTS))
