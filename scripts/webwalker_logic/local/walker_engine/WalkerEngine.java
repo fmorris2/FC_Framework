@@ -8,6 +8,7 @@ import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.utils.InterfaceUtils;
+import scripts.fc.framework.data.Vars;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
 import scripts.webwalker_logic.local.walker_engine.local_pathfinding.PathAnalyzer;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.Charter;
@@ -241,8 +242,16 @@ public class WalkerEngine implements Loggable{
 
         log("Clicking Tile On Minimap (" + pathFindingNode.getX() + ", " + pathFindingNode.getY() + ", " + pathFindingNode.getZ() + ") -> RANDOMIZE -> (" + randomNearby.getX() + ", " + randomNearby.getY() + ", " + randomNearby.getZ() + ")");
         Point point = Projection.tileToMinimap(new RSTile(randomNearby.getX(), randomNearby.getY(), randomNearby.getZ()));
-
-        if (!Projection.isInMinimap(point)){
+        
+        boolean shouldRandomize = Vars.get().get("daxWebRandomize", true);
+        
+        if(!shouldRandomize)
+        {
+        	log("Randomize is off the map, clicking normal instead.");
+            point = Projection.tileToMinimap(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
+            Vars.get().addOrUpdate("daxWebRandomize", true);
+        }
+        else if (!Projection.isInMinimap(point)){
             log("Randomize is off the map, clicking normal instead.");
             point = Projection.tileToMinimap(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
         }
