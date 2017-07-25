@@ -26,7 +26,6 @@ public class QuestJournalBool extends QuestBool
 	@Override
 	public boolean value()
 	{
-		
 		if(!QuestJournal.isCached(quest) || needsCacheReset)
 		{
 			if(Banking.isBankScreenOpen())
@@ -36,6 +35,7 @@ public class QuestJournalBool extends QuestBool
 				GrandExchange.close();
 		}
 		
+		General.println("value() for " + quest + ": needsCacheReset: " + needsCacheReset);
 		JournalContents contents = QuestJournal.getJournalContents(quest, needsCacheReset);
 		if(!contents.isEmpty())
 		{
