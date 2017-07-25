@@ -35,7 +35,6 @@ public class QuestJournalBool extends QuestBool
 				GrandExchange.close();
 		}
 		
-		General.println("value() for " + quest + ": needsCacheReset: " + needsCacheReset);
 		JournalContents contents = QuestJournal.getJournalContents(quest, needsCacheReset);
 		if(!contents.isEmpty())
 		{
@@ -56,7 +55,6 @@ public class QuestJournalBool extends QuestBool
 	
 	public void resetCache()
 	{
-		General.println("QuestJournalBool for " + line + " needs cache reset");
 		needsCacheReset = true;
 	}
 	
