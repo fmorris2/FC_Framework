@@ -14,6 +14,7 @@ import org.tribot.api2007.Projection;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.mouse.AccurateMouse;
 import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.framework.data.Vars;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
@@ -212,7 +213,7 @@ public class WalkerEngine implements Loggable{
                     			Camera.turnToTile(t.getRSTile());
                     		
                     		if(t.getRSTile().distanceTo(Player.getPosition()) > CLICK_SCREEN_THRESH)
-                    			Walking.walkScreenPath(Walking.generateStraightScreenPath(t.getRSTile()));
+                    			AccurateMouse.click(t.getRSTile().getHumanHoverPoint());
                     	}
                     		
                         log("Reached end of path");
