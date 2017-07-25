@@ -11,6 +11,7 @@ import org.tribot.api2007.Game;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Projection;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.utils.InterfaceUtils;
@@ -200,7 +201,17 @@ public class WalkerEngine implements Loggable{
                         break;
 
                     case END_OF_PATH:
-                        clickMinimap(destinationDetails.getDestination());
+                    	RealTimeCollisionTile t = destinationDetails.getDestination();
+                    	if(t.getRSTile().distanceTo(Player.getPosition()) > 6)
+                    		clickMinimap(t);
+                    	else
+                    	{
+                    		if(!t.getRSTile().isOnScreen())
+                    			Camera.turnToTile(t.getRSTile());
+                    		
+                    		Walking.walkScreenPath(Walking.generateStraightScreenPath(t.getRSTile()));
+                    	}
+                    		
                         log("Reached end of path");
                         return true;
                 }
