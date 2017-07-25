@@ -4,9 +4,11 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Game;
+import org.tribot.api2007.GameTab;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
 
@@ -54,6 +56,9 @@ public class ItemOnObject extends ObjectInteraction
 			if(!Game.isUptext(action + " " + itemName + " ->"))
 			{
 				General.println("Need to click item...");
+				if(!GameTab.open(TABS.INVENTORY))
+					return false;
+				
 				if(items[0].click(action) && !Timing.waitCondition(FCConditions.uptextContains(action + " " + itemName + " ->"), 800))
 					return false;
 			}
