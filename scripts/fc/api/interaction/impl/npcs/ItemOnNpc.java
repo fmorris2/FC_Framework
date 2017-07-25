@@ -73,8 +73,12 @@ public class ItemOnNpc extends NpcInteraction
 				
 				RSItem[] items = itemName == null ? Inventory.find(itemId) : Inventory.find(itemName);
 				if(items.length > 0 && !Game.isUptext(action + " "+ itemName + " -> "))
+				{
+					if(!GameTab.open(TABS.INVENTORY))
+						return false;
+					
 					items[0].click("Use");
-						
+				}		
 				return entity.hover() && Game.isUptext(action + " " + itemName + " -> ");
 			}
 		}

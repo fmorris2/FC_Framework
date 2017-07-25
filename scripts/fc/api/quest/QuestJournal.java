@@ -34,10 +34,13 @@ public class QuestJournal
 	public static JournalContents getJournalContents(String name, boolean overrideCache)
 	{
 		RSInterface questJournal;
+		if(overrideCache)
+			CACHE.put(name, null);
+		
 		JournalContents cached = CACHE.get(name);
 		
 		//check the cache first
-		if(!overrideCache && cached != null && !cached.needsCacheUpdate())
+		if(cached != null && !cached.needsCacheUpdate())
 			return cached;
 		
 		//if the quest journal is already opened, just parse it
