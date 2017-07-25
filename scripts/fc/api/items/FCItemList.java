@@ -14,9 +14,17 @@ public class FCItemList extends ArrayList<FCItem>
 {
 	private static final long serialVersionUID = -5556404383763797322L;
 
+	private boolean mandatory = true;
+	
 	public FCItemList(FCItem... items)
 	{
 		addAll(Arrays.asList(items));
+	}
+	
+	public FCItemList notMandatory()
+	{
+		mandatory = false;
+		return this;
 	}
 	
 	public boolean hasListInInv()
@@ -117,7 +125,10 @@ public class FCItemList extends ArrayList<FCItem>
 			final boolean WITHDRAW_ALL = !i.isStackable() && (INV_COUNT + WITHDRAW_AMT > 28 || (index == size() - 1) && i.getBankCount() <= WITHDRAW_AMT);
 			
 			if(!i.withdraw(WITHDRAW_ALL ? 0 : WITHDRAW_AMT))
-				return false;
+			{
+				if(mandatory)
+					return false;
+			}
 			else
 				Timing.waitCondition(FCConditions.inventoryChanged(INV_COUNT), 3500);
 		}

@@ -155,12 +155,12 @@ public abstract class TaskManager extends GoalManager
 			
 			//check for items for future tasks that we can withdraw
 			FutureTaskPreparer preparer = currentTask instanceof FutureTaskPreparer ? (FutureTaskPreparer)currentTask : null;
-			List<FCItem> futureItems = new ArrayList<>();
+			List<FCItem> futureItems = null;
 			if(preparer != null)
-				futureItems.addAll(getFutureItems(preparer));
+				futureItems = getFutureItems(preparer);
 			
 			boolean mainReqs = FCBanking.withdraw(new FCItemList(reqItems));
-			if(futureItems.size() > 0)
+			if(futureItems != null)
 				FCBanking.withdraw(new FCItemList(futureItems.toArray(new FCItem[futureItems.size()])));
 			
 			return mainReqs;
@@ -193,7 +193,7 @@ public abstract class TaskManager extends GoalManager
 				});
 		}
 			
-		General.println("Added " + futureItems.size() + " future task items to the items required");
+		General.println("Added " + futureItems.size() + " future task items to be withdrawn");
 		return futureItems;
 	}
 	
