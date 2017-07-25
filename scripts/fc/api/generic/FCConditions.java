@@ -340,7 +340,8 @@ public class FCConditions
 				String text = inter == null || inter.isHidden() ? null : inter.getText();
 				int amt = text == null || text.length() == 0 ? -1 : Integer.parseInt(text);
 				
-				return amt != -1 && amt == Banking.getAll().length;
+				General.println("BANK LOADED CONDITION: " + amt + ":" + Banking.getAll().length);
+				return amt > 0 && amt == Banking.getAll().length;
 			}
 		};
 	}
