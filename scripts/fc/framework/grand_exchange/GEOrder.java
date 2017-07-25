@@ -111,7 +111,7 @@ public class GEOrder
 			status = GEOrder_Status.SUCCESS;
 	}
 	
-	private boolean isInGe()
+	public static boolean isInGe()
 	{
 		return Player.getPosition().distanceTo(GE_TILE) < GE_DIST_THRESH;
 	}
@@ -120,6 +120,11 @@ public class GEOrder
 	{
 		status = GEOrder_Status.GO_TO_GE;
 		Travel.webWalkTo(GE_TILE, FCConditions.withinDistanceOfTile(GE_TILE, GE_DIST_THRESH));
+	}
+	
+	public static boolean travelToGe()
+	{
+		return Travel.webWalkTo(GE_TILE, FCConditions.withinDistanceOfTile(GE_TILE, GE_DIST_THRESH));
 	}
 	
 	private void handleGeLogic()
