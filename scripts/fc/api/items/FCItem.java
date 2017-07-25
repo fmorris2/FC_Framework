@@ -184,4 +184,9 @@ public class FCItem
 	{
 		return names == null ? Filters.Items.idEquals(ids) : Filters.Items.nameContains(names);
 	}
+	
+	public String toString()
+	{
+		return "ID: " + ids[0] + ", Count: " + amt + ", isRequired: " + isRequired;
+	}
 }

@@ -142,7 +142,7 @@ public abstract class TaskManager extends GoalManager
 		
 		if(!Banking.isInBank())
 			Travel.walkToBank();
-		else if(Banking.isBankScreenOpen() || (Banking.openBank() && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 7000)))
+		else if((Banking.isBankScreenOpen()|| (Banking.openBank()) && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 7000)))
 		{
 			if(!hasCheckedBank) //we won't immediately end the script if the bank observer hasn't been loaded yet
 				return false;
@@ -151,6 +151,10 @@ public abstract class TaskManager extends GoalManager
 			if(Arrays.stream(reqItems).anyMatch(req -> (req.getInvCount(true) + FCBanking.getAmount(req.getIds()[0]) < req.getAmt()) && req.isRequired()))
 			{
 				General.println("We don't have all of the required materials on the character!");
+				Arrays.stream(reqItems)
+				.filter(req -> (req.getInvCount(true) + FCBanking.getAmount(req.getIds()[0]) < req.getAmt() && req.isRequired()))
+				.forEach(r -> General.println("Don't have requirement: " + r));
+				
 				running = false;
 				return false;
 			}
