@@ -117,8 +117,6 @@ public abstract class ItemRequirement extends Requirement
 				//if this req was satisfied by having a combined version of multiple items, don't add the single items to satisfiedReqs
 				if(!req.getSingleReqItems().stream().filter(it -> it.needsItem()).allMatch(item -> item.isSatisfied()))
 					req.getSingleReqItems().stream().forEach(item -> satisfiedReqs.put(item.getId(), satisfiedReqs.getOrDefault(item.getId(), 0) + 1));
-				else
-					General.println(req + " was satisfied by having the combined req instead of individual parts");
 				
 				reqItems.remove(i);
 			}

@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.types.generic.Filter;
+import org.tribot.api2007.GameTab;
+import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterface;
 
@@ -56,6 +58,9 @@ public class InterfaceUtils
 	
 	public static boolean closeQuestInterface()
 	{
+		if(GameTab.getOpen() == TABS.QUESTS)
+			GameTab.open(TABS.INVENTORY);
+		
 		RSInterface[] closeQuestButton = find(getCloseQuestButton());
 		if(closeQuestButton.length > 0)
 			return Clicking.click(closeQuestButton[0]) && FCTiming.waitCondition(() -> !isQuestInterfaceUp(), 1800);
@@ -70,7 +75,7 @@ public class InterfaceUtils
 			@Override
 			public boolean accept(RSInterface i)
 			{
-				return i.getWidth() == 26 && i.getHeight() == 23;
+				return i.isBeingDrawn() && i.getWidth() == 26 && i.getHeight() == 23;
 			}
 			
 		};

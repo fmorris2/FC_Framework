@@ -31,7 +31,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(GameTab.open(TABS.INVENTORY));
+		println(GameTab.open(TABS.QUESTS));
 		return 600;
 	}
 	

@@ -17,6 +17,7 @@ import org.tribot.api2007.types.RSInterface;
 
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.utils.InterfaceUtils;
+import scripts.fc.api.wrappers.FCTiming;
 
 public class QuestJournal
 {	
@@ -63,8 +64,9 @@ public class QuestJournal
 		//we attempt to scroll to the quest, click it, and wait for it to open. If success, parse it
 		RSInterface button = getQuestButton(name);
 		if(button != null && scrollToButton(button) 
-				&& clickButton(button) && (questJournal = getOpenQuestJournal(name)) != null)
+				&& clickButton(button) && FCTiming.waitCondition(() -> (getOpenQuestJournal(name)) != null, 3000))
 		{
+			questJournal = getOpenQuestJournal(name);
 			return parseJournal(name, questJournal);
 		}
 		
