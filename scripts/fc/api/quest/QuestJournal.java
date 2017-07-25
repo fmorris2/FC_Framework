@@ -22,6 +22,7 @@ public class QuestJournal
 {	
 	
 	private static final int JOURNAL_MASTER = 275, NAME_CHILD = 2, MIN_X = 560, MAX_X = 712, MIN_Y = 235, MAX_Y = 450;
+	private static final int KOUREND_MASTER = 245, QUEST_CHILD = 2;
 	private static final Rectangle QUEST_LIST_SCROLLABLE_AREA = new Rectangle(MIN_X, MIN_Y, (MAX_X - MIN_X), (MAX_Y - MIN_Y));
 	private static final Map<String, JournalContents> CACHE = new HashMap<>();
 	
@@ -42,6 +43,11 @@ public class QuestJournal
 		//if the quest journal is already opened, just parse it
 		if((questJournal = getOpenQuestJournal(name)) != null)
 			return parseJournal(name, questJournal);
+		
+		//if the kourend favor tab is open
+		RSInterface kourend = Interfaces.get(KOUREND_MASTER, QUEST_CHILD);
+		if(kourend != null)
+			Clicking.click(kourend);
 		
 		//if we failed to open the quest tab, return
 		if(!GameTab.open(TABS.QUESTS))

@@ -242,7 +242,7 @@ public class DialogueThread extends Thread
 	{
 		String npcChatName = NPCChat.getName();
 		
-		return (ignoreChatName && npcChatName != null) 
+		return (ignoreChatName && areDialogueInterfacesUp()) 
 					|| npcChatName != null && (npcChatName.equals(npcName) || npcChatName.equals(Player.getRSPlayer().getName()));
 	}
 	

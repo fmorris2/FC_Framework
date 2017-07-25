@@ -99,11 +99,13 @@ public abstract class TaskManager extends GoalManager
 	private boolean handleSpaceRequiredTask()
 	{
 		SpaceRequiredTask t = (SpaceRequiredTask)currentTask;
-		if(currentTask.FLAGS.get("hasMadeSpace"+currentTask) != null || (28 - Inventory.getAll().length) >= t.getSpaceRequired())
+		FCItem[] reqItems = t instanceof ItemsRequiredTask ? ((ItemsRequiredTask)t).getRequiredItems() : new FCItem[]{};
+		int itemsNeeded = Arrays.stream(reqItems).reduce(0, (sum, i) -> sum += i.getWithdrawAmt(), (sum1, sum2) -> sum1 + sum2);
+		
+		if(currentTask.FLAGS.get("hasMadeSpace"+currentTask) != null || (28 - Inventory.getAll().length - itemsNeeded) >= t.getSpaceRequired())
 			return true;
 		
 		General.println("Creating inventory space for task");
-		FCItem[] reqItems = t instanceof ItemsRequiredTask ? ((ItemsRequiredTask)t).getRequiredItems() : new FCItem[]{};
 		int[] ids = Arrays.stream(reqItems).mapToInt(i -> i.getIds()[0]).toArray();
 		
 		if(!Banking.isInBank())
