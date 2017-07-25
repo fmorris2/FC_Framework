@@ -30,6 +30,8 @@ public class WalkerEngine implements Loggable{
 
     private static WalkerEngine walkerEngine;
 
+    private static final int CLICK_SCREEN_THRESH = 4;
+    
     private int attemptsForAction;
     private final int failThreshold;
     private boolean navigating;
@@ -202,14 +204,15 @@ public class WalkerEngine implements Loggable{
 
                     case END_OF_PATH:
                     	RealTimeCollisionTile t = destinationDetails.getDestination();
-                    	if(t.getRSTile().distanceTo(Player.getPosition()) > 6)
+                    	if(t.getRSTile().distanceTo(Player.getPosition()) > CLICK_SCREEN_THRESH)
                     		clickMinimap(t);
                     	else
                     	{
                     		if(!t.getRSTile().isOnScreen())
                     			Camera.turnToTile(t.getRSTile());
                     		
-                    		Walking.walkScreenPath(Walking.generateStraightScreenPath(t.getRSTile()));
+                    		if(t.getRSTile().distanceTo(Player.getPosition() > CLICK_SCREEN_THRESH))
+                    			Walking.walkScreenPath(Walking.generateStraightScreenPath(t.getRSTile()));
                     	}
                     		
                         log("Reached end of path");
