@@ -1,26 +1,29 @@
 package scripts.webwalker_logic.local.walker_engine;
 
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.*;
+import org.tribot.api2007.Camera;
+import org.tribot.api2007.Game;
+import org.tribot.api2007.Login;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.framework.data.Vars;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.webwalker_logic.local.walker_engine.local_pathfinding.PathAnalyzer;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.Charter;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.NavigationSpecialCase;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.ShipUtils;
-import scripts.webwalker_logic.local.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.RealTimeCollisionTile;
 import scripts.webwalker_logic.shared.PathFindingNode;
-
-import java.awt.*;
-import java.util.ArrayList;
 
 public class WalkerEngine implements Loggable{
 
@@ -214,6 +217,7 @@ public class WalkerEngine implements Loggable{
             }
         } finally {
             navigating = false;
+            Vars.get().addOrUpdate("daxWebRandomize", true);
         }
     }
 
@@ -247,12 +251,11 @@ public class WalkerEngine implements Loggable{
         
         if(!shouldRandomize)
         {
-        	log("Randomize is off the map, clicking normal instead.");
+        	log("Randomize is off, clicking normal instead.");
             point = Projection.tileToMinimap(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
-            Vars.get().addOrUpdate("daxWebRandomize", true);
         }
         else if (!Projection.isInMinimap(point)){
-            log("Randomize is off the map, clicking normal instead.");
+            log("Tile is off the map, clicking normal instead.");
             point = Projection.tileToMinimap(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
         }
 
