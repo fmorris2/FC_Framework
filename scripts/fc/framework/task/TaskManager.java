@@ -161,7 +161,7 @@ public abstract class TaskManager extends GoalManager
 			
 			boolean mainReqs = FCBanking.withdraw(new FCItemList(reqItems));
 			if(futureItems != null)
-				FCBanking.withdraw(new FCItemList(futureItems.toArray(new FCItem[futureItems.size()])));
+				FCBanking.withdraw(new FCItemList(futureItems.toArray(new FCItem[futureItems.size()])).notMandatory());
 			
 			return mainReqs;
 		}
