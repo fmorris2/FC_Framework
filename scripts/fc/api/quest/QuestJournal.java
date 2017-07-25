@@ -47,10 +47,7 @@ public class QuestJournal
 		
 		//check the cache first
 		if(cached != null && !cached.needsCacheUpdate())
-		{
-			General.println("Returning cached journal contents for "+ name);
 			return cached;
-		}
 		
 		//if the quest journal is already opened, just parse it
 		if((questJournal = getOpenQuestJournal(name)) != null)
