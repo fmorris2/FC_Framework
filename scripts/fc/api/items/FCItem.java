@@ -145,6 +145,12 @@ public class FCItem
 		return COUNT;
 	}
 	
+	public int getBankCount()
+	{
+		RSItem[] items = Banking.find(itemFilter);
+		return items.length == 0 ? 0 : items[0].getStack();
+	}
+	
 	private int getCount()
 	{
 		int count = 0;

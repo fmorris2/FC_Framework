@@ -114,7 +114,7 @@ public class FCItemList extends ArrayList<FCItem>
 			
 			final int INV_COUNT = Inventory.getAll().length;
 			final int WITHDRAW_AMT = i.getWithdrawAmt();
-			final boolean WITHDRAW_ALL = !i.isStackable() && (INV_COUNT + WITHDRAW_AMT > 28 || (index == size() - 1) && i.getAmt() > 1);
+			final boolean WITHDRAW_ALL = !i.isStackable() && (INV_COUNT + WITHDRAW_AMT > 28 || (index == size() - 1) && i.getBankCount() <= WITHDRAW_AMT);
 			
 			if(!i.withdraw(WITHDRAW_ALL ? 0 : WITHDRAW_AMT))
 				return false;
