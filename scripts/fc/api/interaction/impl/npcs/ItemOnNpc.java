@@ -50,7 +50,7 @@ public class ItemOnNpc extends NpcInteraction
 					return false;
 			}
 			
-			General.println("Object in ItemOnNpc: " + npc.getID());
+			General.println("NPC in ItemOnNpc: " + npc.getID());
 			return AccurateMouse.click(npc, "Use");
 		}
 		
