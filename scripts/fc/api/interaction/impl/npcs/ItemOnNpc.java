@@ -1,4 +1,4 @@
-package scripts.fc.api.interaction.impl.objects;
+package scripts.fc.api.interaction.impl.npcs;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
@@ -8,45 +8,32 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSObject;
 
 import scripts.fc.api.generic.FCConditions;
-import scripts.fc.api.interaction.ObjectInteraction;
+import scripts.fc.api.interaction.NpcInteraction;
 import scripts.fc.api.mouse.AccurateMouse;
 
-public class ItemOnObject extends ObjectInteraction
+public class ItemOnNpc extends NpcInteraction
 {
 	private String itemName;
 	private int itemId;
 	
-	public ItemOnObject(String itemName, String objectName, int searchDistance)
+	public ItemOnNpc(String itemName, String npcName, int searchDistance)
 	{
-		this("Use", objectName, itemName, searchDistance);
+		this("Use", npcName, itemName, searchDistance);
 	}
 	
-	public ItemOnObject(String action, String name, String itemName, int searchDistance)
+	public ItemOnNpc(String action, String name, String itemName, int searchDistance)
 	{
 		super(action, name, searchDistance);
 		this.itemName = itemName;
-	}
-	
-	public ItemOnObject(String action, int id, String itemName, int searchDistance)
-	{
-		super(action, id, searchDistance);
-		this.itemName = itemName;
-	}
-	
-	public ItemOnObject(String action, RSObject object, int itemId)
-	{
-		super(action, object);
-		this.itemId = itemId;
 	}
 
 	@Override
 	protected boolean interact()
 	{
-		General.println("ItemOnObject interact()");
-		this.name = object.getDefinition().getName();
+		General.println("ItemOnNpc interact()");
+		this.name = npc.getDefinition().getName();
 		RSItem[] items = itemName == null ? Inventory.find(itemId) : Inventory.find(itemName);
 		
 		if(items.length > 0)
@@ -58,9 +45,8 @@ public class ItemOnObject extends ObjectInteraction
 					return false;
 			}
 			
-			General.println("Object in ItemOnObject: " + object.getID());
-			return AccurateMouse.click(object, "Use");
-			//return DynamicClicking.clickRSObject(object, "Use " + itemName + " -> " + name);
+			General.println("Object in ItemOnNpc: " + npc.getID());
+			return AccurateMouse.click(npc, "Use");
 		}
 		
 		return false;
@@ -72,7 +58,7 @@ public class ItemOnObject extends ObjectInteraction
 		findEntity();
 		if(position != null)
 		{
-			if(!PathFinding.canReach(position, this instanceof ObjectInteraction))
+			if(!PathFinding.canReach(position, false))
 				return false;
 			
 			if(Player.getPosition().distanceTo(position) < DISTANCE_THRESHOLD)
@@ -90,5 +76,4 @@ public class ItemOnObject extends ObjectInteraction
 		
 		return false;
 	}
-
 }
