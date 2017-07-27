@@ -1,5 +1,8 @@
 package scripts.fc.framework.quest;
 
+import java.util.Arrays;
+
+import org.tribot.api2007.Banking;
 import org.tribot.api2007.Inventory;
 
 public class InvBankBool extends QuestBool
@@ -23,7 +26,8 @@ public class InvBankBool extends QuestBool
 		if(!((type == TYPE.IN_ONE || type == TYPE.NOT_IN_EITHER) && inInv) && !BankBool.bankObserver.hasCheckedBank)
 			BankBool.checkBank(BankBool.bankObserver);
 		
-		boolean inBank = BankBool.bankObserver.containsItem(id, amt);
+		boolean inBank = BankBool.bankObserver.containsItem(id, amt)
+				|| (Banking.isBankScreenOpen() && Arrays.stream(Banking.getAll()).allMatch(i -> i.getID() == id && i.getStack() >= amt));
 		
 		switch(type)
 		{
