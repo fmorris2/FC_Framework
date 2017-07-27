@@ -1,19 +1,19 @@
 package scripts.fc.framework.requirement;
 
-import org.tribot.api2007.Game;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
 
+import scripts.fc.framework.quest.QuestScriptManager;
 import scripts.fc.framework.script.FCMissionScript;
 
 public abstract class QuestRequirement extends Requirement
 {
-	public abstract int getSettingIndex();
-	public abstract int getSettingValue();
+	private QuestScriptManager quest;
 	
-	public QuestRequirement(FCMissionScript script)
+	public QuestRequirement(FCMissionScript script, QuestScriptManager quest)
 	{
 		super(script);
+		this.quest = quest;
 	}
 	
 	@Override
@@ -21,8 +21,8 @@ public abstract class QuestRequirement extends Requirement
 	{
 		if(Login.getLoginState() == STATE.INGAME)
 		{
-			if(Game.getSetting(getSettingIndex()) != getSettingValue())
-				missions.addAll(getReqMissions());
+			if(!quest.hasReachedEndingCondition())
+				missions.add(quest);
 			
 			hasCheckedReqs = true;
 		}

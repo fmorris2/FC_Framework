@@ -14,7 +14,6 @@ public abstract class Requirement
 	protected boolean cannotContinue;
 	
 	public abstract void checkReqs();
-	public abstract List<Mission> getReqMissions();
 	
 	public Requirement(FCMissionScript script)
 	{
