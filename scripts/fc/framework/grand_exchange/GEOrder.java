@@ -180,7 +180,9 @@ public class GEOrder
 	{
 		General.println("Collecting items...");
 		
-		if(needsToMakeSpaceToCollect())
+		if(Timing.timeFromMark(lastOffer) < LAST_OFFER_THRESH)
+			General.sleep(1200, 2400);
+		else if(needsToMakeSpaceToCollect())
 		{
 			makingSpace = true;
 			makeSpace();
@@ -191,10 +193,7 @@ public class GEOrder
 		else if(GrandExchange.getWindowState() == null)
 			openGe();
 		else
-		{
-			if(Timing.timeFromMark(lastOffer) < LAST_OFFER_THRESH)
-				General.sleep(1200, 2400);
-			
+		{	
 			RSInterface collectButton = InterfaceUtils.findContainingText("Collect");
 			
 			if(collectButton != null && Clicking.click(collectButton))

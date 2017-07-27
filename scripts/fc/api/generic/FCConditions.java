@@ -1,5 +1,7 @@
 package scripts.fc.api.generic;
 
+import java.util.Arrays;
+
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Positionable;
@@ -339,6 +341,8 @@ public class FCConditions
 				RSInterface inter = Interfaces.get(BANK_AMT_MASTER, BANK_AMT_CHILD);
 				String text = inter == null || inter.isHidden() ? null : inter.getText();
 				int amt = text == null || text.length() == 0 ? -1 : Integer.parseInt(text);
+				General.println("[BANK LOADED CONDITION] text amt: " + amt + ", Banking.getAll() amt: " + Banking.getAll().length);
+				Arrays.stream(Banking.getAll()).forEach(i -> General.println(i.getID() + "x" + i.getStack()));
 				return amt > 0 && amt == Banking.getAll().length;
 			}
 		};

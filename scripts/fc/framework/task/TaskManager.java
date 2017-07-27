@@ -142,7 +142,8 @@ public abstract class TaskManager extends GoalManager
 		
 		if(!Banking.isInBank())
 			Travel.walkToBank();
-		else if((Banking.isBankScreenOpen() || (Banking.openBank()) && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 5000)))
+		else if((Banking.isBankScreenOpen() || (Banking.openBank()) 
+				&& FCTiming.waitCondition(() -> Banking.isBankScreenOpen(), 5000) && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 10000)))
 		{
 			if(!hasCheckedBank) //we won't immediately end the script if the bank observer hasn't been loaded yet
 				return false;
