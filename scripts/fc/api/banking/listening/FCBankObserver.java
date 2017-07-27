@@ -13,7 +13,7 @@ import scripts.fc.api.generic.FCConditions;
 
 public class FCBankObserver extends Thread
 {
-	private final int CYCLE_TIME = 300;
+	private final int CYCLE_TIME = 50;
 	
 	public boolean isRunning = true;
 	public boolean hasCheckedBank = false;
