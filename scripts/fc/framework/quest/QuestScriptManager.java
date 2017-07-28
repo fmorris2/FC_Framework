@@ -77,11 +77,15 @@ public abstract class QuestScriptManager extends MissionManager implements Quest
 			.filter(r -> r instanceof ItemRequirement) //filter every requirement down to only the item requirements
 			.forEach(i -> futureItemReqs.add((ItemRequirement)i)); //add the item requirements to a list
 		
+		General.println("[Requirements] Found " + futureItemReqs + " future quests with item requirements");
+		
 		//compile all of the future req items from all of the ItemRequirements into a list
-		List<ReqItem> futureReqItems = futureItemReqs.stream()
-			.flatMap(r -> Arrays.stream(r.getReqItems()))
-			.collect(Collectors.toList());
-		futureReqItems.stream().forEach(r -> r.setIsFutureReq(true));
+		List<ReqItem> futureReqItems = new ArrayList<>();
+		
+		futureItemReqs.stream().forEach(itemReq -> Arrays.stream(itemReq.getReqItems()).forEach(reqItem -> futureReqItems.add(reqItem)));
+		
+		//set each req item isFutureReq flag
+		futureReqItems.stream().forEach(r -> {r.setIsFutureReq(true); General.println(r);});
 			
 		//add future req items to this current requirement's req items list
 		int startingSize = currentReq.getSetReqItems().size();
