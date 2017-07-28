@@ -149,7 +149,7 @@ public abstract class ItemRequirement extends Requirement
 					General.println("Needs to purchase " + r.getId() + "x" + amtNeeded);
 					geOrder.add(new SingleReqItem(r, (r.getAmt() - r.getPlayerAmt())));
 				}
-				else
+				else if(!r.isFutureReq)
 				{
 					General.println("Will attempt to gather req " + r + " manually");
 					Mission[] preReqMissions = r.getPreReqMissions();
@@ -166,5 +166,10 @@ public abstract class ItemRequirement extends Requirement
 		
 		missions.addAll(mustBeGatheredItems);
 		satisfiedReqs.clear();
+	}
+	
+	public List<ReqItem> getSetReqItems()
+	{
+		return reqItems;
 	}
 }

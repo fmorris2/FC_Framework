@@ -1,8 +1,10 @@
 package scripts.fc;
 
+import org.tribot.api2007.Game;
 import org.tribot.api2007.GameTab;
 import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.MessageListener;
+import org.tribot.api2007.Player;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
@@ -13,6 +15,7 @@ import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
+import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 @ScriptManifest(
 		authors     = { 
@@ -31,7 +34,6 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(GameTab.open(TABS.QUESTS));
 		return 600;
 	}
 	

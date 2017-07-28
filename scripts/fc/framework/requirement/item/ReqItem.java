@@ -13,6 +13,7 @@ public abstract class ReqItem
 	protected boolean shouldUseGE; //if we should use the GE... if we don't have enough gp it will resort to using either the prereq missions or worker
 	protected QuestBool[] bools;
 	protected Mission[] preReqMissions;
+	protected boolean isFutureReq;
 	
 	public ReqItem when(QuestBool... bools)
 	{
@@ -48,6 +49,11 @@ public abstract class ReqItem
 	{
 		//if not all of the required bools for this to execute are validated, we don't need this requirement
 		return bools == null || Arrays.stream(bools).allMatch(b -> b.validate());
+	}
+	
+	public void setIsFutureReq(boolean b)
+	{
+		isFutureReq = b;
 	}
 	
 	public abstract void check(RSItem[] items);
