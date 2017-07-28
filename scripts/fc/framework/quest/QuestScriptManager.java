@@ -39,13 +39,14 @@ public abstract class QuestScriptManager extends MissionManager implements Quest
 	
 	public void compilePreReqs()
 	{
+		General.println("[Prerequisites] Compiling pre-reqs for " + getMissionName());
 		for(Requirement req : getRequirements())
 		{
+			if(req instanceof ItemRequirement) //Prepare for future quests... combine multiple GE trips into one
+				addFutureItemReqs((ItemRequirement)req);
+			
 			while(!req.hasCheckedReqs())
 			{
-				if(req instanceof ItemRequirement) //Prepare for future quests... combine multiple GE trips into one
-					addFutureItemReqs((ItemRequirement)req);
-				
 				req.checkReqs();
 				General.sleep(100);
 			}
