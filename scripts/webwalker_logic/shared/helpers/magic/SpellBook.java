@@ -1,8 +1,8 @@
 package scripts.webwalker_logic.shared.helpers.magic;
 
-import org.tribot.api2007.Game;
-
 import java.util.Arrays;
+
+import org.tribot.api2007.types.RSVarBit;
 
 public class SpellBook {
 
@@ -20,7 +20,7 @@ public class SpellBook {
         }
 
         public boolean isInUse(){
-            return Game.getVarBit(SPELLBOOK_VARBIT) == varbit;
+            return RSVarBit.get(SPELLBOOK_VARBIT).getValue() == varbit;
         }
     }
 

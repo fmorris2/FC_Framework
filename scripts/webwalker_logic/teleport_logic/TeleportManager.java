@@ -1,18 +1,21 @@
 package scripts.webwalker_logic.teleport_logic;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.tribot.api.General;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
+
 import scripts.webwalker_logic.WebPath;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
-
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class TeleportManager implements Loggable {
@@ -25,6 +28,7 @@ public class TeleportManager implements Loggable {
     private ExecutorService executorService;
 
     private static TeleportManager teleportManager;
+    private static TeleportMethod teleportMethod;
     private static TeleportManager getInstance(){
         return teleportManager != null ? teleportManager : (teleportManager = new TeleportManager());
     }
@@ -66,17 +70,24 @@ public class TeleportManager implements Loggable {
     }
 
     public static ArrayList<RSTile> teleport(int originalPathLength, RSTile destination){
+    	return null;
+    	/*
         if (originalPathLength < getInstance().offset){
             return null;
         }
         
-        TeleportAction teleportAction = null; /* Arrays.stream(TeleportMethod.values())
+        Arrays.stream(TeleportMethod.values())
                 .filter(TeleportMethod::canUse)
                 .filter(teleportMethod -> !getInstance().blacklistTeleportMethods.contains(teleportMethod))
-                        .map(teleportMethod -> Arrays.stream(teleportMethod.getDestinations())
+                .forEach(t -> General.println(t + ", canUse: " + t.canUse()));
+        
+        TeleportAction teleportAction = Arrays.stream(TeleportMethod.values())
+                .filter(TeleportMethod::canUse)
+                .filter(teleportMethod -> !getInstance().blacklistTeleportMethods.contains(teleportMethod))
+                        .map(teleportMethod -> Arrays.stream(teleportMethod.getDestinations()))
                                 .filter(teleportLocation -> !getInstance().blacklistTeleportLocations.contains(teleportLocation)) //map to destinations
-                                .map(teleportLocation -> getInstance().executorService.submit(new PathComputer(teleportMethod, teleportLocation, destination)))) //map to future
-                .flatMap(futureStream -> futureStream).collect(Collectors.toList()).stream().map(teleportActionFuture -> { //flatten out futures
+                                .map(loc -> getInstance().executorService.submit(new PathComputer(teleportMethod, loc.min((l1, l2) -> l1.getRSTile().distanceTo(destination) - l2.getRSTile().distanceTo(destination)).orElse(null), destination)))
+                .map(teleportActionFuture -> { //flatten out futures
                     try {
                         return teleportActionFuture.get();
                     } catch (ExecutionException | InterruptedException e) {
@@ -84,7 +95,8 @@ public class TeleportManager implements Loggable {
                         return null;
                     }
                 }).filter(teleportAction1 -> teleportAction1 != null && teleportAction1.path.size() > 0).min(Comparator.comparingInt(o -> o.path.size())).orElse(null);
-		*/
+		
+        General.println("teleportAction == null: " + (teleportAction == null));
         if (teleportAction == null || teleportAction.path.size() >= originalPathLength || teleportAction.path.size() == 0){
             return null;
         }
@@ -102,6 +114,7 @@ public class TeleportManager implements Loggable {
         }
         WaitFor.condition(General.random(3000, 54000), () -> teleportAction.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         return teleportAction.path;
+        */
 
     }
 
@@ -112,6 +125,7 @@ public class TeleportManager implements Loggable {
         private RSTile destination;
 
         private PathComputer(TeleportMethod teleportMethod, TeleportLocation teleportLocation, RSTile destination){
+        	General.println("Creating PathComputer with location: " + teleportLocation);
             this.teleportMethod = teleportMethod;
             this.teleportLocation = teleportLocation;
             this.destination = destination;

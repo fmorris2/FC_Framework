@@ -3,6 +3,7 @@ package scripts.webwalker_logic.shared.helpers.magic;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Magic;
 import org.tribot.api2007.Skills;
+
 import scripts.webwalker_logic.shared.Pair;
 import scripts.webwalker_logic.teleport_logic.Validatable;
 

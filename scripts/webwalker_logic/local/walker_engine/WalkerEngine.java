@@ -211,7 +211,7 @@ public class WalkerEngine implements Loggable{
                     		if(!t.getRSTile().isOnScreen())
                     			Camera.turnToTile(t.getRSTile());
                     		
-                    		if(t.getRSTile().distanceTo(Player.getPosition()) > CLICK_SCREEN_THRESH)
+                    		if(t.getRSTile().distanceTo(Player.getPosition()) <= CLICK_SCREEN_THRESH)
                     			Walking.walkScreenPath(Walking.generateStraightScreenPath(t.getRSTile()));
                     	}
                     		

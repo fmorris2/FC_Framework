@@ -1,17 +1,19 @@
 package scripts.webwalker_logic;
 
+import java.util.ArrayList;
+
+import org.tribot.api.General;
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
+
 import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
 import scripts.webwalker_logic.local.walker_engine.WalkingCondition;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
 import scripts.webwalker_logic.shared.helpers.BankHelper;
 import scripts.webwalker_logic.teleport_logic.TeleportManager;
-
-import java.util.ArrayList;
 
 public class WebWalker {
 
@@ -147,8 +149,12 @@ public class WebWalker {
         }
         ArrayList<RSTile> bestPath = TeleportManager.teleport(path.size(), destination);
         if (bestPath != null){
+        	General.println("Best path not null! Will teleport!");
             path = bestPath;
         }
+        else
+        	General.println("Best path null");
+        
 
         return WalkerEngine.getInstance().walkPath(path, walkingCondition.combine(getInstance().globalWalkingCondition));
     }
