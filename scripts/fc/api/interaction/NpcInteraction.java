@@ -14,11 +14,13 @@ public abstract class NpcInteraction extends EntityInteraction
 	public NpcInteraction(String action, String name, int searchDistance)
 	{
 		super(action, name, searchDistance);
+		this.checkPath = true;
 	}
 
 	public NpcInteraction(String action, int id, int searchDistance)
 	{
 		super(action, id, searchDistance);
+		this.checkPath = true;
 	}
 	
 	public NpcInteraction(String action, RSNPC npc)
@@ -27,12 +29,14 @@ public abstract class NpcInteraction extends EntityInteraction
 		this.npc = npc;
 		entity = npc;
 		position = npc;
+		this.checkPath = true;
 	}
 	
 	public NpcInteraction(String action, String name, boolean isRightClicking, int searchDistance)
 	{
 		super(action, name, searchDistance);
 		this.isRightClicking = isRightClicking;
+		this.checkPath = true;
 	}
 
 	@Override

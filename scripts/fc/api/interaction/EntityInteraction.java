@@ -71,6 +71,12 @@ public abstract class EntityInteraction
 		this.name = name;
 	}
 	
+	public EntityInteraction dontCheckPath()
+	{
+		checkPath = false;
+		return this;
+	}
+	
 	public boolean execute()
 	{
 		if(Login.getLoginState() != STATE.INGAME)
