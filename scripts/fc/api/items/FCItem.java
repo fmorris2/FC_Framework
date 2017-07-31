@@ -8,6 +8,7 @@ import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.RSItemDefinition;
 
 import scripts.fc.api.generic.FCConditions;
 
@@ -41,6 +42,11 @@ public class FCItem
 	{
 		this(amt, isStackable, ids);
 		this.isRequired = isRequired;
+	}
+	
+	public FCItem(int amt, RSItemDefinition def)
+	{
+		this(amt, def.isStackable(), def.getID());
 	}
 	
 	public boolean isRequired()

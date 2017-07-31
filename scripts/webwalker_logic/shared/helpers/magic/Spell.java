@@ -1,9 +1,13 @@
 package scripts.webwalker_logic.shared.helpers.magic;
 
+import java.util.Arrays;
+
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Magic;
 import org.tribot.api2007.Skills;
 
+import scripts.fc.api.items.FCItem;
+import scripts.fc.api.items.FCItemList;
 import scripts.webwalker_logic.shared.Pair;
 import scripts.webwalker_logic.teleport_logic.Validatable;
 
@@ -39,7 +43,34 @@ public enum Spell implements Validatable {
     }
 
     public boolean cast() {
-        return canUse() && Magic.selectSpell(getSpellName());
+        return canUse() && hasInInv() && Magic.selectSpell(getSpellName());
+    }
+    
+    public boolean isInBank()
+    {
+    	return Arrays.stream(recipe).allMatch(r -> r.getValue().isInBank(r.getKey()));
+    }
+    
+    public FCItemList getItemList()
+    {
+    	FCItem[] items = Arrays.stream(recipe)
+    			.map(recipe -> new FCItem(recipe.getKey(), true, recipe.getValue().getNameToWithdraw(recipe.getKey())))
+    			.toArray(FCItem[]::new);
+    			
+    	return new FCItemList(items);
+    }
+    
+    public boolean hasInInv()
+    {
+    	 for (Pair<Integer, RuneElement> pair : recipe){
+             int amountRequiredForSpell = pair.getKey();
+             RuneElement runeElement = pair.getValue();
+             if (runeElement.getCount() < amountRequiredForSpell){
+                 return false;
+             }
+         }
+    	 
+    	 return true;
     }
 
     @Override
@@ -52,14 +83,6 @@ public enum Spell implements Validatable {
         }
         if (this == ARDOUGNE_TELEPORT && Game.getSetting(165) < 30){
             return false;
-        }
-
-        for (Pair<Integer, RuneElement> pair : recipe){
-            int amountRequiredForSpell = pair.getKey();
-            RuneElement runeElement = pair.getValue();
-            if (runeElement.getCount() < amountRequiredForSpell){
-                return false;
-            }
         }
         return true;
     }

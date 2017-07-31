@@ -4,18 +4,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import org.tribot.api.General;
+import org.tribot.api2007.Banking;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.webwalker_logic.WebPath;
+import scripts.webwalker_logic.WebWalker;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
+import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 
 public class TeleportManager implements Loggable {
@@ -28,7 +33,6 @@ public class TeleportManager implements Loggable {
     private ExecutorService executorService;
 
     private static TeleportManager teleportManager;
-    private static TeleportMethod teleportMethod;
     private static TeleportManager getInstance(){
         return teleportManager != null ? teleportManager : (teleportManager = new TeleportManager());
     }
@@ -70,32 +74,60 @@ public class TeleportManager implements Loggable {
     }
 
     public static ArrayList<RSTile> teleport(int originalPathLength, RSTile destination){
-    	return null;
     	/*
         if (originalPathLength < getInstance().offset){
             return null;
         }
         
-        Arrays.stream(TeleportMethod.values())
-                .filter(TeleportMethod::canUse)
-                .filter(teleportMethod -> !getInstance().blacklistTeleportMethods.contains(teleportMethod))
-                .forEach(t -> General.println(t + ", canUse: " + t.canUse()));
-        
-        TeleportAction teleportAction = Arrays.stream(TeleportMethod.values())
-                .filter(TeleportMethod::canUse)
-                .filter(teleportMethod -> !getInstance().blacklistTeleportMethods.contains(teleportMethod))
-                        .map(teleportMethod -> Arrays.stream(teleportMethod.getDestinations()))
-                                .filter(teleportLocation -> !getInstance().blacklistTeleportLocations.contains(teleportLocation)) //map to destinations
-                                .map(loc -> getInstance().executorService.submit(new PathComputer(teleportMethod, loc.min((l1, l2) -> l1.getRSTile().distanceTo(destination) - l2.getRSTile().distanceTo(destination)).orElse(null), destination)))
-                .map(teleportActionFuture -> { //flatten out futures
+        //first, get useable teleport methods
+        */
+    	List<TeleportMethod> useableTeleports = Arrays.stream(TeleportMethod.values())
+    			.filter(method -> method.canUse() && (method.hasOnCharacter() || method.hasInBank()) && !getInstance().blacklistTeleportMethods.contains(method))
+    			.collect(Collectors.toList());
+    	
+    	List<PathComputer> pathComputers = new ArrayList<>();
+    	
+    	/*
+    	 	Iterate through useable teleport methods,
+    		and create a PathComputer object for
+    		the closest teleport location to our
+    		destination for that method
+		*/
+    	for(TeleportMethod method : useableTeleports)
+    	{
+    		TeleportLocation closestLoc = 
+    			Arrays.stream(method.getDestinations())
+    			.filter(loc -> !getInstance().blacklistTeleportLocations.contains(loc))
+    			.min((l1, l2) -> l1.getRSTile().distanceTo(destination) - l2.getRSTile().distanceTo(destination))
+    			.orElse(null);
+    		
+    		if(closestLoc != null)
+    			pathComputers.add(new PathComputer(method, closestLoc, destination));			
+    	}
+    	
+    	/*
+    	 * We now submit each pathcomputer to the executor
+    	 * service, and get a list of future teleport actions
+    	 * in return
+    	 */
+    	List<Future<TeleportAction>> futures = new ArrayList<>();
+    	
+    	for(PathComputer computer : pathComputers)
+    		futures.add(getInstance().executorService.submit(computer));
+    	
+    	/*
+    	 * Find best teleport action
+    	 */
+    	TeleportAction teleportAction = futures.stream()
+    			.map(future -> { //flatten out futures
                     try {
-                        return teleportActionFuture.get();
-                    } catch (ExecutionException | InterruptedException e) {
+                        return future.get();
+                    } catch (Exception e) {
                         e.printStackTrace();
                         return null;
                     }
                 }).filter(teleportAction1 -> teleportAction1 != null && teleportAction1.path.size() > 0).min(Comparator.comparingInt(o -> o.path.size())).orElse(null);
-		
+    	
         General.println("teleportAction == null: " + (teleportAction == null));
         if (teleportAction == null || teleportAction.path.size() >= originalPathLength || teleportAction.path.size() == 0){
             return null;
@@ -109,13 +141,37 @@ public class TeleportManager implements Loggable {
         }
 
         getInstance().log("We will be using " + teleportAction.teleportMethod + " to " + teleportAction.teleportLocation);
-        if (!teleportAction.teleportMethod.use(teleportAction.teleportLocation)){
-            getInstance().log("Failed to teleport");
+        if(!teleportAction.teleportMethod.hasOnCharacter())
+        {
+        	General.println("We will be grabbing " + teleportAction.teleportMethod + " from the bank");
+        	while(!BankHelper.isInBank())
+        	{
+        		General.println("Walking to bank to grab teleport supplies...");
+        		WebWalker.walkToBank();
+        		General.sleep(100);
+        	}
+        	while(!teleportAction.teleportMethod.hasOnCharacter()
+        			&& teleportAction.teleportMethod.hasInBank())
+        	{
+        		General.println("Withdrawing teleport from bank...");
+        		teleportAction.teleportMethod.withdraw();
+        		General.sleep(100);
+        	}
+        	
+        	while(Banking.isBankScreenOpen())
+        	{
+        		Banking.close();
+        		General.sleep(100);
+        	}
         }
-        WaitFor.condition(General.random(3000, 54000), () -> teleportAction.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+        if (!teleportAction.teleportMethod.use(teleportAction.teleportMethod, teleportAction.teleportLocation)){
+            getInstance().log("Failed to teleport");
+            return null;
+        }
+        else
+        	WaitFor.condition(General.random(3000, 54000), () -> teleportAction.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+        
         return teleportAction.path;
-        */
-
     }
 
     private static class PathComputer implements Callable<TeleportAction>{
@@ -123,18 +179,32 @@ public class TeleportManager implements Loggable {
         private TeleportMethod teleportMethod;
         private TeleportLocation teleportLocation;
         private RSTile destination;
-
+        private boolean hasOnCharacter;
+        
         private PathComputer(TeleportMethod teleportMethod, TeleportLocation teleportLocation, RSTile destination){
         	General.println("Creating PathComputer with location: " + teleportLocation);
             this.teleportMethod = teleportMethod;
             this.teleportLocation = teleportLocation;
             this.destination = destination;
+            this.hasOnCharacter = teleportMethod.hasOnCharacter();
+            General.println("Method: " + teleportMethod + " has on character: " + hasOnCharacter);
         }
 
         @Override
         public TeleportAction call() throws Exception {
-            getInstance().log("Checking path... [" + teleportMethod + "] -> [" + teleportLocation + "]");
-            return new TeleportAction(WebPath.getPath(teleportLocation.getRSTile(), destination), teleportMethod, teleportLocation);
+        	//check if we need to get from bank first
+        	ArrayList<RSTile> toBank = new ArrayList<>();
+        	if(!hasOnCharacter)
+        	{
+        		General.println("Needs to grab [" + teleportMethod + "] from bank...");
+        		toBank = WebPath.getPathToBank();
+        		General.println("Path to nearest bank is " + toBank.size() + " tiles long...");
+        	}
+        	
+        	General.println("Checking path... [" + teleportMethod + "] -> [" + teleportLocation + "]");
+            toBank.addAll((WebPath.getPath(teleportLocation.getRSTile(), destination)));
+            General.println("Total path size for [" + teleportMethod +"] is " + toBank.size() + " tiles");
+            return new TeleportAction(toBank, teleportMethod, teleportLocation);
         }
 
     }

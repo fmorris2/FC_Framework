@@ -10,10 +10,17 @@ import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.generic.FCConditions;
+import scripts.fc.framework.data.Vars;
 
 public class FCTeleporting
 {
 	private final static RSArea LUMBRIDGE_SPAWN = new RSArea(new RSTile(3221, 3218, 0), 10);
+	private final static int HOME_TELE_THRESH = 30; //30 mins
+	
+	public static boolean canHomeTele()
+	{
+		return Timing.timeFromMark(Vars.get().get("lastHomeTele", Timing.currentTimeMillis())) < HOME_TELE_THRESH;
+	}
 	
 	public static boolean homeTeleport()
 	{
@@ -26,9 +33,11 @@ public class FCTeleporting
 			
 			if(teleInter != null && !teleInter.isHidden())
 			{
-				if(Clicking.click(teleInter) && Timing.waitCondition(FCConditions.animationChanged(-1), 2000))
+				if(Clicking.click(teleInter))
 				{
-					return Timing.waitCondition(FCConditions.inAreaCondition(LUMBRIDGE_SPAWN), 15000);
+					Vars.get().addOrUpdate("lastHomeTele", Timing.currentTimeMillis());
+					if(Timing.waitCondition(FCConditions.animationChanged(-1), 2000))
+						return Timing.waitCondition(FCConditions.inAreaCondition(LUMBRIDGE_SPAWN), 15000);
 				}
 			}
 		}

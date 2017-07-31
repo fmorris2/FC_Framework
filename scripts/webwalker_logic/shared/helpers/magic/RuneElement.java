@@ -7,6 +7,9 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 
+import scripts.fc.api.banking.listening.FCBankObserver;
+import scripts.fc.framework.quest.BankBool;
+
 import java.util.Arrays;
 
 public enum RuneElement {
@@ -26,6 +29,18 @@ public enum RuneElement {
 
     public String[] getAlternativeNames() {
         return alternativeNames;
+    }
+    
+    public boolean isInBank(int amt)
+    {
+    	FCBankObserver obs = BankBool.bankObserver;
+    	return Arrays.stream(alternativeNames).anyMatch(n -> obs.containsItem(n + " rune", amt));
+    }
+    
+    public String getNameToWithdraw(int amt)
+    {
+    	FCBankObserver obs = BankBool.bankObserver;
+    	return Arrays.stream(alternativeNames).filter(n -> obs.containsItem(n + " rune", amt)).findFirst().orElse(null);
     }
 
     public int getCount(){

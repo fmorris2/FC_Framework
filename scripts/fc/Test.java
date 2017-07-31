@@ -14,6 +14,7 @@ import scripts.fc.api.travel.Travel;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 import scripts.webwalker_logic.shared.helpers.magic.SpellBook;
+import scripts.webwalker_logic.teleport_logic.TeleportLocation;
 
 @ScriptManifest(
 		authors     = { 
@@ -32,8 +33,10 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		Travel.webWalkTo(new RSTile(3162, 3487, 0));
-		return 600;
+		Travel.webWalkTo(TeleportLocation.LUMBRIDGE_CASTLE.getRSTile());
+		sleep(10000);
+		Travel.webWalkTo(TeleportLocation.VARROCK_CENTER.getRSTile());
+		return 10000;
 	}
 	
 	@Override
