@@ -103,6 +103,7 @@ public class GEOrder
 	
 	private void finishOrder()
 	{
+		General.println("[GEOrder] Finish order");
 		int invSpace = Inventory.getAll().length;
 		
 		if(GrandExchange.getWindowState() != null)
@@ -132,8 +133,11 @@ public class GEOrder
 	{
 		status = GEOrder_Status.BUY_ITEMS;
 		
-		if(InterfaceUtils.isQuestInterfaceUp())
+		if(GrandExchange.getWindowState() == null && InterfaceUtils.isQuestInterfaceUp())
+		{
+			General.println("[GEOrder] Closing quest interface");
 			InterfaceUtils.closeQuestInterface();
+		}
 		else if(makingSpace)
 			makeSpace();
 		else if(Banking.isBankScreenOpen())
@@ -146,6 +150,7 @@ public class GEOrder
 	
 	private void buyItems()
 	{
+		General.println("[GEOrder] Buy items");
 		if(needsToOfferItems() && hasEmptySlot())
 			offerItems();
 		else if(shouldCollectItems())
