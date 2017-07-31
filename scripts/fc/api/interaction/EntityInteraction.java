@@ -19,6 +19,7 @@ import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.fc.api.interaction.impl.npcs.dialogue.NpcDialogue;
 import scripts.fc.api.mouse.AccurateMouse;
+import scripts.fc.api.travel.Travel;
 import scripts.fc.api.utils.ChooseOptionUtils;
 import scripts.fc.api.viewport.ACamera;
 import scripts.fc.framework.data.Vars;
@@ -197,9 +198,12 @@ public abstract class EntityInteraction
 		
 		if(!canReach)
 		{
-			DPathNavigator dPath = new DPathNavigator();
-			dPath.setMaxDistance(75);
-			dPath.traverse(position);	
+			if(!Travel.webWalkTo(position))
+			{
+				DPathNavigator dPath = new DPathNavigator();
+				dPath.setMaxDistance(75);
+				dPath.traverse(position);
+			}
 		}
 		else
 			Walking.blindWalkTo(position);		
