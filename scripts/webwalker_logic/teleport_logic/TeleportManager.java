@@ -128,7 +128,6 @@ public class TeleportManager implements Loggable {
                     }
                 }).filter(teleportAction1 -> teleportAction1 != null && teleportAction1.path.size() > 0).min(Comparator.comparingInt(o -> o.path.size())).orElse(null);
     	
-        General.println("teleportAction == null: " + (teleportAction == null));
         if (teleportAction == null || teleportAction.path.size() >= originalPathLength || teleportAction.path.size() == 0){
             return null;
         }

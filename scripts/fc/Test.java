@@ -33,10 +33,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		Travel.webWalkTo(TeleportLocation.LUMBRIDGE_CASTLE.getRSTile());
-		sleep(10000);
-		Travel.webWalkTo(TeleportLocation.VARROCK_CENTER.getRSTile());
-		return 10000;
+		return 600;
 	}
 	
 	@Override

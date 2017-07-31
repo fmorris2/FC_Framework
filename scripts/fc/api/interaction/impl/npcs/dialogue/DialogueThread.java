@@ -99,16 +99,27 @@ public class DialogueThread extends Thread
 			String[] dialogueOptions = NPCChat.getOptions();
 			if(dialogueOptions != null && dialogueOptions.length > 0)
 			{
-				//if we don't know how to handle the option that is currently up
-				//either we've ran out of supplied options, or the option interface doesn't contain the option that was supplied
-				if(optionIndex >= options.length || dialogueOptions.length <= options[optionIndex])
-					return false;
-				
-				//send the appropriate option
-				General.println("Sending option: " + (options[optionIndex] + 1));
-				Keyboard.sendType(Integer.toString(options[optionIndex] + 1).charAt(0));
-				sleep(600, 1200);
-				optionIndex++;
+				//if we've been presented with a random option before we've even selected
+				//any of our intended options
+				if(optionIndex == 0 && options[optionIndex] >= dialogueOptions.length)
+				{
+					General.println("Sending random option");
+					Keyboard.sendType(Integer.toString(General.random(0, dialogueOptions.length - 1)).charAt(0));
+					sleep(600, 1200);
+				}
+				else
+				{
+					//if we don't know how to handle the option that is currently up
+					//either we've ran out of supplied options, or the option interface doesn't contain the option that was supplied
+					if(optionIndex >= options.length || dialogueOptions.length <= options[optionIndex])
+						return false;
+					
+					//send the appropriate option
+					General.println("Sending option: " + (options[optionIndex] + 1));
+					Keyboard.sendType(Integer.toString(options[optionIndex] + 1).charAt(0));
+					sleep(600, 1200);
+					optionIndex++;
+				}
 			}
 			else if(areDialogueInterfacesUp()) //click continue interface
 				doClickToContinue();

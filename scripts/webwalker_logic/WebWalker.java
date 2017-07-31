@@ -152,8 +152,6 @@ public class WebWalker {
         	General.println("Best path not null! Will teleport!");
             path = bestPath;
         }
-        else
-        	General.println("Best path null");
         
 
         return WalkerEngine.getInstance().walkPath(path, walkingCondition.combine(getInstance().globalWalkingCondition));
