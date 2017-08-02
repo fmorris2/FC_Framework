@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -16,9 +17,9 @@ import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.ChooseOption;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.GameTab;
+import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.WorldHopper;
-import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSMenuNode;
 import org.tribot.api2007.types.RSTile;
@@ -176,6 +177,24 @@ public class Utils
 				}
 			}
 		}
+	}
+	
+	public static Thread getMainScriptThread()
+	{
+		java.util.Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+		Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
+		return Arrays.stream(threadArray)
+				.filter(t -> t != null && t.getName().contains("Script"))
+				.findFirst().orElse(null);
+	}
+	
+	public static Thread getMouseMovementThread()
+	{
+		java.util.Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+		Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
+		return Arrays.stream(threadArray)
+				.filter(t -> t != null && t.getName().contains("Mouse Movement"))
+				.findFirst().orElse(null);
 	}
 	
 	private static boolean isRemoveRoofsOn(RSInterface removeButton)

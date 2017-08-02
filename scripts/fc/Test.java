@@ -30,7 +30,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	protected int mainLogic()
 	{
 		//Travel.webWalkTo(new RSTile(3049,9567,0));
-		return 600;
+		return 200;
 	}
 	
 	@Override
