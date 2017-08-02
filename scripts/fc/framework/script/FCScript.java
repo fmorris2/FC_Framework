@@ -76,6 +76,8 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 		
 		Vars.get().add("abc", new ABCUtil());
 		Vars.get().add("abc2", new PersistantABCUtil());
+		Vars.get().add("mainThreadGroup", Thread.currentThread().getThreadGroup());
+		Vars.get().addOrUpdate("isRunning", true);
 		General.useAntiBanCompliance(true);
 		ThreadSettings.get().setClickingAPIUseDynamic(true);
 		BankBool.bankObserver = BANK_OBSERVER;
@@ -85,6 +87,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	public void onEnd()
 	{
 		((PersistantABCUtil)Vars.get().get("abc2")).close();
+		Vars.get().addOrUpdate("isRunning", false);
 		BANK_OBSERVER.isRunning = false;
 
 		//stat tracking
