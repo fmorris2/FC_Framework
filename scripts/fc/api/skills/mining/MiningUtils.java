@@ -11,6 +11,7 @@ import org.tribot.api2007.types.RSObject;
 
 import scripts.fc.api.skills.mining.data.Pickaxe;
 import scripts.fc.api.skills.mining.data.RockType;
+import scripts.fc.framework.quest.BankBool;
 
 public class MiningUtils
 {	
@@ -33,7 +34,9 @@ public class MiningUtils
 			Pickaxe pick = picks[i];
 			if(pick.getMiningLevel() <= Skills.getActualLevel(SKILLS.MINING) //Mining level check
 					&& ((Inventory.getCount(pick.getItemId()) > 0 || Equipment.getCount(pick.getItemId()) > 0) //Inventory check
-							|| (isCheckingBank && Banking.find(pick.getItemId()).length > 0))) //Bank check
+							|| (isCheckingBank && 
+									(BankBool.bankObserver.containsItem(pick.getItemId(), 1)
+										|| (Banking.isBankScreenOpen() && Banking.find(pick.getItemId()).length > 0))))) //Bank check
 				return pick;
 		}
 		
