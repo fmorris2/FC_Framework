@@ -38,7 +38,7 @@ public class FCFoodThread extends Thread
 	@SuppressWarnings("deprecation")
 	public void run()
 	{
-		while(Vars.get().get("isRunning", false))
+		while(Vars.get().get("isRunning", true))
 		{	
 			try
 			{
