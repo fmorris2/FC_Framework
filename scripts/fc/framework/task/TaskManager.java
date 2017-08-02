@@ -25,6 +25,7 @@ import scripts.fc.api.travel.Travel;
 import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.goal.GoalManager;
+import scripts.fc.framework.quest.BankBool;
 import scripts.fc.framework.script.FCScript;
 
 /**
@@ -125,7 +126,8 @@ public abstract class TaskManager extends GoalManager
 		//first, check if we have the items in our inventory
 		ItemsRequiredTask reqTask = (ItemsRequiredTask)currentTask;
 		FCItem[] requiredItems = reqTask.getRequiredItems();
-		if(requiredItems.length == 0 || Arrays.stream(requiredItems).allMatch(req -> req.getInvCount(true) >= req.getAmt()))
+		if(!shouldWithdrawFutureItems() 
+				&& (requiredItems.length == 0 || Arrays.stream(requiredItems).allMatch(req -> req.getInvCount(true) >= req.getAmt())))
 		{
 			General.println("We have the required items in our inventory!");
 			return true;
@@ -145,6 +147,8 @@ public abstract class TaskManager extends GoalManager
 		else if((Banking.isBankScreenOpen() || (Banking.openBank()) 
 				&& FCTiming.waitCondition(() -> Banking.isBankScreenOpen(), 5000) && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 10000)))
 		{
+			boolean withdrewReqs = withdrawReqs(reqItems);
+			
 			if(!hasCheckedBank) //we won't immediately end the script if the bank observer hasn't been loaded yet
 				return false;
 			
@@ -160,20 +164,35 @@ public abstract class TaskManager extends GoalManager
 				return false;
 			}
 			
-			//check for items for future tasks that we can withdraw
-			FutureTaskPreparer preparer = currentTask instanceof FutureTaskPreparer ? (FutureTaskPreparer)currentTask : null;
-			List<FCItem> futureItems = null;
-			if(preparer != null)
-				futureItems = getFutureItems(preparer);
-			
-			boolean mainReqs = FCBanking.withdraw(new FCItemList(reqItems));
-			if(futureItems != null)
-				FCBanking.withdraw(new FCItemList(futureItems.toArray(new FCItem[futureItems.size()])).notMandatory());
-			
-			return mainReqs;
+			return withdrewReqs;
 		}
 			
 		return false;
+	}
+	
+	private boolean withdrawReqs(FCItem[] reqItems)
+	{
+		//check for items for future tasks that we can withdraw
+		FutureTaskPreparer preparer = currentTask instanceof FutureTaskPreparer ? (FutureTaskPreparer)currentTask : null;
+		General.println("preparer == null: " + (preparer == null));
+		List<FCItem> futureItems = null;
+		if(preparer != null)
+			futureItems = getFutureItems(preparer);
+		
+		boolean mainReqs = FCBanking.withdraw(new FCItemList(reqItems));
+		if(futureItems != null)
+			FCBanking.withdraw(new FCItemList(futureItems.toArray(new FCItem[futureItems.size()])).notMandatory());
+		
+		return mainReqs;
+	}
+	
+	private boolean shouldWithdrawFutureItems()
+	{
+		if(!(currentTask instanceof FutureTaskPreparer))
+			return false;
+		
+		return getFutureItems((FutureTaskPreparer)currentTask).stream()
+				.anyMatch(i -> i.getInvCount(true) < i.getAmt() && BankBool.bankObserver.containsItem(i.getIds()[0], i.getAmt() - i.getInvCount(true)));
 	}
 	
 	private List<FCItem> getFutureItems(FutureTaskPreparer preparer)
