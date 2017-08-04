@@ -147,6 +147,8 @@ public abstract class TaskManager extends GoalManager
 		
 		if(!Banking.isInBank())
 			Travel.walkToBank();
+		else if(Banking.isDepositBoxOpen())
+			Banking.close();
 		else if((Banking.isBankScreenOpen() || (Banking.openBank()) 
 				&& FCTiming.waitCondition(() -> Banking.isBankScreenOpen(), 5000) && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 10000)))
 		{
