@@ -76,12 +76,10 @@ public class FCFoodThread extends Thread
 				int attempts = 0;
 				while(attempts < ATTEMPT_THRESH)
 				{
-					TABS old = GameTab.getOpen();
 					if(GameTab.open(TABS.INVENTORY) && Clicking.click(food) 
 							&& Timing.waitCondition(FCConditions.inventoryChanged(oldInvCount), 1200))
 					{
 						General.println("[FCFoodThread] Sucessfully ate " + (name != null ? name : food.getID()));
-						GameTab.open(old);
 						nextEatPerc = getNextEatPerc();
 						break;
 					}
