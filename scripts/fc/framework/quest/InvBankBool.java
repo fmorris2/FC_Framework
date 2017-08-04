@@ -3,6 +3,7 @@ package scripts.fc.framework.quest;
 import java.util.Arrays;
 
 import org.tribot.api2007.Banking;
+import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
 
 public class InvBankBool extends QuestBool
@@ -21,7 +22,7 @@ public class InvBankBool extends QuestBool
 	@Override
 	public boolean value()
 	{
-		boolean inInv = Inventory.getCount(id) >= amt;
+		boolean inInv = Inventory.getCount(id) >= amt || Equipment.getCount(id) >= amt;
 		
 		if(!((type == TYPE.IN_ONE || type == TYPE.NOT_IN_EITHER) && inInv) && !BankBool.bankObserver.hasCheckedBank)
 			BankBool.checkBank(BankBool.bankObserver);

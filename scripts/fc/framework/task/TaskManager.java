@@ -174,7 +174,6 @@ public abstract class TaskManager extends GoalManager
 	{
 		//check for items for future tasks that we can withdraw
 		FutureTaskPreparer preparer = currentTask instanceof FutureTaskPreparer ? (FutureTaskPreparer)currentTask : null;
-		General.println("preparer == null: " + (preparer == null));
 		List<FCItem> futureItems = null;
 		if(preparer != null)
 			futureItems = getFutureItems(preparer);

@@ -11,7 +11,7 @@ import javax.crypto.Cipher;
 public class RSAEncryptionUtil
 {
 	private static final String ALGORITHM = "RSA";
-	private static final String KEY_PATH = "https://www.vikingscripts.io/downloads/encryption/public.key";
+	private static final String KEY_PATH = "https://www.vikingsoftware.org/downloads/encryption/public.key";
 	
 	/*
 	 * Encrypts plain text using RSA with the public key

@@ -10,7 +10,7 @@ import scripts.fc.framework.encryption.RSAEncryptionUtil;
 
 public class StatTracker
 {
-	public static final String SOCKET_URL = "vikingscripts.io";
+	public static final String SOCKET_URL = "127.0.0.1";//"vikingsoftware.org";
 	
 	private static final int SESSION_ID_LENGTH = 12;
 	private static final String CANDIDATE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
