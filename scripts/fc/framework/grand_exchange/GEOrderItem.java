@@ -12,10 +12,12 @@ import scripts.fc.framework.requirement.item.SingleReqItem;
 
 public class GEOrderItem
 {
+	private static final double LOWEST_PRICE_BUY_MODIFIER = 4.00;
 	private static final double LOW_PRICE_BUY_MODIFIER = 2.00;//2.00; //we'll put in offers for 100% over market price for low priced items
 	private static final double HIGH_PRICE_BUY_MODIFIER = 1.30;//1.30; //we'll put in offers for 30% over market price for high priced items
 	private static final double RESUBMIT_STEP = .15; //price will go up 15% every time we resubmit
-	private static final int HIGH_PRICE_THRESH = 2000;
+	private static final int LOW_PRICE_THRESH = 600;
+	private static final int LOWEST_PRICE_THRESH = 100;
 	
 	public final int ID, AMT;
 	public final String NAME;
@@ -74,12 +76,24 @@ public class GEOrderItem
 	
 	public int getPricePer()
 	{
-		return (int)Math.ceil(GE_PRICE_PER * ((GE_PRICE_PER < HIGH_PRICE_THRESH ? LOW_PRICE_BUY_MODIFIER : HIGH_PRICE_BUY_MODIFIER) + resubmitModifier));
+		return (int)Math.ceil(GE_PRICE_PER * (getModifier() + resubmitModifier));
 	}
 	
 	private int getResubmitPricePer()
 	{
-		return (int)Math.ceil(GE_PRICE_PER * ((GE_PRICE_PER < HIGH_PRICE_THRESH ? LOW_PRICE_BUY_MODIFIER : HIGH_PRICE_BUY_MODIFIER) + (resubmitModifier + RESUBMIT_STEP)));
+		return (int)Math.ceil(GE_PRICE_PER * (getModifier() + (resubmitModifier + RESUBMIT_STEP)));
+	}
+	
+	private double getModifier()
+	{
+		if(GE_PRICE_PER <= LOWEST_PRICE_THRESH)
+			return LOWEST_PRICE_BUY_MODIFIER;
+		
+		if(GE_PRICE_PER <= LOW_PRICE_THRESH)
+			return LOW_PRICE_BUY_MODIFIER;
+		
+		return HIGH_PRICE_BUY_MODIFIER;
+		
 	}
 	
 	public void setPurchased(boolean b)
