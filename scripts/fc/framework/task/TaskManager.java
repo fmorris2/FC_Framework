@@ -153,7 +153,7 @@ public abstract class TaskManager extends GoalManager
 				return false;
 			
 			//check if we don't have one of the required items
-			if(Arrays.stream(reqItems).anyMatch(req -> (req.getInvCount(true) + FCBanking.getAmount(req.getIds()[0]) < req.getAmt()) && req.isRequired()))
+			if(Arrays.stream(reqItems).anyMatch(req -> (req.getInvCount(true) + req.getEquipCount() + FCBanking.getAmount(req.getIds()[0]) < req.getAmt()) && req.isRequired()))
 			{
 				General.println("We don't have all of the required materials on the character!");
 				Arrays.stream(reqItems)

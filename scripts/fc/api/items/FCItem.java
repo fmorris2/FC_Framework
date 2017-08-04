@@ -151,6 +151,12 @@ public class FCItem
 		return COUNT;
 	}
 	
+	public int getEquipCount()
+	{
+		RSItem[] items = Equipment.find(itemFilter);
+		return items.length == 0 ? 0 : items[0].getStack();
+	}
+	
 	public int getBankCount()
 	{
 		RSItem[] items = Banking.find(itemFilter);
