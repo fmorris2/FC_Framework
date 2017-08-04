@@ -42,6 +42,14 @@ public abstract class ItemRequirement extends Requirement
 		General.println("CHECKING FOR ITEM REQUIREMENT");
 	}
 	
+	public void reset()
+	{
+		hasCheckedInv = false;
+		hasCheckedEquipment = false;
+		hasCheckedBank = false;
+		hasCheckedReqs = false;
+	}
+	
 	@Override
 	public void checkReqs()
 	{

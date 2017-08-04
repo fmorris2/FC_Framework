@@ -25,7 +25,10 @@ import scripts.fc.api.travel.Travel;
 import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.goal.GoalManager;
+import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.quest.BankBool;
+import scripts.fc.framework.quest.QuestScriptManager;
+import scripts.fc.framework.script.FCMissionScript;
 import scripts.fc.framework.script.FCScript;
 
 /**
@@ -160,7 +163,8 @@ public abstract class TaskManager extends GoalManager
 				.filter(req -> (req.getInvCount(true) + FCBanking.getAmount(req.getIds()[0]) < req.getAmt() && req.isRequired()))
 				.forEach(r -> General.println("Don't have requirement: " + r));
 				
-				running = false;
+				//running = false;
+				restartPreReqs();
 				return false;
 			}
 			
@@ -168,6 +172,20 @@ public abstract class TaskManager extends GoalManager
 		}
 			
 		return false;
+	}
+	
+	private void restartPreReqs()
+	{
+		if(fcScript instanceof FCMissionScript)
+		{
+			Mission currentMission = ((FCMissionScript)fcScript).getCurrentMission();
+			if(currentMission instanceof QuestScriptManager)
+			{
+				General.println("Restarting pre-reqs...");
+				((QuestScriptManager)currentMission).compilePreReqs();
+			}
+		}
+			
 	}
 	
 	private boolean withdrawReqs(FCItem[] reqItems)

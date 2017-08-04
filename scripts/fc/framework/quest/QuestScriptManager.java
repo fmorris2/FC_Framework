@@ -43,7 +43,10 @@ public abstract class QuestScriptManager extends MissionManager implements Quest
 		for(Requirement req : getRequirements())
 		{
 			if(req instanceof ItemRequirement) //Prepare for future quests... combine multiple GE trips into one
+			{
+				((ItemRequirement)(req)).reset();
 				addFutureItemReqs((ItemRequirement)req);
+			}
 			
 			while(!req.hasCheckedReqs())
 			{

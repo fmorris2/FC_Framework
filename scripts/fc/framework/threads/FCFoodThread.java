@@ -62,7 +62,6 @@ public class FCFoodThread extends Thread
 				.filter(i -> i != null)
 				.findFirst().orElse(null);
 		
-		General.println("[FCFoodThread] Needs to eat!");
 		if(food != null)
 		{
 			RSItemDefinition def = food.getDefinition();
