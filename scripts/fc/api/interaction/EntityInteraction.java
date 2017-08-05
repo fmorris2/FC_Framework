@@ -72,6 +72,12 @@ public abstract class EntityInteraction
 		this.name = name;
 	}
 	
+	public EntityInteraction checkPath()
+	{
+		checkPath = true;
+		return this;
+	}
+	
 	public EntityInteraction dontCheckPath()
 	{
 		checkPath = false;
