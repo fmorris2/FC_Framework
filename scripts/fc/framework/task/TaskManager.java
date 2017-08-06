@@ -210,7 +210,7 @@ public abstract class TaskManager extends GoalManager
 		if(preparer != null)
 			futureItems = getFutureItems(preparer);
 		
-		boolean mainReqs = FCBanking.withdraw(new FCItemList(reqItems));
+		boolean mainReqs = FCBanking.withdraw(new FCItemList(Arrays.stream(reqItems).filter(i -> i.getEquipCount() + i.getInvCount(true) < i.getAmt()).toArray(FCItem[]::new)));
 		if(futureItems != null)
 			FCBanking.withdraw(new FCItemList(futureItems.toArray(new FCItem[futureItems.size()])).notMandatory());
 		

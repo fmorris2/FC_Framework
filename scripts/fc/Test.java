@@ -1,5 +1,6 @@
 package scripts.fc;
 
+import org.tribot.api2007.Equipment;
 import org.tribot.api2007.MessageListener;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
@@ -124,8 +125,10 @@ public class FCItemList extends ArrayList<FCItem>
 			final int WITHDRAW_AMT = i.getWithdrawAmt();
 			final boolean WITHDRAW_ALL = !i.isStackable() && (INV_COUNT + WITHDRAW_AMT > 28 || (index == size() - 1) && i.getBankCount() <= WITHDRAW_AMT);
 			
+			General.println("[FCBanking] i.withdraw(" + (WITHDRAW_ALL ? 0 : WITHDRAW_AMT) + ")");
 			if(!i.withdraw(WITHDRAW_ALL ? 0 : WITHDRAW_AMT))
 			{
+				General.println("[FCBanking] Failed to withdraw " + i);
 				if(mandatory)
 					return false;
 			}
