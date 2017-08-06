@@ -95,7 +95,7 @@ public class GEOrder
 		}
 		else if(!isInGe()) //then, if we aren't in the GE, go there
 			goToGe();
-		else if(Inventory.getCount(995) < getMinGpNeeded()) //if we need to withdraw gold
+		else if((Inventory.getCount(995) == 0 && needsToOfferItems()) || Inventory.getCount(995) < getMinGpNeeded()) //if we need to withdraw gold
 			withdrawGold();
 		else //lastly, we're at the GE, so now we handle the buying process
 			handleGeLogic();
