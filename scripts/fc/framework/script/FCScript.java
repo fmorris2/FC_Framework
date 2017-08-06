@@ -16,7 +16,6 @@ import org.tribot.script.interfaces.Starting;
 
 import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.banking.listening.FCBankObserver;
-import scripts.fc.api.utils.Utils;
 import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.paint.FCPaint;
 import scripts.fc.framework.paint.FCPaintable;
