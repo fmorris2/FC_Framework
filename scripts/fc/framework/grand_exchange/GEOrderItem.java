@@ -15,7 +15,8 @@ public class GEOrderItem
 	private static final double LOWEST_PRICE_BUY_MODIFIER = 4.00;
 	private static final double LOW_PRICE_BUY_MODIFIER = 2.00;//2.00; //we'll put in offers for 100% over market price for low priced items
 	private static final double HIGH_PRICE_BUY_MODIFIER = 1.30;//1.30; //we'll put in offers for 30% over market price for high priced items
-	private static final double RESUBMIT_STEP = .15; //price will go up 15% every time we resubmit
+	private static final double RESUBMIT_STEP = .15; //price will go up a base of 15% every time we resubmit
+	private static final double RESUBMIT_STEP_MODIFIER = .10; //resubmit step will go up 10% every time we resubmit 
 	private static final int LOW_PRICE_THRESH = 600;
 	private static final int LOWEST_PRICE_THRESH = 100;
 	
@@ -25,7 +26,7 @@ public class GEOrderItem
 	
 	private Mission[] gatherMissions; //in case we've failed to buy this item from the GE
 	private boolean isPurchased, isOffered;
-	private double resubmitModifier = 0.0;
+	private double resubmitModifier = 0.0, resubmitStepModifier = 0.0;
 	
 	public GEOrderItem(int id, int amt)
 	{
@@ -60,8 +61,14 @@ public class GEOrderItem
 	public void resubmit()
 	{
 		isOffered = false;
-		resubmitModifier += RESUBMIT_STEP;
-		General.println("Resubmitting " + this + " with higher price...");
+		resubmitModifier += getResubmitStep();
+		resubmitStepModifier += RESUBMIT_STEP_MODIFIER;
+		General.println("Resubmitting " + this + " with higher price... Resubmit modifier is now " + (resubmitModifier * 100) + "%");
+	}
+	
+	public double getResubmitStep()
+	{
+		return RESUBMIT_STEP + resubmitStepModifier;
 	}
 	
 	public int getResubmitPrice()
@@ -81,7 +88,10 @@ public class GEOrderItem
 	
 	private int getResubmitPricePer()
 	{
-		return (int)Math.ceil(GE_PRICE_PER * (getModifier() + (resubmitModifier + RESUBMIT_STEP)));
+		General.println("Previous price per: " + getPricePer());
+		int newPricePer = (int)Math.ceil(GE_PRICE_PER * (getModifier() + (resubmitModifier + getResubmitStep())));
+		General.println("New price per: " + newPricePer + ", formula: ceil(" + GE_PRICE_PER + " * " + (getModifier() + (resubmitModifier + getResubmitStep())) + ")");
+		return newPricePer;
 	}
 	
 	private double getModifier()

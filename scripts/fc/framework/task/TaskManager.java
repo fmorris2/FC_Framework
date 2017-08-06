@@ -25,6 +25,7 @@ import scripts.fc.api.travel.Travel;
 import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.goal.GoalManager;
+import scripts.fc.framework.mission.GoalMission;
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.quest.BankBool;
 import scripts.fc.framework.quest.QuestScriptManager;
@@ -178,13 +179,24 @@ public abstract class TaskManager extends GoalManager
 	
 	private void restartPreReqs()
 	{
+		FCMissionScript missionScript = ((FCMissionScript)fcScript);
 		if(fcScript instanceof FCMissionScript)
 		{
-			Mission currentMission = ((FCMissionScript)fcScript).getCurrentMission();
+			Mission currentMission = missionScript.getCurrentMission();
 			if(currentMission instanceof QuestScriptManager)
 			{
 				General.println("Restarting pre-reqs...");
-				((QuestScriptManager)currentMission).compilePreReqs();
+				QuestScriptManager qsm = ((QuestScriptManager)currentMission);
+				qsm.compilePreReqs();
+				((LinkedList<Mission>)missionScript.getSetMissions()).addFirst(currentMission);
+				missionScript.setCurrentMission(null);
+				for(Mission req : qsm.getPreReqMissions())
+				{
+					General.println("ADDED PRE REQ MISSION FOR " + qsm.getMissionName().toUpperCase() + ": " + req.getMissionName() 
+							+ ((req instanceof GoalMission) ? ", GOALS: " + ((GoalMission)req).getGoals() : ""));
+					
+					((LinkedList<Mission>)missionScript.getSetMissions()).addFirst(req);
+				}
 			}
 		}
 			

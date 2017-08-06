@@ -118,7 +118,7 @@ public abstract class FCMissionScript extends FCScript implements FCInventoryLis
 		}
 	}
 	
-	private void compilePreReqs()
+	public void compilePreReqs()
 	{
 		LinkedList<Mission> normalMissions = new LinkedList<>(missions);
 		
@@ -156,6 +156,11 @@ public abstract class FCMissionScript extends FCScript implements FCInventoryLis
 	public Mission getCurrentMission()
 	{
 		return currentMission;
+	}
+	
+	public void setCurrentMission(Mission m)
+	{
+		currentMission = m;
 	}
 	
 	public Queue<Mission> getSetMissions()

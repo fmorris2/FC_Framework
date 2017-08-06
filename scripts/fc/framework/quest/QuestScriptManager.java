@@ -39,6 +39,7 @@ public abstract class QuestScriptManager extends MissionManager implements Quest
 	
 	public void compilePreReqs()
 	{
+		preReqMissions.clear();
 		General.println("[Prerequisites] Compiling pre-reqs for " + getMissionName());
 		for(Requirement req : getRequirements())
 		{

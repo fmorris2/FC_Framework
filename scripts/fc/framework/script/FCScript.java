@@ -72,8 +72,8 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	
 	public void onStart()
 	{
-		if(this instanceof StatTracking)
-			statTracker = new StatTracker();
+		//if(this instanceof StatTracking)
+			//statTracker = new StatTracker();
 		
 		Vars.get().add("abc", new ABCUtil());
 		Vars.get().add("abc2", new PersistantABCUtil());
