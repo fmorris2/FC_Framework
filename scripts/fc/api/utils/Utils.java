@@ -25,6 +25,7 @@ import org.tribot.api2007.types.RSMenuNode;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.generic.FCConditions;
+import scripts.fc.api.generic.FCFilters;
 import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 public class Utils
@@ -142,6 +143,32 @@ public class Utils
 		}
 		
 		return true;		
+	}
+	
+	public static void turnSoundDown()
+	{
+		General.println("Turn sound down");
+		Object[][] audioSettings = {{168, "Adjust Music Volume"}, {169, "Adjust Sound Effect Volume"}, {872, "Adjust Area Sound Effect Volume"}};
+		
+		Object[][] needToChange = Arrays.stream(audioSettings)
+			.filter(o -> Game.getSetting((int)o[0]) < 4)
+			.toArray(Object[][]::new);
+		
+		if(needToChange.length == 0 || !GameTab.open(TABS.OPTIONS))
+			return;
+				
+		RSInterface[] soundButton = InterfaceUtils.find(FCFilters.containsAction("Audio"));
+		if(soundButton.length == 0 || !Clicking.click(soundButton[0]))
+			return;
+		
+		General.sleep(600, 1200);
+		
+		for(Object[] o : needToChange)
+		{
+			RSInterface[] button = InterfaceUtils.find(FCFilters.containsAction((String)o[1]));
+			if(button.length > 0 && Clicking.click(button[0]))
+				continue;
+		}
 	}
 	
 	public static void removeRoofs()
