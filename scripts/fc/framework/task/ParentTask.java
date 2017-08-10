@@ -31,7 +31,7 @@ public abstract class ParentTask extends Task
 	@Override
 	public String getStatus()
 	{
-		return currentTask == null ? this.getClass().getCanonicalName() : currentTask.getStatus();
+		return currentTask == null ? this.getClass().getSimpleName() : currentTask.getStatus();
 	}
 	
 }
