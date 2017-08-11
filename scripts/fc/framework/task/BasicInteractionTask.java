@@ -6,7 +6,7 @@ import org.tribot.api2007.Player;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.travel.Travel;
 
-public abstract class BasicDialogueTask extends Task
+public abstract class BasicInteractionTask extends Task
 {
 	private static final long serialVersionUID = 1L;
 	
