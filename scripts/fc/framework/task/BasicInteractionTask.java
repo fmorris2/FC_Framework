@@ -7,6 +7,7 @@ import org.tribot.api2007.Player;
 
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.travel.Travel;
+import scripts.fc.api.wrappers.FCTiming;
 
 public abstract class BasicInteractionTask extends Task
 {
@@ -16,6 +17,7 @@ public abstract class BasicInteractionTask extends Task
 	protected abstract int getRadius();
 	protected abstract EntityInteraction getInteraction();
 	protected abstract BooleanSupplier getWaitCondition();
+	protected abstract int getWaitTimeout();
 	
 	@Override
 	public boolean execute()
@@ -25,6 +27,6 @@ public abstract class BasicInteractionTask extends Task
 		
 		BooleanSupplier waitCond = getWaitCondition();
 		
-		return getInteraction().execute() && waitCond != null ? waitCond.getAsBoolean() : true;
+		return getInteraction().execute() && waitCond != null ? FCTiming.waitCondition(waitCond, getWaitTimeout()) : true;
 	}
 }
