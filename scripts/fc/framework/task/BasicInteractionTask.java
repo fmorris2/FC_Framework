@@ -1,5 +1,7 @@
 package scripts.fc.framework.task;
 
+import java.util.function.BooleanSupplier;
+
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
 
@@ -13,6 +15,7 @@ public abstract class BasicInteractionTask extends Task
 	protected abstract Positionable getPosition();
 	protected abstract int getRadius();
 	protected abstract EntityInteraction getInteraction();
+	protected abstract BooleanSupplier getWaitCondition();
 	
 	@Override
 	public boolean execute()
@@ -20,6 +23,8 @@ public abstract class BasicInteractionTask extends Task
 		if(Player.getPosition().distanceTo(getPosition()) > getRadius())
 			return Travel.webWalkTo(getPosition());
 		
-		return getInteraction().execute();
+		BooleanSupplier waitCond = getWaitCondition();
+		
+		return getInteraction().execute() && waitCond != null ? waitCond.getAsBoolean() : true;
 	}
 }
