@@ -1,6 +1,5 @@
 package scripts.fc.framework.quest;
 
-import org.tribot.api.General;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.GrandExchange;
 

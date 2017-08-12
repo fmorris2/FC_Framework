@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.travel.Travel;
@@ -22,7 +23,9 @@ public abstract class BasicInteractionTask extends Task
 	@Override
 	public boolean execute()
 	{
-		if(Player.getPosition().distanceTo(getPosition()) > getRadius())
+		final RSTile POS = Player.getPosition();
+		final RSTile TARG = getPosition().getPosition();
+		if(POS.getPlane() != TARG.getPlane() || POS.distanceTo(TARG) > getRadius())
 			return Travel.webWalkTo(getPosition());
 		
 		BooleanSupplier waitCond = getWaitCondition();
