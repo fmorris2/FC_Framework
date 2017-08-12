@@ -222,7 +222,9 @@ public class DialogueThread extends Thread
 	private boolean waitForDialogue()
 	{
 		//while our character is moving toward the appropriate NPC, we must wait
-		while(isInteractingWithNpc() && Login.getLoginState() == STATE.INGAME)
+		final int TIMEOUT = 10000; //wait max 10 seconds for dialogue to start
+		long start = Timing.currentTimeMillis();
+		while(isInteractingWithNpc() && Login.getLoginState() == STATE.INGAME && Timing.timeFromMark(start) < TIMEOUT)
 		{
 			log("Waiting for dialogue to start....");
 			sleep(20, 30);
