@@ -43,6 +43,9 @@ public class QuestJournalBool extends QuestBool
 		else
 			failed = true;
 		
+		if(status == JOURNAL_STATUS.CONTAINS_AND_ISNT_COMPLETE)
+			return contents.hasLineThatContains(line) && !contents.hasLineCompleted(line, true);
+		
 		return status == JOURNAL_STATUS.HAS_COMPLETED ? contents.hasLineCompleted(line, true) : contents.hasLineThatContains(line);
 	}
 	
@@ -60,6 +63,7 @@ public class QuestJournalBool extends QuestBool
 	public enum JOURNAL_STATUS
 	{
 		CONTAINS_STRING,
+		CONTAINS_AND_ISNT_COMPLETE,
 		HAS_COMPLETED
 	}
 
