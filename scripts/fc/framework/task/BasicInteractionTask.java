@@ -23,13 +23,18 @@ public abstract class BasicInteractionTask extends Task
 	@Override
 	public boolean execute()
 	{
-		final RSTile POS = Player.getPosition();
-		final RSTile TARG = getPosition().getPosition();
-		if(POS.getPlane() != TARG.getPlane() || POS.distanceTo(TARG) > getRadius())
+		if(!isWithinRadius())
 			return Travel.webWalkTo(getPosition());
 		
 		BooleanSupplier waitCond = getWaitCondition();
 		
 		return getInteraction().execute() && waitCond != null ? FCTiming.waitCondition(waitCond, getWaitTimeout()) : true;
+	}
+	
+	public boolean isWithinRadius()
+	{
+		final RSTile POS = Player.getPosition();
+		final RSTile TARG = getPosition().getPosition();
+		return POS.getPlane() == TARG.getPlane() && POS.distanceTo(TARG) <= getRadius();
 	}
 }
