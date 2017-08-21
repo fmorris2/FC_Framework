@@ -223,6 +223,9 @@ public enum TeleportMethod implements Validatable {
     
     public boolean use(TeleportMethod method, TeleportLocation loc)
     {
+    	if(Banking.isBankScreenOpen() || Banking.isDepositBoxOpen())
+    		Banking.close();
+    	
     	switch(method)
     	{
 			case ARDOUGNE_TELEPORT_TAB: return RSItemHelper.click("Ardougne t.*", "Break");
