@@ -434,9 +434,10 @@ public class FCConditions
 			@Override
 			public boolean active()
 			{
-				Timing.waitCondition(IN_DIALOGUE_CONDITION, 600);	
+				Timing.waitCondition(IN_DIALOGUE_CONDITION, 1200);	
 				return NPCChat.getSelectOptionInterface() != null 
-						|| InterfaceUtils.findContainingText("Click here to continue") == null;
+						|| (InterfaceUtils.findContainingText("Click here to continue") == null
+							 && InterfaceUtils.findContainingText("Please wait...") == null);
 			}
 		};
 	}

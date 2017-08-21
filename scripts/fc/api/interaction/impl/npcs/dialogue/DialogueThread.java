@@ -97,53 +97,65 @@ public class DialogueThread extends Thread
 			
 			//check for option selection first
 			String[] dialogueOptions = NPCChat.getOptions();
-			if(dialogueOptions != null && dialogueOptions.length > 0)
-			{
-				//if we've been presented with a random option before we've even selected
-				//any of our intended options
-				if(optionIndex == 0 && options[optionIndex] >= dialogueOptions.length)
-				{
-					General.println("Sending random option");
-					Keyboard.sendType(Integer.toString(General.random(0, dialogueOptions.length - 1)).charAt(0));
-					sleep(600, 1200);
-				}
-				else
-				{
-					//if we don't know how to handle the option that is currently up
-					//either we've ran out of supplied options, or the option interface doesn't contain the option that was supplied
-					if(optionIndex >= options.length || dialogueOptions.length <= options[optionIndex])
-						return false;
-					
-					//send the appropriate option
-					General.println("Sending option: " + (options[optionIndex] + 1));
-					Keyboard.sendType(Integer.toString(options[optionIndex] + 1).charAt(0));
-					sleep(600, 1200);
-					optionIndex++;
-				}
-			}
+			if(dialogueOptions != null && dialogueOptions.length > 0 && !handleOptions(dialogueOptions))
+				return false;
 			else if(areDialogueInterfacesUp()) //click continue interface
 				doClickToContinue();
 			else if(isInCutscene())
-			{
-				log("In cutscene...");	
-				startAbc2Timing();
-				
-				//for quest rewards when you're in a cutscene
-				RSInterface[] inter = InterfaceUtils.find(FCFilters.containsAction("Close"));
-				RSInterface questReward = Interfaces.get(QUEST_REWARD_MASTER, QUEST_REWARD_CLOSE);
-				if(inter.length > 0)
-					Clicking.click(inter[0]);
-				else if(questReward != null)
-					Clicking.click(questReward);
-				
-				sleep(600, 1200);
-			}
+				handleCutscene();
 			
-			FCTiming.waitCondition(() -> areDialogueInterfacesUp() || areCutsceneInterfacesUp() || isInCutscene(), General.random(600, 1200));
+			FCTiming.waitCondition(() -> areDialogueInterfacesUp() || areCutsceneInterfacesUp() || isInCutscene(), General.random(1200, 1800));
 		}
 		
 		//assume we've gone through the dialogue successfully
 		return true;
+	}
+	
+	private boolean handleOptions(String[] dialogueOptions)
+	{
+		//if we've been presented with a random option before we've even selected
+		//any of our intended options
+		if(optionIndex == 0 && options[optionIndex] >= dialogueOptions.length)
+		{
+			General.println("Sending random option");
+			Keyboard.sendType(Integer.toString(General.random(0, dialogueOptions.length - 1)).charAt(0));
+			sleep(600, 1200);
+		}
+		else if(!selectPlannedForOption(dialogueOptions))
+			return false;
+		
+		return true;
+	}
+	
+	private boolean selectPlannedForOption(String[] dialogueOptions)
+	{
+		//if we don't know how to handle the option that is currently up
+		//either we've ran out of supplied options, or the option interface doesn't contain the option that was supplied
+		if(optionIndex >= options.length || dialogueOptions.length <= options[optionIndex])
+			return false;
+		
+		//send the appropriate option
+		General.println("Sending option: " + (options[optionIndex] + 1));
+		Keyboard.sendType(Integer.toString(options[optionIndex] + 1).charAt(0));
+		sleep(600, 1200);
+		optionIndex++;
+		return true;
+	}
+	
+	private void handleCutscene()
+	{
+		log("In cutscene...");	
+		startAbc2Timing();
+		
+		//for quest rewards when you're in a cutscene
+		RSInterface[] inter = InterfaceUtils.find(FCFilters.containsAction("Close"));
+		RSInterface questReward = Interfaces.get(QUEST_REWARD_MASTER, QUEST_REWARD_CLOSE);
+		if(inter.length > 0)
+			Clicking.click(inter[0]);
+		else if(questReward != null)
+			Clicking.click(questReward);
+		
+		sleep(600, 1200);
 	}
 	
 	private void startAbc2Timing()

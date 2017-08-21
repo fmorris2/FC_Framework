@@ -11,6 +11,7 @@ import org.tribot.script.interfaces.Starting;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
 import scripts.fc.api.travel.Travel;
+import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.utils.Utils;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
@@ -32,7 +33,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		//Travel.webWalkTo(new RSTile(3116,9752,0));
+		println(InterfaceUtils.findContainingText("Please wait...") != null);
 		return 600;
 	}
 	
