@@ -39,7 +39,35 @@ public abstract class ItemRequirement extends Requirement
 	public ItemRequirement(FCMissionScript script)
 	{
 		super(script);
+		General.println("reqItems before combining: " + reqItems.size());
+		reqItems = getCombinedReqItems();
+		General.println("reqItems after combining: " + reqItems.size());
 		General.println("CHECKING FOR ITEM REQUIREMENT");
+	}
+	
+	private List<ReqItem> getCombinedReqItems()
+	{
+		List<ReqItem> combined = new ArrayList<>();
+		for(int i = 0; i < reqItems.size(); i++)
+			combined.add(findAndCombineForItem(reqItems.get(i)));
+		
+		return combined;
+	}
+	
+	private ReqItem findAndCombineForItem(ReqItem r)
+	{
+		ReqItem combined = r;
+		for(int i = reqItems.indexOf(r) + 1; i < reqItems.size(); i++) 
+		{
+			if(combined.shouldCombine(reqItems.get(i)))
+			{
+				General.println("Combining reqs: " + combined + " AND " + reqItems.get(i));
+				combined = combined.and(reqItems.get(i));
+				reqItems.remove(i);
+			}
+		}
+		
+		return combined;
 	}
 	
 	public void reset()

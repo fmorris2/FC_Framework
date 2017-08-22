@@ -56,6 +56,16 @@ public abstract class ReqItem
 		isFutureReq = b;
 	}
 	
+	public boolean shouldCombine(ReqItem otherReq)
+	{
+		return getSingleReqItems()
+				.stream()
+				.filter(reqItem -> otherReq.getSingleReqItems()
+						.stream()
+						.anyMatch(otherItem -> otherItem.needsItem() == reqItem.needsItem() && otherItem.getId() == reqItem.getId()))
+				.count() > 0;
+	}
+	
 	public abstract void check(RSItem[] items);
 	public abstract boolean isSatisfied();
 	public abstract List<SingleReqItem> getSingleReqItems();
