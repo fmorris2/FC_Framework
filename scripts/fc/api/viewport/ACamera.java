@@ -6,6 +6,8 @@ import org.tribot.api2007.Camera;
 import org.tribot.api2007.Camera.ROTATION_METHOD;
 import org.tribot.api2007.Player;
 import org.tribot.script.Script;
+
+import scripts.fc.api.utils.DebugUtils;
 /**
  * 
  * @author Final Calibur & WastedBro (no specific order)
@@ -180,7 +182,7 @@ public class ACamera
         		{   
         			if(tile != null)
         			{
-        				General.println("[ACamera] Setting Camera Rotation");
+        				DebugUtils.debugOnInterval("[ACamera] Setting Camera Rotation", 3500);
         				Camera.setCameraRotation(getOptimalRotation(tile));
         				if(!shouldStopCamera(tile))
         				{
@@ -217,7 +219,7 @@ public class ACamera
     			{	
     				if(tile != null)
     				{
-    					General.println("[ACamera] Setting Camera Angle");
+    					DebugUtils.debugOnInterval("[ACamera] Setting Camera Angle", 3500);
     					Camera.setCameraAngle(getOptimalAngle(tile));
     					if(!shouldStopCamera(tile))
         				{

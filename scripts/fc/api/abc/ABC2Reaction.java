@@ -57,7 +57,7 @@ public class ABC2Reaction
 	
 	private void setProfile(long waitTime)
 	{
-		ABCProperties props = Vars.get().get("abc2Props");
+		ABCProperties props = Vars.get().get("abc2Props", new ABCProperties());
 		props.setWaitingTime(((Long)(getWaitTime())).intValue());
 		props.setWaitingFixed(isFixed);
 		props.setUnderAttack(underAttack);

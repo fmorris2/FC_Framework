@@ -38,7 +38,7 @@ public class TeleportManager implements Loggable {
     }
 
     public TeleportManager(){
-        offset = 25;
+        offset = 75;
         blacklistTeleportMethods = new HashSet<>();
         blacklistTeleportLocations = new HashSet<>();
         executorService = Executors.newFixedThreadPool(15);;
@@ -126,7 +126,8 @@ public class TeleportManager implements Loggable {
                         e.printStackTrace();
                         return null;
                     }
-                }).filter(teleportAction1 -> teleportAction1 != null && teleportAction1.path.size() > 0).min(Comparator.comparingInt(o -> o.path.size())).orElse(null);
+                }).filter(teleportAction1 -> teleportAction1 != null && teleportAction1.path.size() > 0)
+                .min(Comparator.comparingInt(o -> o.path.size())).orElse(null);
     	
         if (teleportAction == null || teleportAction.path.size() >= originalPathLength || teleportAction.path.size() == 0){
             return null;

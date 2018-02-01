@@ -22,6 +22,7 @@ import scripts.fc.api.interaction.ItemInteraction;
 import scripts.fc.api.items.FCItem;
 import scripts.fc.api.items.FCItemList;
 import scripts.fc.api.travel.Travel;
+import scripts.fc.api.utils.DebugUtils;
 import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.goal.GoalManager;
@@ -133,7 +134,7 @@ public abstract class TaskManager extends GoalManager
 		if(!shouldWithdrawFutureItems() 
 				&& (requiredItems.length == 0 || Arrays.stream(requiredItems).allMatch(req -> req.getInvCount(true) + req.getEquipCount() >= req.getAmt())))
 		{
-			General.println("We have the required items in our inventory!");
+			DebugUtils.debugOnInterval("We have the required items in our inventory!", 3000);
 			return true;
 		}
 		

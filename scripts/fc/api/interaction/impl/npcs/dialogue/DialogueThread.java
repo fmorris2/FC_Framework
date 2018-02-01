@@ -21,6 +21,7 @@ import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.generic.FCFilters;
 import scripts.fc.api.mouse.AccurateMouse;
 import scripts.fc.api.utils.ChooseOptionUtils;
+import scripts.fc.api.utils.DebugUtils;
 import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.utils.PlayerUtils;
 import scripts.fc.api.wrappers.FCTiming;
@@ -238,7 +239,7 @@ public class DialogueThread extends Thread
 		long start = Timing.currentTimeMillis();
 		while(isInteractingWithNpc() && Login.getLoginState() == STATE.INGAME && Timing.timeFromMark(start) < TIMEOUT)
 		{
-			log("Waiting for dialogue to start....");
+			DebugUtils.debugOnInterval("[DialogueThread] Waiting for dialogue to start....", 2500);
 			sleep(20, 30);
 		}
 		

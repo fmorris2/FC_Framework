@@ -1,5 +1,6 @@
 package scripts.fc;
 
+import org.tribot.api2007.Game;
 import org.tribot.api2007.MessageListener;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.script.ScriptManifest;
@@ -33,7 +34,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(InterfaceUtils.findContainingText("Please wait...") != null);
+		println(Game.getSetting(281));
 		return 600;
 	}
 	
