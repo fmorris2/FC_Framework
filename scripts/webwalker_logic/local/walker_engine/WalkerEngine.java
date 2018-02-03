@@ -224,6 +224,10 @@ public class WalkerEngine implements Loggable{
                         return true;
                     case EXIT_OUT_WALKER_FAIL:
                         return false;
+					case CONTINUE_WALKER:
+						break;
+					default:
+						break;
                 }
 
                 WaitFor.milliseconds(50, 100);
