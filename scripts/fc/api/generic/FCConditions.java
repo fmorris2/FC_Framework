@@ -434,10 +434,13 @@ public class FCConditions
 			@Override
 			public boolean active()
 			{
-				Timing.waitCondition(IN_DIALOGUE_CONDITION, 1200);	
+				Timing.waitCondition(IN_DIALOGUE_CONDITION, 1200);
+				RSInterface continueInter = InterfaceUtils.findContainingText("Click here to continue");
+				RSInterface pleaseWait = InterfaceUtils.findContainingText("Please wait...");
+				
 				return NPCChat.getSelectOptionInterface() != null 
-						|| (InterfaceUtils.findContainingText("Click here to continue") == null
-							 && InterfaceUtils.findContainingText("Please wait...") == null);
+						|| ((continueInter == null || continueInter.isHidden())
+							 && (pleaseWait == null || pleaseWait.isHidden()));
 			}
 		};
 	}

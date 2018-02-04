@@ -32,7 +32,7 @@ public class Travel
 	
 	public static boolean webWalkTo(Positionable p, Condition c)
 	{
-		boolean daxSuccess = WebWalker.walkTo(p.getPosition(), () -> {return c.active() ? WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS : WalkingCondition.State.EXIT_OUT_WALKER_FAIL;});
+		boolean daxSuccess = WebWalker.walkTo(p.getPosition(), () -> {return c.active() ? WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS : WalkingCondition.State.CONTINUE_WALKER;});
 		
 		failures = !daxSuccess ? failures + 1 : 0;
 		

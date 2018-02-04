@@ -23,7 +23,7 @@ public class FCGrandExchange
 	private static final int GE_MASTER = 465;
 	private static final int[] SLOTS = {7,8,9,10,11,12,13,14};
 	private static final int BUY_COMP = 0, SELL_COMP = 1;
-	private static final int BUY_OFFER_ITEM_SELECTION_MASTER = 162, BUY_OFFER_ITEM_SELECTION_COMP = 39;
+	private static final int BUY_OFFER_ITEM_SELECTION_MASTER = 162, BUY_OFFER_ITEM_SELECTION_COMP = 41;
 	
 	public static boolean offer(String name, int price, int quantity, boolean sell)
 	{
