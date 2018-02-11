@@ -29,7 +29,7 @@ class WebPathCore {
     private static ArrayList<RSTile> lastCalledPath = null;
     private static HashMap<String, GetPathResponseContainer> cache = null;
 
-    private static String apiKey = "dc9bce99-f696-4f57-8e9a-50c75d6695f3", secretKey = "46F7149B15027D0C";
+    private static String apiKey = "7c61b729-ffd5-438b-ab3a-468024b57edd", secretKey = "FC4F2258470B8DED";
 
     private static boolean local = false;
 
