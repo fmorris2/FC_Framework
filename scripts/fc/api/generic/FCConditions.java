@@ -45,6 +45,7 @@ public class FCConditions
 	public static final Condition NOT_TRADING_CONDITION = notTradingCondition();
 	public static final Condition NOT_MOVING_CONDITION = notMovingCondition();
 	public static final Condition IN_BUILDING_CONDITION = inBuildingCondition();
+	public static final Condition PLEASE_WAIT_NOT_UP_CONDITION = pleaseWaitNotUpCondition();
 	
 	public static Condition inBuildingCondition()
 	{
@@ -436,11 +437,21 @@ public class FCConditions
 			{
 				Timing.waitCondition(IN_DIALOGUE_CONDITION, 1200);
 				RSInterface continueInter = InterfaceUtils.findContainingText("Click here to continue");
-				RSInterface pleaseWait = InterfaceUtils.findContainingText("Please wait...");
 				
 				return NPCChat.getSelectOptionInterface() != null 
 						|| ((continueInter == null || continueInter.isHidden())
-							 && (pleaseWait == null || pleaseWait.isHidden()));
+							 && Timing.waitCondition(PLEASE_WAIT_NOT_UP_CONDITION, 5400));
+			}
+		};
+	}
+	
+	private static Condition pleaseWaitNotUpCondition() {
+		return new Condition() {
+			@Override
+			public boolean active() {
+				General.sleep(100);
+				RSInterface pleaseWait = InterfaceUtils.findContainingText("Please wait...");
+				return pleaseWait == null || pleaseWait.isHidden();
 			}
 		};
 	}
