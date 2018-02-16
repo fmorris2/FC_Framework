@@ -2,6 +2,7 @@ package scripts.fc.framework.script;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -23,17 +24,19 @@ import scripts.fc.framework.quest.BankBool;
 import scripts.fc.framework.statistic_tracking.StatTracker;
 import scripts.fc.framework.statistic_tracking.StatTracking;
 
-public abstract class FCScript extends Script implements FCPaintable, Painting, Starting, Ending
+public abstract class FCScript extends Script implements FCPaintable, Painting, Starting, Ending, Serializable
 {	
-	public final ScriptManifest MANIFEST = (ScriptManifest)this.getClass().getAnnotation(ScriptManifest.class);
-	public final FCBankObserver BANK_OBSERVER = new FCBankObserver();
+	private static final long serialVersionUID = 1L;
 	
-	public FCPaint paint = new FCPaint(this, Color.WHITE);
+	public final ScriptManifest MANIFEST = (ScriptManifest)this.getClass().getAnnotation(ScriptManifest.class);
+	public final transient FCBankObserver BANK_OBSERVER = new FCBankObserver();
+	
+	public transient FCPaint paint = new FCPaint(this, Color.WHITE);
 	
 	protected abstract int mainLogic();
 	protected abstract String[] scriptSpecificPaint();
 	protected boolean isRunning = true;
-	private StatTracker statTracker;
+	private transient StatTracker statTracker;
 	
 	public void run()
 	{

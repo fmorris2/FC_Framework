@@ -26,7 +26,7 @@ public abstract class FCMissionScript extends FCScript implements FCInventoryLis
 	protected GoalList goalList;
 	protected Mission currentMission;
 	protected String username;
-	public final FCInventoryObserver INV_OBSERVER = new FCInventoryObserver(this);
+	public final transient FCInventoryObserver INV_OBSERVER = new FCInventoryObserver(this);
 	
 	private StatTracker statTracker;
 	private boolean statTrackingFailed;

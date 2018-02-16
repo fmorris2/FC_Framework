@@ -79,6 +79,10 @@ public class ABC2Helper
 	
 	public void doActions(Positionable next)
 	{
+		if(!Vars.get().get("abc2Enabled", true)) {
+			return;
+		}
+		
 		abcLeaveGame();
 			
 		if(abc2.performTimedActions())
@@ -112,6 +116,10 @@ public class ABC2Helper
 	
 	public static boolean shouldUseClosest(ABCUtil abcOne, Positionable[] objs)
 	{
+		if(!Vars.get().get("abc2Enabled", true)) {
+			return true;
+		}
+		
 		if(objs.length < 2) //If there are not multiple objects to choose from
 			return true;
 		
@@ -141,6 +149,10 @@ public class ABC2Helper
 	
 	private void abcLeaveGame()
 	{
+		if(!Vars.get().get("abc2Enabled", true)) {
+			return;
+		}
+		
 		if(abc2.shouldLeaveGame())
 		{
 			log("Leaving game");

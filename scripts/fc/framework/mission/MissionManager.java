@@ -6,7 +6,7 @@ import scripts.fc.framework.task.TaskManager;
 public abstract class MissionManager extends TaskManager implements Mission
 {
 	private boolean hasAddedPreReqs;
-	protected FCMissionScript missionScript;
+	protected transient FCMissionScript missionScript;
 	
 	public MissionManager(FCMissionScript script)
 	{
@@ -27,5 +27,9 @@ public abstract class MissionManager extends TaskManager implements Mission
 	public void setHasAddedPreReqs(boolean b)
 	{
 		hasAddedPreReqs = b;
+	}
+	
+	public void setScript(FCMissionScript script) {
+		this.missionScript = script;
 	}
 }

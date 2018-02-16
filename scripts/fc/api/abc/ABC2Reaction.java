@@ -41,6 +41,10 @@ public class ABC2Reaction
 	
 	public boolean react()
 	{
+		if(!Vars.get().get("abc2Enabled", true)) {
+			return false;
+		}
+		
 		if(hasStarted && startTime != -1)
 		{
 			setProfile(getWaitTime());
