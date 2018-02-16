@@ -92,13 +92,15 @@ public class DialogueThread extends Thread
 	{
 		//while any of the dialogue screens are up and we're in game
 		while((areDialogueInterfacesUp() || areCutsceneInterfacesUp() || isInCutscene()) && Login.getLoginState() == STATE.INGAME)
-		{
+		{			
 			wentThroughDialogue = true;
 			handleAbc2Reaction();
 			
 			//check for option selection first
 			String[] dialogueOptions = NPCChat.getOptions();
-			if(dialogueOptions != null && dialogueOptions.length > 0 && !handleOptions(dialogueOptions))
+			if(isPleaseWaitUp())
+				DebugUtils.debugOnInterval("Please wait is currently up... waiting until interface loads (this could be due to a slow proxy).", 1800);
+			else if(dialogueOptions != null && dialogueOptions.length > 0 && !handleOptions(dialogueOptions))
 				return false;
 			else if(areDialogueInterfacesUp()) //click continue interface
 				doClickToContinue();
@@ -110,6 +112,10 @@ public class DialogueThread extends Thread
 		
 		//assume we've gone through the dialogue successfully
 		return true;
+	}
+	
+	private boolean isPleaseWaitUp() {
+		return !Timing.waitCondition(FCConditions.PLEASE_WAIT_NOT_UP_CONDITION, 1200);
 	}
 	
 	private boolean handleOptions(String[] dialogueOptions)
