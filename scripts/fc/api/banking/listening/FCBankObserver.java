@@ -28,6 +28,11 @@ public class FCBankObserver extends Thread
 		start();
 	}
 	
+	public void clear() {
+		hasCheckedBank = false;
+		bankCache.clear();
+	}
+	
 	public void run()
 	{
 		while(isRunning)
