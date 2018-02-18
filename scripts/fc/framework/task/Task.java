@@ -12,7 +12,8 @@ import java.util.Map;
  */
 public abstract class Task implements Serializable
 {	
-	protected static final long serialVersionUID = 3065304610552397194L;
+	private static final long serialVersionUID = 1L;
+	
 	public final Map<String, Boolean> FLAGS = new HashMap<>(); 
 
 	/**

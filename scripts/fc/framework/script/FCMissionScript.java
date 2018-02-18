@@ -153,6 +153,11 @@ public abstract class FCMissionScript extends FCScript implements FCInventoryLis
 		compilingPreReqs = false;
 	}
 	
+	public void clearMissions() {
+		currentMission = null;
+		missions.clear();
+	}
+	
 	public Mission getCurrentMission()
 	{
 		return currentMission;

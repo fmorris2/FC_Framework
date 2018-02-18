@@ -1,13 +1,16 @@
 package scripts.fc.api.abc;
 
+import java.io.Serializable;
+
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.abc.ABCProperties;
 
 import scripts.fc.framework.data.Vars;
 
-public class ABC2Reaction
+public class ABC2Reaction implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private boolean hasStarted, isFixed, underAttack;
 	private long startTime = -1, estimatedWait;
 	

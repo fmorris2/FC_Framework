@@ -1,5 +1,7 @@
 package scripts.fc.framework.task;
 
+import java.io.Serializable;
+
 import scripts.fc.api.interaction.EntityInteraction;
 
 /**
@@ -9,7 +11,7 @@ import scripts.fc.api.interaction.EntityInteraction;
  * @author Final Calibur
  *
  */
-public interface PredictableInteraction
+public interface PredictableInteraction extends Serializable
 {
 	/**
 	 * Returns EntityInteraction that we can prepare

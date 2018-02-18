@@ -1,5 +1,7 @@
 package scripts.fc.api.items;
 
+import java.io.Serializable;
+
 import org.tribot.api.Clicking;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Filter;
@@ -12,15 +14,17 @@ import org.tribot.api2007.types.RSItemDefinition;
 
 import scripts.fc.api.generic.FCConditions;
 
-public class FCItem
+public class FCItem implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private final int MAX_CLICKING_AMT = 4;
 	
 	private String[] names = null;
 	private int[] ids = null;
 	private int amt;
 	private boolean isStackable, isRequired = true;
-	private Filter<RSItem> itemFilter;
+	private transient Filter<RSItem> itemFilter;
 	
 	public FCItem(int amt, boolean isStackable, int... ids)
 	{

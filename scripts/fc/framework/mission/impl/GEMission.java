@@ -83,8 +83,8 @@ public class GEMission implements Mission
 	
 	private void stopScript()
 	{
-		General.println("Could not purchase mandatory item from GE, and we don't have a gather mission for it! Ending script...");
-		script.setIsRunning(false);
+		General.println("Could not purchase mandatory item from GE, and we don't have a gather mission for it! Clearing missions...");
+		script.clearMissions();
 	}
 
 	@Override

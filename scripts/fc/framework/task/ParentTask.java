@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class ParentTask extends Task
 {
-	private static final long serialVersionUID = 3986957991804689745L;
+	private static final long serialVersionUID = 1L;
 	protected List<Task> childrenTasks;
 	protected Task currentTask;
 	

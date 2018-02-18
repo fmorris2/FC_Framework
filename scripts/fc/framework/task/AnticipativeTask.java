@@ -11,7 +11,7 @@ package scripts.fc.framework.task;
  */
 public abstract class AnticipativeTask extends Task
 {
-	private static final long serialVersionUID = 2000257624147266884L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Provides the task that we will have to execute / prepare for immediately

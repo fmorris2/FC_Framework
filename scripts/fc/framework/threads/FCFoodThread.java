@@ -1,5 +1,6 @@
 package scripts.fc.framework.threads;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import org.tribot.api.Clicking;
@@ -19,8 +20,10 @@ import scripts.fc.api.items.FCItem;
 import scripts.fc.api.utils.Utils;
 import scripts.fc.framework.data.Vars;
 
-public class FCFoodThread extends Thread
+public class FCFoodThread extends Thread implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private static final int CYCLE_TIME = 100;
 	
 	private final int MIN_PERC, MAX_PERC, ATTEMPT_THRESH = 5;
