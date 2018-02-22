@@ -1,8 +1,6 @@
 package scripts.fc;
 
-import org.tribot.api2007.Game;
 import org.tribot.api2007.MessageListener;
-import org.tribot.api2007.types.RSTile;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
@@ -11,8 +9,6 @@ import org.tribot.script.interfaces.Starting;
 
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
-import scripts.fc.api.travel.Travel;
-import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.utils.Utils;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
@@ -34,7 +30,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(Game.getSetting(281));
+		println(Utils.getTribotDir());
 		return 600;
 	}
 	
@@ -59,6 +55,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	{
 		MessageListener.addListener(this);
 		//setLoginBotState(false);
+		//new FCFoodThread(40, 50, new FCItem(1, false, KSItemReqs.TROUT)).start();
 		super.onStart();
 	}
 

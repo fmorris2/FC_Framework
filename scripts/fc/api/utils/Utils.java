@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -23,6 +24,7 @@ import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSMenuNode;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.util.Util;
 
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.generic.FCFilters;
@@ -42,6 +44,26 @@ public class Utils
 	private static final int REMOVE_BUTTON_TEXTURE = 762;
 	
 	private static Image paintImage;
+	
+	public static String getTribotDir() {
+		final File WORKING_DIR = Util.getWorkingDirectory();
+		final File HOME_DIR = Util.getHomeDirectory();
+		final File APP_DATA_DIR = Util.getAppDataDirectory();
+		
+		if(WORKING_DIR.getName().equals(".tribot")) {
+			return WORKING_DIR.getAbsolutePath();
+		}
+		
+		if(APP_DATA_DIR.getName().equals(".tribot")) {
+			return APP_DATA_DIR.getAbsolutePath();
+		}
+		
+		if(Arrays.stream(HOME_DIR.list()).noneMatch(n -> n.equals(".tribot"))) {
+			return HOME_DIR.getAbsolutePath() + "\\AppData\\.tribot";
+		}
+		
+		return HOME_DIR.getAbsolutePath() + "\\.tribot";
+	}
 	
 	public static void handleGui(final JFrame gui)
 	{	
