@@ -1,6 +1,5 @@
 package scripts.fc.api.interaction.impl.objects;
 
-import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.types.RSArea;
@@ -8,6 +7,7 @@ import org.tribot.api2007.types.RSObject;
 
 import scripts.fc.api.interaction.ObjectInteraction;
 import scripts.fc.api.mouse.AccurateMouse;
+import scripts.fc.api.viewport.FCCameraUtils;
 
 public class ClickObject extends ObjectInteraction
 {
@@ -44,23 +44,15 @@ public class ClickObject extends ObjectInteraction
 	{
 		if(Game.isUptext("Use"))
 			Mouse.click(1);
-	
-		/*
-		ThreadSettings.get().setClickingAPIUseDynamic(true);
 		
-		if(rightClick)
-			ThreadSettings.get().setAlwaysRightClick(true);
-	
-		boolean result = Clicking.click(FCFilters.correlatesTo(action, object), object);
+		for(int i = 0; i < CLICK_ATTEMPT_THRESHOLD; i++) {
+			if(AccurateMouse.click(object, action)) {
+				return true;
+			}
+		}
 		
-		ThreadSettings.get().setClickingAPIUseDynamic(false);
-		ThreadSettings.get().setAlwaysRightClick(false);
-		*/
-		
-		boolean result = AccurateMouse.click(object, action);
-		
-		General.println("ClickObject interact() result: " + result);
-		return result;
+		FCCameraUtils.adjustCameraRandomly();
+		return false;
 	}
 	
 	public void setRightClick(boolean b)

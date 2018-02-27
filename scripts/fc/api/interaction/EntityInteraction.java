@@ -27,6 +27,7 @@ import scripts.fc.framework.data.Vars;
 public abstract class EntityInteraction
 {	
 	protected static final int DISTANCE_THRESHOLD = 20;
+	protected static final int CLICK_ATTEMPT_THRESHOLD = 3;
 
 	public static ACamera aCamera = new ACamera();
 	
