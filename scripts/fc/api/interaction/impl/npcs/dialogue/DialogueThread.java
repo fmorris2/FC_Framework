@@ -1,6 +1,7 @@
 package scripts.fc.api.interaction.impl.npcs.dialogue;
 
 import java.awt.Rectangle;
+import java.util.Arrays;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
@@ -126,12 +127,23 @@ public class DialogueThread extends Thread
 		{
 			General.println("Sending random option");
 			Keyboard.sendType(Integer.toString(General.random(0, dialogueOptions.length - 1)).charAt(0));
-			sleep(600, 1200);
+			if(!waitForOptionChange(dialogueOptions)) {
+				return false;
+			}
 		}
 		else if(!selectPlannedForOption(dialogueOptions))
 			return false;
 		
 		return true;
+	}
+	
+	private boolean waitForOptionChange(String[] oldOptions) {
+		return FCTiming.waitCondition(() -> {
+			String[] newOpts = NPCChat.getOptions();
+			return newOpts == null || 
+					(!Arrays.stream(newOpts).anyMatch(s -> s.equalsIgnoreCase("Please wait..."))
+							&& !Arrays.equals(oldOptions, newOpts));
+		}, General.random(4200, 5400));
 	}
 	
 	private boolean selectPlannedForOption(String[] dialogueOptions)
@@ -144,7 +156,9 @@ public class DialogueThread extends Thread
 		//send the appropriate option
 		General.println("Sending option: " + (options[optionIndex] + 1));
 		Keyboard.sendType(Integer.toString(options[optionIndex] + 1).charAt(0));
-		sleep(600, 1200);
+		if(!waitForOptionChange(dialogueOptions)) {
+			return false;
+		}
 		optionIndex++;
 		return true;
 	}
@@ -258,7 +272,8 @@ public class DialogueThread extends Thread
 		
 		return (continueInter != null && !continueInter.isHidden())
 				|| NPCChat.getName() != null
-				|| NPCChat.getSelectOptionInterface() != null;
+				|| NPCChat.getSelectOptionInterface() != null
+				|| NPCChat.getClickContinueInterface() != null;
 	}
 	
 	private boolean areCutsceneInterfacesUp()

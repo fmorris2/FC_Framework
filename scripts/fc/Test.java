@@ -1,6 +1,7 @@
 package scripts.fc;
 
 import org.tribot.api2007.MessageListener;
+import org.tribot.api2007.Player;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
@@ -30,7 +31,8 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(Utils.getTribotDir());
+		println(Player.getRSPlayer().getInteractingCharacter());
+		//println(Utils.getTribotDir());
 		return 600;
 	}
 	
