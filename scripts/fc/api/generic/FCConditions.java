@@ -438,6 +438,10 @@ public class FCConditions
 				Timing.waitCondition(IN_DIALOGUE_CONDITION, 1200);
 				RSInterface continueInter = InterfaceUtils.findContainingText("Click here to continue");
 				
+				if(Login.getLoginState() != STATE.INGAME) {
+					return true;
+				}
+				
 				return NPCChat.getSelectOptionInterface() != null 
 						|| ((continueInter == null || continueInter.isHidden())
 							 && Timing.waitCondition(PLEASE_WAIT_NOT_UP_CONDITION, 5400));
