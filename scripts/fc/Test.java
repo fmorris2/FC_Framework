@@ -1,18 +1,20 @@
 package scripts.fc;
 
+import org.tribot.api.General;
 import org.tribot.api2007.MessageListener;
-import org.tribot.api2007.Player;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.Painting;
 import org.tribot.script.interfaces.Starting;
 
+import scripts.fc.api.items.FCItem;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
-import scripts.fc.api.utils.Utils;
+import scripts.fc.api.worldhopping.FCInGameHopper;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
+import scripts.fc.framework.threads.FCFoodThread;
 
 @ScriptManifest(
 		authors     = { 
@@ -31,8 +33,8 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		println(Player.getRSPlayer().getInteractingCharacter());
-		//println(Utils.getTribotDir());
+		FCInGameHopper.hop(General.random(82,84));
+		//Travel.webWalkTo(new RSTile(2960, 3339, 0));
 		return 600;
 	}
 	
@@ -57,7 +59,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	{
 		MessageListener.addListener(this);
 		//setLoginBotState(false);
-		//new FCFoodThread(40, 50, new FCItem(1, false, KSItemReqs.TROUT)).start();
+		new FCFoodThread(40, 50, new FCItem(1, false, 333)).start();
 		super.onStart();
 	}
 

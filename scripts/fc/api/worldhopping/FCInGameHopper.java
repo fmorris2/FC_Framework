@@ -33,7 +33,7 @@ public class FCInGameHopper
 	
 	//normal logout inter constants
 	private static final int NORMAL_LOGOUT_MASTER = 182;
-	private static final int WORLD_SWITCHER_CHILD = 1;
+	private static final int WORLD_SWITCHER_CHILD = 3;
 	
 	//world hopper inter constants
 	private static final int HOPPER_MASTER = 69;
