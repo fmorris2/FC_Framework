@@ -183,7 +183,6 @@ public abstract class ItemRequirement extends Requirement
 					
 					General.println("Will attempt to use GE for req " + r);
 					General.println("Needs to purchase " + r.getId() + "x" + amtNeeded);
-					satisfiedReqs.put(r.getId(), satisfiedReqs.getOrDefault(r.getId(), 0) + r.getAmt());
 					geOrder.add(new SingleReqItem(r, (r.getAmt() - r.getPlayerAmt())));
 				}
 				else if(!r.isFutureReq)
@@ -192,10 +191,8 @@ public abstract class ItemRequirement extends Requirement
 					Mission[] preReqMissions = r.getPreReqMissions();
 					if(preReqMissions == null)
 						cannotContinue = true;
-					else {
-						satisfiedReqs.put(r.getId(), satisfiedReqs.getOrDefault(r.getId(), 0) + r.getAmt());
+					else
 						mustBeGatheredItems.addAll(Arrays.asList(preReqMissions));
-					}
 				}
 			}
 		}
