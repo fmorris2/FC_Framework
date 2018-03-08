@@ -9,7 +9,6 @@ import org.tribot.api2007.types.RSItemDefinition;
 
 import scripts.fc.framework.mission.Mission;
 import scripts.fc.framework.mission.impl.OneTaskMission;
-import scripts.fc.framework.quest.QuestBool;
 import scripts.fc.framework.task.Task;
 
 public class SingleReqItem extends ReqItem
@@ -67,6 +66,10 @@ public class SingleReqItem extends ReqItem
 	public int getAmt()
 	{
 		return amt;
+	}
+	
+	public void addToAmt(int amt) {
+		this.amt += amt;
 	}
 	
 	public int getPlayerAmt()
