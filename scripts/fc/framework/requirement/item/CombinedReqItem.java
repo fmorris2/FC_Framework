@@ -2,10 +2,7 @@ package scripts.fc.framework.requirement.item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.tribot.api2007.types.RSItem;
 
@@ -34,37 +31,9 @@ public class CombinedReqItem extends ReqItem
 		if(!checkBools()) //our bools say we don't need this requirement, so mark it as satisfied
 			return true;
 		
-		if(type == Type.OR) {
-			return one.isSatisfied() || two.isSatisfied();
-		}
-		
-		List<SingleReqItem> reducedNeeds = getReducedNeededReqItems();
-		return reducedNeeds.stream()
-					.allMatch(req -> req.isSatisfied());
+		return type == Type.OR ? one.isSatisfied() || two.isSatisfied() : one.isSatisfied() && two.isSatisfied();
 	}
-	
-	private List<SingleReqItem> getReducedNeededReqItems() {
-		Map<Integer, SingleReqItem> itemMap = new HashMap<>();
-		for(SingleReqItem i : one.getSingleReqItems()) {
-			if(i.checkBools()) {
-				itemMap.put(i.getId(), i);
-			}
-		}
-		
-		for(SingleReqItem i : two.getSingleReqItems()) {
-			if(i.checkBools()) {
-				if(itemMap.containsKey(i.getId())) {
-					itemMap.get(i.getId()).addToAmt(i.getAmt());
-				} else {
-					itemMap.put(i.getId(), i);
-				}
-			}
-		}
-		
-		return itemMap.values().stream()
-					.collect(Collectors.toList());
-	}
-	
+
 	@Override
 	public List<SingleReqItem> getSingleReqItems()
 	{
