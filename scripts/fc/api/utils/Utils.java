@@ -50,6 +50,10 @@ public class Utils
 		final File HOME_DIR = Util.getHomeDirectory();
 		final File APP_DATA_DIR = Util.getAppDataDirectory();
 		
+		General.println("WORKING DIR: " + WORKING_DIR);
+		General.println("HOME DIR: " + HOME_DIR);
+		General.println("APP_DATA_DIR: " + APP_DATA_DIR);
+		
 		if(WORKING_DIR.getName().equals(".tribot")) {
 			return WORKING_DIR.getAbsolutePath();
 		}
