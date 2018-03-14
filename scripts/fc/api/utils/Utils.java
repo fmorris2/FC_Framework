@@ -54,15 +54,15 @@ public class Utils
 		General.println("HOME DIR: " + HOME_DIR);
 		General.println("APP_DATA_DIR: " + APP_DATA_DIR);
 		
-		if(WORKING_DIR.getName().equals(".tribot")) {
+		if(WORKING_DIR.getName().contains("tribot")) {
 			return WORKING_DIR.getAbsolutePath();
 		}
 		
-		if(APP_DATA_DIR.getName().equals(".tribot")) {
+		if(APP_DATA_DIR.getName().contains("tribot")) {
 			return APP_DATA_DIR.getAbsolutePath();
 		}
 		
-		if(Arrays.stream(HOME_DIR.list()).noneMatch(n -> n.equals(".tribot"))) {
+		if(Arrays.stream(HOME_DIR.list()).noneMatch(n -> n.contains("tribot"))) {
 			return HOME_DIR.getAbsolutePath() + "\\AppData\\.tribot";
 		}
 		
