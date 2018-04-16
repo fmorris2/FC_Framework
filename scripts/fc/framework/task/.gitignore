@@ -2,3 +2,8 @@
 /PredictableInteraction.class
 /Task.class
 /TaskManager.class
+/BasicInteractionTask.class
+/FutureTaskPreparer.class
+/ItemsRequiredTask.class
+/ParentTask.class
+/SpaceRequiredTask.class

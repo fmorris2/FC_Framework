@@ -329,7 +329,7 @@ public class FCConditions
 	private static Condition bankLoadedCondition()
 	{
 		final int BANK_AMT_MASTER = 12;
-		final int BANK_AMT_CHILD = 5;
+		final int BANK_AMT_CHILD = 16;
 		
 		return new Condition()
 		{

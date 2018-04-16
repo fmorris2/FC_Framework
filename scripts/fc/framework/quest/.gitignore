@@ -4,3 +4,16 @@
 /QuestScriptManager.class
 /QuestState.class
 /SettingBool.class
+/AnonBool.class
+/AreaBool.class
+/BankBool.class
+/CombatLevelBool.class
+/InvBankBool$TYPE.class
+/InvBankBool.class
+/ItemBool.class
+/QuestBool$1.class
+/QuestBool$2.class
+/QuestJournalBool$JOURNAL_STATUS.class
+/QuestJournalBool.class
+/QuestMission.class
+/VarBitBool.class
