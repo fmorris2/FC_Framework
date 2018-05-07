@@ -18,16 +18,22 @@ public class InterfaceUtils
 {
 	public static RSInterface findContainingText(String text)
 	{
-		RSInterface[] inters = find(new Filter<RSInterface>()
-		{
+		return findContainingText(text, null);
+	}
+	
+	public static RSInterface findContainingText(String text, Filter<RSInterface> exceptions) {
+		RSInterface[] inters = find(new Filter<RSInterface>() {
 			@Override
-			public boolean accept(RSInterface i)
-			{
+			public boolean accept(RSInterface i) {
+				if (exceptions != null && exceptions.accept(i)) {
+					return false;
+				}
+
 				String interText = i.getText();
 				return interText != null && interText.contains(text);
-			}	
+			}
 		});
-		
+
 		return inters.length == 0 ? null : inters[0];
 	}
 	
@@ -83,8 +89,9 @@ public class InterfaceUtils
 	}
 	
 	public static boolean isQuestInterfaceUp()
-	{
+	{		
 		return Interfaces.get(QuestJournal.JOURNAL_MASTER) != null
-				|| (findContainingText("Congratulations!") != null && findContainingText("Quest Points:") != null);
+				|| (Interfaces.isInterfaceSubstantiated(findContainingText("You are awarded:")) 
+						&& Interfaces.isInterfaceSubstantiated(findContainingText("Quest Points:")));
 	}
 }
