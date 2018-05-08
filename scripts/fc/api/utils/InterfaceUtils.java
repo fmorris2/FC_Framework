@@ -88,10 +88,14 @@ public class InterfaceUtils
 		};
 	}
 	
+	private static boolean isInterfaceSubstantiated(RSInterface i) {
+		return Interfaces.isInterfaceValid(i.getIndex()) && i.isBeingDrawn() && !i.isHidden();
+	}
+	
 	public static boolean isQuestInterfaceUp()
 	{		
 		return Interfaces.get(QuestJournal.JOURNAL_MASTER) != null
-				|| (Interfaces.isInterfaceSubstantiated(findContainingText("You are awarded:")) 
-						&& Interfaces.isInterfaceSubstantiated(findContainingText("Quest Points:")));
+				|| (isInterfaceSubstantiated(findContainingText("You are awarded:")) 
+						&& isInterfaceSubstantiated(findContainingText("Quest Points:")));
 	}
 }
