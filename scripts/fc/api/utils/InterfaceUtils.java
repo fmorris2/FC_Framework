@@ -89,7 +89,7 @@ public class InterfaceUtils
 	}
 	
 	private static boolean isInterfaceSubstantiated(RSInterface i) {
-		return Interfaces.isInterfaceValid(i.getIndex()) && i.isBeingDrawn() && !i.isHidden();
+		return i != null && Interfaces.isInterfaceValid(i.getIndex()) && i.isBeingDrawn() && !i.isHidden();
 	}
 	
 	public static boolean isQuestInterfaceUp()
