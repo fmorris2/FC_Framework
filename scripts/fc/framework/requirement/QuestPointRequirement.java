@@ -31,7 +31,7 @@ public class QuestPointRequirement extends Requirement {
 				.sorted((q1, q2) -> q2.getQuestPointReward() - q1.getQuestPointReward()) //sort by highest qp rewards first
 				.forEach(mission -> {
 					if(requiredQuestPoints > 0 && !mission.hasReachedEndingCondition())
-						missions.add(mission);
+						super.missions.add(mission);
 						requiredQuestPoints -= mission.getQuestPointReward();
 				});
 			
