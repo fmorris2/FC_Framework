@@ -31,7 +31,7 @@ public class DialogueThread extends Thread
 {	
 	private static final int DIALOGUE_MASTER = 231;
 	private static final int PLAYER_DIALOGUE_MASTER = 217;
-	private static final int CUTSCENE_SETTING = 1021, CUTSCENE_VALUE = 192;
+	private static final int CUTSCENE_VARBIT = 542, CUTSCENE_VALUE = 1;
 	private static final int QUEST_REWARD_MASTER = 277, QUEST_REWARD_CLOSE = 15;
 	private static final long EST_WAIT_TIME = 3000, CUTSCENE_WAIT_THRESH = 10000;
 	
@@ -216,7 +216,7 @@ public class DialogueThread extends Thread
 	{
 		RSInterface continueInter = InterfaceUtils.findContainingText("to continue");
 		
-		return Game.getSetting(CUTSCENE_SETTING) == CUTSCENE_VALUE
+		return Game.getVarBit(CUTSCENE_VARBIT) == CUTSCENE_VALUE
 					|| (continueInter == null && NPCChat.getSelectOptionInterface() == null
 							&& (NPCChat.getMessage() != null || NPCChat.getName() != null));
 	}
