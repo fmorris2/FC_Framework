@@ -11,8 +11,10 @@ import scripts.fc.framework.script.FCMissionScript;
 
 public class QuestPointRequirement extends Requirement {
 
-	final int QP_REQUIRED;
-	final QuestMission[] MISSIONS;
+	private final int QP_REQUIRED;
+	private final QuestMission[] MISSIONS;
+	
+	private int requiredQuestPoints; 
 	
 	public QuestPointRequirement(FCMissionScript script, int requiredAmt, QuestMission... preReqMissions) {
 		super(script);
@@ -24,11 +26,14 @@ public class QuestPointRequirement extends Requirement {
 	public void checkReqs() {
 		if(Login.getLoginState() == STATE.INGAME)
 		{
-			int requiredQuestPoints = getQuestPoints() - QP_REQUIRED;
-			Arrays.stream(MISSIONS).forEach(mission -> {
-				if(requiredQuestPoints > 0 && !mission.hasReachedEndingCondition())
-					missions.add(mission);
-			});
+			requiredQuestPoints = getQuestPoints() - QP_REQUIRED;
+			Arrays.stream(MISSIONS)
+				.sorted((q1, q2) -> q2.getQuestPointReward() - q1.getQuestPointReward()) //sort by highest qp rewards first
+				.forEach(mission -> {
+					if(requiredQuestPoints > 0 && !mission.hasReachedEndingCondition())
+						missions.add(mission);
+						requiredQuestPoints -= mission.getQuestPointReward();
+				});
 			
 			hasCheckedReqs = true;
 		}
