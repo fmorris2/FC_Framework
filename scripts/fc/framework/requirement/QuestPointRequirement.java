@@ -26,7 +26,7 @@ public class QuestPointRequirement extends Requirement {
 	public void checkReqs() {
 		if(Login.getLoginState() == STATE.INGAME)
 		{
-			requiredQuestPoints = getQuestPoints() - QP_REQUIRED;
+			requiredQuestPoints = QP_REQUIRED - getQuestPoints();
 			Arrays.stream(MISSIONS)
 				.sorted((q1, q2) -> q2.getQuestPointReward() - q1.getQuestPointReward()) //sort by highest qp rewards first
 				.forEach(mission -> {
