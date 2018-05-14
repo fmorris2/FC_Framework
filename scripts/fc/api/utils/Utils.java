@@ -24,6 +24,7 @@ import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSMenuNode;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.RSVarBit;
 import org.tribot.util.Util;
 
 import scripts.fc.api.generic.FCConditions;
@@ -248,6 +249,11 @@ public class Utils
 		return Arrays.stream(threadArray)
 				.filter(t -> t != null && t.getName().contains("Mouse Movement"))
 				.findFirst().orElse(null);
+	}
+	
+	public static int getVarBit(int index) {
+		RSVarBit varBit = RSVarBit.get(index);
+		return varBit == null ? -1 : varBit.getValue();
 	}
 	
 	private static boolean isRemoveRoofsOn(RSInterface removeButton)

@@ -8,7 +8,6 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.input.Mouse;
-import org.tribot.api2007.Game;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
@@ -25,6 +24,7 @@ import scripts.fc.api.utils.ChooseOptionUtils;
 import scripts.fc.api.utils.DebugUtils;
 import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.utils.PlayerUtils;
+import scripts.fc.api.utils.Utils;
 import scripts.fc.api.wrappers.FCTiming;
 
 public class DialogueThread extends Thread
@@ -216,7 +216,7 @@ public class DialogueThread extends Thread
 	{
 		RSInterface continueInter = InterfaceUtils.findContainingText("to continue");
 		
-		return Game.getVarBit(CUTSCENE_VARBIT) == CUTSCENE_VALUE
+		return Utils.getVarBit(CUTSCENE_VARBIT) == CUTSCENE_VALUE
 					|| (continueInter == null && NPCChat.getSelectOptionInterface() == null
 							&& (NPCChat.getMessage() != null || NPCChat.getName() != null));
 	}

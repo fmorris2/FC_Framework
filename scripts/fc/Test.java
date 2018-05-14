@@ -2,6 +2,7 @@ package scripts.fc;
 
 import org.tribot.api2007.Game;
 import org.tribot.api2007.MessageListener;
+import org.tribot.api2007.types.RSVarBit;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
