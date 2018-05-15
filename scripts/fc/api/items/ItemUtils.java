@@ -3,9 +3,11 @@ package scripts.fc.api.items;
 import org.tribot.api.Clicking;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Filter;
+import org.tribot.api2007.Banking;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.GameTab;
+import org.tribot.api2007.GrandExchange;
 import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
@@ -73,6 +75,11 @@ public class ItemUtils
 	{
 		if(items.length > 0)
 		{
+			if(Banking.isBankScreenOpen() || Banking.isDepositBoxOpen())
+				Banking.close();
+			if(GrandExchange.getWindowState() != null)
+				GrandExchange.close();
+			
 			RSItemDefinition def = items[0].getDefinition();
 			
 			if(def != null && def.getActions().length > 1 && Clicking.click(items[0]))
