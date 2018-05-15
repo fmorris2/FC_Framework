@@ -12,6 +12,10 @@ public class EquipmentSet {
 		this.pieces = pieces;
 	}
 	
+	public EquipmentSet(EquipData... data) {
+		this.pieces = Arrays.stream(data).map(d -> new EquipmentPiece(d)).toArray(EquipmentPiece[]::new);
+	}
+	
 	public boolean hasSetEquipped() {
 		return Arrays.stream(pieces).allMatch(piece -> piece.hasMinimumAmtEquipped());
 	}
