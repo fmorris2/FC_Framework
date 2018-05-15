@@ -23,6 +23,12 @@ public class EquipmentPiece {
 		IDS_SET = new HashSet<>(Arrays.stream(ids).map(i -> new Integer(i)).boxed().collect(Collectors.toList()));
 	}
 	
+	public EquipmentPiece(EquipData data) {
+		SLOT = data.SLOT;
+		IDS_ARR = data.IDS;
+		IDS_SET = new HashSet<>(Arrays.stream(data.IDS).map(i -> new Integer(i)).boxed().collect(Collectors.toList()));
+	}
+	
 	public EquipmentPiece(Equipment.SLOTS slot, int minAmt, int startAmt, int... ids) {
 		SLOT = slot;
 		IDS_ARR = ids;
