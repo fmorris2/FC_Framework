@@ -13,6 +13,7 @@ import org.tribot.api2007.Banking;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WebWalking;
+import org.tribot.api2007.ext.Filters;
 
 import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.banking.FCBanking;
@@ -21,10 +22,12 @@ import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.ItemInteraction;
 import scripts.fc.api.items.FCItem;
 import scripts.fc.api.items.FCItemList;
+import scripts.fc.api.items.ItemUtils;
 import scripts.fc.api.travel.Travel;
 import scripts.fc.api.utils.DebugUtils;
 import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.data.Vars;
+import scripts.fc.framework.equipment.EquipmentSet;
 import scripts.fc.framework.goal.GoalManager;
 import scripts.fc.framework.mission.GoalMission;
 import scripts.fc.framework.mission.Mission;
@@ -81,14 +84,9 @@ public abstract class TaskManager extends GoalManager
 			if(currentTask == null)
 				return false;
 			
-			//check if this task requires a certain amount of inventory space
-			if(currentTask instanceof SpaceRequiredTask && !handleSpaceRequiredTask())
+			if(!handleTaskPreConditions())
 				return false;
-			
-			//check if this task requires items (used for quest stages)
-			if(currentTask instanceof ItemsRequiredTask && !handleItemsRequiredTask())
-				return false;
-			
+		
 			//handle appropriate task type
 			if(isAnticipativeTask(currentTask))
 				success = handleAnticipativeTask((AnticipativeTask)currentTask);
@@ -100,6 +98,44 @@ public abstract class TaskManager extends GoalManager
 			
 			return success;
 		}
+	}
+	
+	private boolean handleTaskPreConditions() {
+		//check if this task requires equipment
+		if(currentTask instanceof EquipmentRequiredTask && !handleEquipmentRequiredTask())
+			return false;
+		
+		//check if this task requires a certain amount of inventory space
+		if(currentTask instanceof SpaceRequiredTask && !handleSpaceRequiredTask())
+			return false;
+		
+		//check if this task requires items (used for quest stages)
+		if(currentTask instanceof ItemsRequiredTask && !handleItemsRequiredTask())
+			return false;
+		
+		return true;
+	}
+	
+	private boolean handleEquipmentRequiredTask() {
+		EquipmentRequiredTask t = (EquipmentRequiredTask)currentTask;
+		EquipmentSet equipSet = t.getNeededEquipmentSet();
+		FCItemList neededItems = equipSet.generateNeededEquipment();
+		FCItemList itemsInInventoryToEquip = equipSet.generatePiecesToEquipInInventory();
+		
+		if(neededItems.isEmpty()) {
+			if(itemsInInventoryToEquip.isEmpty()) {
+				return true;
+			} else {
+				itemsInInventoryToEquip.forEach(item -> {
+					General.println("Equipping " + item.getRSItem(true).getDefinition().getName());
+					ItemUtils.equipItem(Filters.Items.idEquals(item.getIds()));
+				});
+			}
+		} else { //Need to get equipment from bank
+			General.println("Need to get required equipment set");
+			getRequiredItems(neededItems.toArray(new FCItem[neededItems.size()]));
+		}
+		return false;
 	}
 	
 	private boolean handleSpaceRequiredTask()
@@ -141,18 +177,25 @@ public abstract class TaskManager extends GoalManager
 		return getRequiredItems(requiredItems);
 	}
 	
+	private boolean travelToAndOpenBank() {
+		if(!Banking.isInBank())
+			Travel.walkToBank();
+		else if(Banking.isDepositBoxOpen())
+			Banking.close();
+		else if((Banking.isBankScreenOpen() || (Banking.openBank())
+				&& FCTiming.waitCondition(() -> Banking.isBankScreenOpen(), 5000) && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 10000)))
+			return true;
+		
+		return false;
+	}
+	
 	private boolean getRequiredItems(FCItem[] reqItems)
 	{
 		General.println("Getting required items for task");
 		
 		boolean hasCheckedBank = fcScript.BANK_OBSERVER.hasCheckedBank;
 		
-		if(!Banking.isInBank())
-			Travel.walkToBank();
-		else if(Banking.isDepositBoxOpen())
-			Banking.close();
-		else if((Banking.isBankScreenOpen() || (Banking.openBank()) 
-				&& FCTiming.waitCondition(() -> Banking.isBankScreenOpen(), 5000) && Timing.waitCondition(FCConditions.BANK_LOADED_CONDITION, 10000)))
+		if(travelToAndOpenBank())
 		{
 			boolean withdrewReqs = withdrawReqs(reqItems);
 			

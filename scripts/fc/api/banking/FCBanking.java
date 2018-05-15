@@ -12,6 +12,7 @@ import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.items.FCItem;
 import scripts.fc.api.items.FCItemList;
+import scripts.fc.framework.quest.BankBool;
 
 public class FCBanking
 {	
@@ -108,6 +109,10 @@ public class FCBanking
 	
 	public static int getAmount(int id)
 	{
+		if(BankBool.bankObserver.hasCheckedBank) {
+			return BankBool.bankObserver.getCount(id);
+		}
+		
 		RSItem[] items = Banking.find(id);
 		
 		return items.length == 0 ? 0 : items[0].getStack();
