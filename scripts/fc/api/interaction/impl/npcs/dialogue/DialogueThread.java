@@ -40,7 +40,7 @@ public class DialogueThread extends Thread
 	private long lastCutsceneWait;
 	private ABC2Reaction cutsceneReaction = new ABC2Reaction(true, EST_WAIT_TIME);
 	
-	private boolean isSuccessful, isRunning = true, ignoreChatName, wentThroughDialogue;
+	private boolean isSuccessful, isRunning = true, ignoreChatName, wentThroughDialogue, ignoreNpc;
 	
 	private RSNPC npc;
 	private String npcName, action;
@@ -59,12 +59,17 @@ public class DialogueThread extends Thread
 		return this;
 	}
 	
+	public DialogueThread ignoreNpc(boolean n) {
+		ignoreNpc = n;
+		return this;
+	}
+	
 	public void run()
 	{
 		log("Thread started");
 		
 		//first, check if we need to click the npc
-		if(needsToClickNpc())
+		if(!ignoreNpc && needsToClickNpc())
 		{
 			log("Needs to click npc");
 			if(!clickNpc())
@@ -257,7 +262,7 @@ public class DialogueThread extends Thread
 		//while our character is moving toward the appropriate NPC, we must wait
 		final int TIMEOUT = 10000; //wait max 10 seconds for dialogue to start
 		long start = Timing.currentTimeMillis();
-		while(isInteractingWithNpc() && Login.getLoginState() == STATE.INGAME && Timing.timeFromMark(start) < TIMEOUT)
+		while(!ignoreNpc && isInteractingWithNpc() && Login.getLoginState() == STATE.INGAME && Timing.timeFromMark(start) < TIMEOUT)
 		{
 			DebugUtils.debugOnInterval("[DialogueThread] Waiting for dialogue to start....", 2500);
 			sleep(20, 30);
@@ -289,7 +294,7 @@ public class DialogueThread extends Thread
 	{
 		String npcChatName = NPCChat.getName();
 		
-		return (ignoreChatName && areDialogueInterfacesUp()) 
+		return ((ignoreNpc || ignoreChatName) && areDialogueInterfacesUp()) 
 					|| npcChatName != null && (npcChatName.equals(npcName) || npcChatName.equals(Player.getRSPlayer().getName()));
 	}
 	

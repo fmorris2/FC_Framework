@@ -15,7 +15,7 @@ public class NpcDialogue extends NpcInteraction
 	protected static Thread currentExecutingThread = null;
 	
 	private DialogueThread dialogueThread;
-	private boolean waitMainThread = true, ignoreChatName;
+	private boolean waitMainThread = true, ignoreChatName, ignoreNpc;
 	private int[] options;
 	
 	public NpcDialogue(String action, String name, int searchDistance, int... options)
@@ -36,7 +36,7 @@ public class NpcDialogue extends NpcInteraction
 		if(currentExecutingThread != null) //Avoid multiple threads from being started when one is still executing
 			return false;
 		
-		if(npc == null) //Can't interact with a null NPC
+		if(!ignoreNpc && npc == null) //Can't interact with a null NPC
 			return false;
 		
 		General.println("Starting dialogueThread...");
@@ -46,7 +46,7 @@ public class NpcDialogue extends NpcInteraction
 		if(abnormalClickToContinue != null && !abnormalClickToContinue.isHidden())
 			Clicking.click(abnormalClickToContinue);
 		
-		dialogueThread = new DialogueThread(npc, action, options).ignoreChatName(ignoreChatName);
+		dialogueThread = new DialogueThread(npc, action, options).ignoreChatName(ignoreChatName).ignoreNpc(ignoreNpc);
 		dialogueThread.start();
 		currentExecutingThread = dialogueThread;
 		
@@ -65,6 +65,10 @@ public class NpcDialogue extends NpcInteraction
 	public void setIgnoreChatName(boolean b)
 	{
 		ignoreChatName = b;
+	}
+	
+	public void setIgnoreNpc(boolean b) {
+		ignoreNpc = b;
 	}
 	
 	public boolean wentThroughDialogue()

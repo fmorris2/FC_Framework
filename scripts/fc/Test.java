@@ -1,8 +1,6 @@
 package scripts.fc;
 
-import org.tribot.api2007.Game;
 import org.tribot.api2007.MessageListener;
-import org.tribot.api2007.types.RSVarBit;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
@@ -33,8 +31,7 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	
 	protected int mainLogic()
 	{
-		//println(Game.getSetting(1021));
-		//Travel.webWalkTo(new RSTile(2959, 3338, 2));
+		//Travel.webWalkTo(new RSTile(3016, 3514, 0));
 		return 600;
 	}
 	
