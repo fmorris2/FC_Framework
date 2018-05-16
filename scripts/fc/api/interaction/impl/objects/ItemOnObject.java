@@ -5,11 +5,12 @@ import org.tribot.api.Timing;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.GameTab;
+import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSObject;
 
 import scripts.fc.api.generic.FCConditions;
@@ -53,6 +54,12 @@ public class ItemOnObject extends ObjectInteraction
 		
 		if(items.length > 0)
 		{
+			if(itemName == null) {
+				RSItemDefinition def = items[0].getDefinition();
+				if(def != null)
+					itemName = def.getName();
+			}
+			
 			if(!Game.isUptext(action + " " + itemName + " ->"))
 			{
 				General.println("Need to click item...");
