@@ -83,6 +83,7 @@ public class TeleportManager implements Loggable {
         */
     	List<TeleportMethod> useableTeleports = Arrays.stream(TeleportMethod.values())
     			.filter(method -> method.canUse() && (method.hasOnCharacter() || method.hasInBank()) && !getInstance().blacklistTeleportMethods.contains(method))
+    			.filter(method -> !method.isMembers()) //DON'T CONSIDER MEMBERS TELEPORTS UNTIL I IMPROVE SYSTEM
     			.collect(Collectors.toList());
     	
     	List<PathComputer> pathComputers = new ArrayList<>();

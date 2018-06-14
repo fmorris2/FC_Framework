@@ -101,6 +101,28 @@ public enum TeleportMethod implements Validatable {
     public TeleportLocation[] getDestinations() {
         return destinations;
     }
+    
+    public boolean isMembers() {
+    	switch(this) {
+		case ARDOUGNE_TELEPORT_TAB:
+		case ARDOUGNE_TELPORT_SPELL:
+		case CAMELOT_TELEPORT_SPELL:
+		case CAMELOT_TELEPORT_TAB:
+		case COMBAT_BRACE:
+		case DUELING_RING:
+		case ECTOPHIAL:
+		case FALADOR_TELEPORT_TAB:
+		case GAMES_NECKLACE:
+		case GLORY:
+		case LUMBRIDGE_TELEPORT_TAB:
+		case RING_OF_WEALTH:
+		case SKILLS_NECKLACE:
+		case VARROCK_TELEPORT_TAB:
+			return true;
+		default:
+			return false;
+    	}
+    }
 
     @Override
     public boolean canUse()

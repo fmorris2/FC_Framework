@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -47,6 +46,7 @@ public class Utils
 	private static Image paintImage;
 	
 	public static String getTribotDir() {
+		/*
 		final File WORKING_DIR = Util.getWorkingDirectory();
 		final File HOME_DIR = Util.getHomeDirectory();
 		final File APP_DATA_DIR = Util.getAppDataDirectory();
@@ -55,19 +55,24 @@ public class Utils
 		General.println("HOME DIR: " + HOME_DIR);
 		General.println("APP_DATA_DIR: " + APP_DATA_DIR);
 		
-		if(WORKING_DIR.getName().contains("tribot")) {
+		if(WORKING_DIR.toString().contains("tribot")) {
+			General.println("USING WORKING DIR");
 			return WORKING_DIR.getAbsolutePath();
 		}
 		
-		if(APP_DATA_DIR.getName().contains("tribot")) {
+		if(APP_DATA_DIR.toString().contains("tribot")) {
+			General.println("USING APP DATA DIR");
 			return APP_DATA_DIR.getAbsolutePath();
 		}
 		
 		if(Arrays.stream(HOME_DIR.list()).noneMatch(n -> n.contains("tribot"))) {
+			General.println("USING HOME DIR");
 			return HOME_DIR.getAbsolutePath() + "\\AppData\\.tribot";
 		}
 		
 		return HOME_DIR.getAbsolutePath() + "\\.tribot";
+		*/
+		return Util.getWorkingDirectory().getAbsolutePath();
 	}
 	
 	public static void handleGui(final JFrame gui)
@@ -83,13 +88,13 @@ public class Utils
 					gui.setAlwaysOnTop(true);
 					
 					//Position GUI in center of screen
-					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();		
+					final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();		
 					gui.setLocation((int)(screenSize.getWidth() / 2), (int)(screenSize.getHeight() / 2));
 					
 					//Make GUI visible
 					gui.setVisible(true);
 				} 
-				catch (Exception e)
+				catch (final Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -97,7 +102,7 @@ public class Utils
 		});
 	}
 	
-	public static Image loadImage(String url)
+	public static Image loadImage(final String url)
 	{	
 		paintImage = null;
 		
@@ -111,7 +116,7 @@ public class Utils
                 	paintImage = ImageIO.read(new URL(url));
 					this.finalize();
 				} 
-                catch (Throwable e) 
+                catch (final Throwable e) 
                 {
 					e.printStackTrace();
 				}
@@ -126,15 +131,15 @@ public class Utils
 		return WorldHopper.isMembers(WorldHopper.getWorld());
 	}
 	
-	public static boolean isInBuilding(Positionable p)
+	public static boolean isInBuilding(final Positionable p)
 	{
-		RSTile t = p.getPosition().toLocalTile();
+		final RSTile t = p.getPosition().toLocalTile();
 		return BankHelper.isInBuilding(t, Game.getSceneFlags());
 	}
 	
-	public static RSMenuNode getOption(String str)
+	public static RSMenuNode getOption(final String str)
 	{
-		for(RSMenuNode node : ChooseOption.getMenuNodes())
+		for(final RSMenuNode node : ChooseOption.getMenuNodes())
 		{
 			if(node.getAction().equalsIgnoreCase(str))
 			{
@@ -147,10 +152,10 @@ public class Utils
 	
 	public static int getWildyLevel()
 	{
-		RSInterface inter = Interfaces.get(90, 26);
+		final RSInterface inter = Interfaces.get(90, 26);
 		if (inter != null)
 		{
-			String text = inter.getText();
+			final String text = inter.getText();
 			
 			return text == null || text.length() < 8 ? 0 : Integer.parseInt(text.substring(7));
 		} else
@@ -161,7 +166,7 @@ public class Utils
 
 	public static boolean isMember()
 	{
-		for(int w : FREE_WORLDS)
+		for(final int w : FREE_WORLDS)
 		{
 			if(Game.getCurrentWorld() == w)
 			{
@@ -175,24 +180,24 @@ public class Utils
 	public static void turnSoundDown()
 	{
 		General.println("Turn sound down");
-		Object[][] audioSettings = {{168, "Adjust Music Volume"}, {169, "Adjust Sound Effect Volume"}, {872, "Adjust Area Sound Effect Volume"}};
+		final Object[][] audioSettings = {{168, "Adjust Music Volume"}, {169, "Adjust Sound Effect Volume"}, {872, "Adjust Area Sound Effect Volume"}};
 		
-		Object[][] needToChange = Arrays.stream(audioSettings)
+		final Object[][] needToChange = Arrays.stream(audioSettings)
 			.filter(o -> Game.getSetting((int)o[0]) < 4)
 			.toArray(Object[][]::new);
 		
 		if(needToChange.length == 0 || !GameTab.open(TABS.OPTIONS))
 			return;
 				
-		RSInterface[] soundButton = InterfaceUtils.find(FCFilters.containsAction("Audio"));
+		final RSInterface[] soundButton = InterfaceUtils.find(FCFilters.containsAction("Audio"));
 		if(soundButton.length == 0 || !Clicking.click(soundButton[0]))
 			return;
 		
 		General.sleep(600, 1200);
 		
-		for(Object[] o : needToChange)
+		for(final Object[] o : needToChange)
 		{
-			RSInterface[] button = InterfaceUtils.find(FCFilters.containsAction((String)o[1]));
+			final RSInterface[] button = InterfaceUtils.find(FCFilters.containsAction((String)o[1]));
 			if(button.length > 0 && Clicking.click(button[0]))
 				continue;
 		}
@@ -204,16 +209,16 @@ public class Utils
 		if(!GameTab.open(TABS.OPTIONS))
 			return;
 		
-		RSInterface advancedOptions = Interfaces.get(OPTIONS_TAB_MASTER, ADVANCED_CHILD);
+		final RSInterface advancedOptions = Interfaces.get(OPTIONS_TAB_MASTER, ADVANCED_CHILD);
 		if(advancedOptions != null && Clicking.click(advancedOptions) && Timing.waitCondition(FCConditions.interfaceUp(SELECTION_MASTER), 3000))
 		{
-			RSInterface master = Interfaces.get(SELECTION_MASTER);
-			RSInterface removeRoofs = master == null ? null : master.getChild(REMOVE_ROOFS_CHILD);
+			final RSInterface master = Interfaces.get(SELECTION_MASTER);
+			final RSInterface removeRoofs = master == null ? null : master.getChild(REMOVE_ROOFS_CHILD);
 			
 			if(removeRoofs != null)
 			{
-				RSInterface exitButton = master.getChild(EXIT_CHILD);
-				RSInterface exitComp = exitButton == null ? null : exitButton.getChild(EXIT_COMP);
+				final RSInterface exitButton = master.getChild(EXIT_CHILD);
+				final RSInterface exitComp = exitButton == null ? null : exitButton.getChild(EXIT_COMP);
 				
 				//check if remove roofs is toggled
 				if(isRemoveRoofsOn(removeRoofs))
@@ -235,8 +240,8 @@ public class Utils
 	
 	public static Thread getMainScriptThread()
 	{
-		java.util.Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
+		final java.util.Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+		final Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
 		return Arrays.stream(threadArray)
 				.filter(t -> t != null && t.getName().contains("Script"))
 				.findFirst().orElse(null);
@@ -244,19 +249,19 @@ public class Utils
 	
 	public static Thread getMouseMovementThread()
 	{
-		java.util.Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
+		final java.util.Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+		final Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
 		return Arrays.stream(threadArray)
 				.filter(t -> t != null && t.getName().contains("Mouse Movement"))
 				.findFirst().orElse(null);
 	}
 	
-	public static int getVarBit(int index) {
-		RSVarBit varBit = RSVarBit.get(index);
+	public static int getVarBit(final int index) {
+		final RSVarBit varBit = RSVarBit.get(index);
 		return varBit == null ? -1 : varBit.getValue();
 	}
 	
-	private static boolean isRemoveRoofsOn(RSInterface removeButton)
+	private static boolean isRemoveRoofsOn(final RSInterface removeButton)
 	{
 		return removeButton.getTextureID() == REMOVE_BUTTON_TEXTURE;
 	}
