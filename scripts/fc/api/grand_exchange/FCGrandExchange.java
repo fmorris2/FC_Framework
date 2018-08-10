@@ -23,25 +23,25 @@ public class FCGrandExchange
 	private static final int GE_MASTER = 465;
 	private static final int[] SLOTS = {7,8,9,10,11,12,13,14};
 	private static final int BUY_COMP = 0, SELL_COMP = 1;
-	private static final int BUY_OFFER_ITEM_SELECTION_MASTER = 162, BUY_OFFER_ITEM_SELECTION_COMP = 42;
+	private static final int BUY_OFFER_ITEM_SELECTION_MASTER = 162, BUY_OFFER_ITEM_SELECTION_COMP = 45;
 	
-	public static boolean offer(String name, int price, int quantity, boolean sell)
+	public static boolean offer(final String name, final int price, final int quantity, final boolean sell)
 	{
 		//check if we need to get to main selection window
 		if(GrandExchange.getWindowState() != WINDOW_STATE.SELECTION_WINDOW && !GrandExchange.goToSelectionWindow(true))
 			return false;
 		
 		//check if we have an empty offer and we clicked the offer
-		RSGEOffer emptyOffer = getEmptyOffer();
+		final RSGEOffer emptyOffer = getEmptyOffer();
 		if(emptyOffer == null || !clickOffer(emptyOffer, sell))
 			return false;
 		
 		return !sell ? buyItem(name, price, quantity) : sellItem(name, price, quantity);
 	}
 	
-	private static boolean buyItem(String name, int price, int quantity)
+	private static boolean buyItem(final String name, final int price, final int quantity)
 	{
-		RSInterface typeInter = InterfaceUtils.findContainingText("What would you like to buy?");
+		final RSInterface typeInter = InterfaceUtils.findContainingText("What would you like to buy?");
 		if(typeInter == null)
 			return false;
 		
@@ -54,7 +54,7 @@ public class FCGrandExchange
 		if(!FCTiming.waitCondition(() -> getItemSelection(name) != null, 1800))
 			return false;
 		
-		RSInterface item = getItemSelection(name);
+		final RSInterface item = getItemSelection(name);
 		
 		if(item == null || !Clicking.click(item))
 			return false;
@@ -70,25 +70,25 @@ public class FCGrandExchange
 				&& GrandExchange.confirmOffer();
 	}
 	
-	private static RSInterface getItemSelection(String name)
+	private static RSInterface getItemSelection(final String name)
 	{
-		RSInterface itemSelection = Interfaces.get(BUY_OFFER_ITEM_SELECTION_MASTER, BUY_OFFER_ITEM_SELECTION_COMP);
-		RSInterface[] children = itemSelection == null ? null : itemSelection.getChildren();
+		final RSInterface itemSelection = Interfaces.get(BUY_OFFER_ITEM_SELECTION_MASTER, BUY_OFFER_ITEM_SELECTION_COMP);
+		final RSInterface[] children = itemSelection == null ? null : itemSelection.getChildren();
 		return children == null ? null 
 				: Arrays.stream(itemSelection.getChildren())
-					.filter(i -> {if(i == null) return false; String text = i.getText(); return text != null && text.equalsIgnoreCase(name);})
+					.filter(i -> {if(i == null) return false; final String text = i.getText(); return text != null && text.equalsIgnoreCase(name);})
 					.findFirst().orElse(null);
 	}
 	
-	private static boolean sellItem(String name, int price, int quantity)
+	private static boolean sellItem(final String name, final int price, final int quantity)
 	{
 		return false;
 	}
 	
-	private static boolean clickOffer(RSGEOffer offer, boolean sell)
+	private static boolean clickOffer(final RSGEOffer offer, final boolean sell)
 	{
-		RSInterface slot = Interfaces.get(GE_MASTER, SLOTS[offer.getIndex()]);
-		RSInterface offerButton = slot == null ? null : slot.getChild(sell ? SELL_COMP : BUY_COMP);
+		final RSInterface slot = Interfaces.get(GE_MASTER, SLOTS[offer.getIndex()]);
+		final RSInterface offerButton = slot == null ? null : slot.getChild(sell ? SELL_COMP : BUY_COMP);
 		if(offerButton != null)
 			return Clicking.click(offerButton) && FCTiming.waitCondition(
 					() -> GrandExchange.getWindowState() == WINDOW_STATE.NEW_OFFER_WINDOW 

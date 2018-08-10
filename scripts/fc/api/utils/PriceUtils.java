@@ -23,17 +23,17 @@ public class PriceUtils
 		
 		General.println("[Pricing] Getting official GE price for item id " + itemId);
 	    try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemId).openStream()))) {
-	        Matcher matcher = Pattern.compile(".*\"price\":\"?(\\d+\\,?\\.?\\d*)([k|m]?)\"?},\"today\".*").matcher(reader.readLine());
+	        final Matcher matcher = Pattern.compile(".*\"price\":\"?(\\d+\\,?\\.?\\d*)([k|m]?)\"?},\"today\".*").matcher(reader.readLine());
 	        if (matcher.matches()) 
 	        {
-	            double price = Double.parseDouble(matcher.group(1).replace(",",""));
-	            String suffix = matcher.group(2);
-	            int parsed = (int) (suffix.isEmpty() ? price : price * (suffix.charAt(0) == 'k' ? 1000 : 1000000));
+	            final double price = Double.parseDouble(matcher.group(1).replace(",",""));
+	            final String suffix = matcher.group(2);
+	            final int parsed = (int) (suffix.isEmpty() ? price : price * (suffix.charAt(0) == 'k' ? 1000 : 1000000));
 	            PRICE_CACHE.put(itemId, parsed);
 	            return parsed;
 	        }
 	    } 
-	    catch (IOException e) 
+	    catch (final IOException e) 
 	    {
 	        e.printStackTrace();
 	    }
@@ -41,12 +41,12 @@ public class PriceUtils
 		return -1;
     }
 	
-	public static String getCondensedNumber(long amt) 
+	public static String getCondensedNumber(final long amt) 
 	{
 		double convertedAmount;
 		String formattedAmount;
 		String tag;
-		DecimalFormat decimalFormat = new DecimalFormat(".##");
+		final DecimalFormat decimalFormat = new DecimalFormat(".##");
 		
 		//IF(gold amount is under 1k)
 		if(amt < 1000)

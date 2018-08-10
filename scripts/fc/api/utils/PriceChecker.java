@@ -1,13 +1,13 @@
 package scripts.fc.api.utils;
 
-import org.tribot.api.General;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.tribot.api.General;
 
 public class PriceChecker
 {
@@ -22,32 +22,32 @@ public class PriceChecker
 			"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246",
 			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A" };
 
-	public static int getOSbuddyPrice(int itemID)
+	public static int getOSbuddyPrice(final int itemID)
 	{
 		return handleResult(
 				"https://api.rsbuddy.com/grandExchange?a=guidePrice&i=",
 				itemID, "overall");
 	}
 
-	public static int getGEPrice(int itemID)
+	public static int getGEPrice(final int itemID)
 	{
 		return handleResult(
 				"http://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=",
 				itemID, "price");
 	}
 
-	private static int handleResult(String url, int itemID, String key)
+	private static int handleResult(final String url, final int itemID, final String key)
 	{
 		if(PRICE_CACHE.containsKey(itemID))
 			return PRICE_CACHE.get(itemID);
 		
-		String queryResult = httpRequest(url + itemID);
+		final String queryResult = httpRequest(url + itemID);
 		if (queryResult != null)
 		{
-			HashMap<String, String> results = JSONToMap(queryResult);
+			final HashMap<String, String> results = JSONToMap(queryResult);
 			if (results.containsKey(key))
 			{
-				int price = Integer.parseInt(results.get(key));
+				final int price = Integer.parseInt(results.get(key));
 				PRICE_CACHE.put(itemID, price);
 				return price;
 			}
@@ -61,12 +61,12 @@ public class PriceChecker
 		{
 			String content = "";
 			String line;
-			URLConnection con = new URL(url).openConnection();
+			final URLConnection con = new URL(url).openConnection();
 			con.setConnectTimeout(10000);
 			con.setReadTimeout(10000);
 			con.setRequestProperty("User-Agent",
 					userAgents[General.random(0, userAgents.length - 1)]);
-			BufferedReader in = new BufferedReader(new InputStreamReader(
+			final BufferedReader in = new BufferedReader(new InputStreamReader(
 					con.getInputStream()));
 			while ((line = in.readLine()) != null)
 			{
@@ -74,21 +74,21 @@ public class PriceChecker
 			}
 			in.close();
 			return (content.isEmpty()) ? null : content;
-		} catch (Exception e)
+		} catch (final Exception e)
 		{
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private static HashMap<String, String> JSONToMap(String json)
+	private static HashMap<String, String> JSONToMap(final String json)
 	{
-		HashMap<String, String> map = new HashMap<>();
-		String[] parts = json.replace("{", "").replace("}", "")
+		final HashMap<String, String> map = new HashMap<>();
+		final String[] parts = json.replace("{", "").replace("}", "")
 				.replaceAll("\"", "").split(",");
-		for (String part : parts)
+		for (final String part : parts)
 		{
-			String[] pieces = part.split(":");
+			final String[] pieces = part.split(":");
 			if (map.containsKey(pieces[0]))
 			{
 				int c = 1;
