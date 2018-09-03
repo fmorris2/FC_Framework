@@ -73,10 +73,11 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition invAmountChanged(String name, int prevCount)
+	public static Condition invAmountChanged(final String name, final int prevCount)
 	{
 		return new Condition()
 		{
+			@Override
 			public boolean active()
 			{
 				General.sleep(100);
@@ -89,6 +90,7 @@ public class FCConditions
 	{
 		return new Condition()
 		{
+			@Override
 			public boolean active()
 			{
 				General.sleep(100);
@@ -101,6 +103,7 @@ public class FCConditions
 	{
 		return new Condition()
 		{
+			@Override
 			public boolean active()
 			{
 				General.sleep(100);
@@ -109,7 +112,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition interTextNotContains(int master, int child, String text)
+	public static Condition interTextNotContains(final int master, final int child, final String text)
 	{
 		return new Condition()
 		{
@@ -117,7 +120,7 @@ public class FCConditions
 			public boolean active()
 			{
 				General.sleep(100);
-				RSInterface inter = Interfaces.get(master, child);
+				final RSInterface inter = Interfaces.get(master, child);
 				return inter != null && !inter.getText().equals(text);
 			}
 
@@ -137,7 +140,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition varbitChanged(int varbit, int value)
+	public static Condition varbitChanged(final int varbit, final int value)
 	{
 		return new Condition()
 		{
@@ -150,7 +153,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition tradingWithCondition(String name)
+	public static Condition tradingWithCondition(final String name)
 	{
 		return new Condition()
 		{
@@ -163,19 +166,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition onWorldCondition(int world)
-	{
-		return new Condition()
-		{
-			public boolean active()
-			{
-				General.sleep(100);
-				return WorldHopper.getWorld() == world;
-			}
-		};
-	}
-	
-	public static Condition interfaceNotUp(int id)
+	public static Condition onWorldCondition(final int world)
 	{
 		return new Condition()
 		{
@@ -183,13 +174,26 @@ public class FCConditions
 			public boolean active()
 			{
 				General.sleep(100);
-				RSInterface inter = Interfaces.get(id);
+				return WorldHopper.getWorld() == world || WorldHopper.getWorld() % 100 == world;
+			}
+		};
+	}
+	
+	public static Condition interfaceNotUp(final int id)
+	{
+		return new Condition()
+		{
+			@Override
+			public boolean active()
+			{
+				General.sleep(100);
+				final RSInterface inter = Interfaces.get(id);
 				return inter == null || inter.isHidden();
 			}		
 		};
 	}
 	
-	public static Condition inventoryNotContains(int id)
+	public static Condition inventoryNotContains(final int id)
 	{
 		return new Condition()
 		{
@@ -202,7 +206,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition inventoryNotContains(String name)
+	public static Condition inventoryNotContains(final String name)
 	{
 		return new Condition()
 		{
@@ -215,7 +219,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition isEquipped(int id)
+	public static Condition isEquipped(final int id)
 	{
 		return new Condition()
 		{
@@ -228,7 +232,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition settingEqualsCondition(int index, int setting)
+	public static Condition settingEqualsCondition(final int index, final int setting)
 	{
 		return new Condition()
 		{
@@ -241,7 +245,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition settingNotEqualsCondition(int index, int setting)
+	public static Condition settingNotEqualsCondition(final int index, final int setting)
 	{
 		return new Condition()
 		{
@@ -254,7 +258,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition withinDistanceOfTile(Positionable p, int threshold)
+	public static Condition withinDistanceOfTile(final Positionable p, final int threshold)
 	{
 		return new Condition()
 		{
@@ -267,7 +271,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition yCoordGreaterThan(int y)
+	public static Condition yCoordGreaterThan(final int y)
 	{
 		return new Condition()
 		{
@@ -280,7 +284,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition yCoordLessThan(int y)
+	public static Condition yCoordLessThan(final int y)
 	{
 		return new Condition()
 		{
@@ -301,7 +305,7 @@ public class FCConditions
 			public boolean active()
 			{
 				General.sleep(100);
-				RSInterface inter = Interfaces.get(162, 32);
+				final RSInterface inter = Interfaces.get(162, 32);
 				return inter != null && !inter.isHidden();
 			}
 		};
@@ -315,8 +319,8 @@ public class FCConditions
 			public boolean active()
 			{
 				General.sleep(100);
-				RSCharacter interacting  = Player.getRSPlayer().getInteractingCharacter();
-				RSCharacter interactingsInteracting = interacting == null ? null : interacting.getInteractingCharacter();
+				final RSCharacter interacting  = Player.getRSPlayer().getInteractingCharacter();
+				final RSCharacter interactingsInteracting = interacting == null ? null : interacting.getInteractingCharacter();
 				
 				return Player.getRSPlayer().isInCombat() ||
 							(interacting != null 
@@ -337,9 +341,9 @@ public class FCConditions
 			public boolean active()
 			{
 				General.sleep(100);
-				RSInterface inter = Interfaces.get(BANK_AMT_MASTER, BANK_AMT_CHILD);
-				String text = inter == null || inter.isHidden() ? null : inter.getText();
-				int amt = text == null || text.length() == 0 ? -1 : Integer.parseInt(text);
+				final RSInterface inter = Interfaces.get(BANK_AMT_MASTER, BANK_AMT_CHILD);
+				final String text = inter == null || inter.isHidden() ? null : inter.getText();
+				final int amt = text == null || text.length() == 0 ? -1 : Integer.parseInt(text);
 				return amt > 0 && amt == Banking.getAll().length;
 			}
 		};
@@ -362,6 +366,7 @@ public class FCConditions
 	{
 		return new Condition()
 		{
+			@Override
 			public boolean active()
 			{
 				General.sleep(100);
@@ -374,6 +379,7 @@ public class FCConditions
 	{
 		return new Condition()
 		{
+			@Override
 			public boolean active()
 			{
 				General.sleep(100);
@@ -383,7 +389,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition interfaceUp(int id)
+	public static Condition interfaceUp(final int id)
 	{
 		return new Condition()
 		{
@@ -405,8 +411,8 @@ public class FCConditions
 			public boolean active()
 			{
 				General.sleep(100);
-				RSCharacter target = Combat.getTargetEntity();
-				RSCharacter rangedTarget = Player.getRSPlayer().getInteractingCharacter();
+				final RSCharacter target = Combat.getTargetEntity();
+				final RSCharacter rangedTarget = Player.getRSPlayer().getInteractingCharacter();
 				return target != null && target.getHealthPercent() <= 0 ||
 						(rangedTarget != null && rangedTarget.isInCombat()
 						&& rangedTarget.isInteractingWithMe() && rangedTarget.getHealthPercent() <= 0);
@@ -436,7 +442,7 @@ public class FCConditions
 			public boolean active()
 			{
 				Timing.waitCondition(IN_DIALOGUE_CONDITION, 1200);
-				RSInterface continueInter = InterfaceUtils.findContainingText("Click here to continue");
+				final RSInterface continueInter = InterfaceUtils.findContainingText("Click here to continue");
 				
 				if(Login.getLoginState() != STATE.INGAME) {
 					return true;
@@ -454,13 +460,13 @@ public class FCConditions
 			@Override
 			public boolean active() {
 				General.sleep(100);
-				RSInterface pleaseWait = InterfaceUtils.findContainingText("Please wait...");
+				final RSInterface pleaseWait = InterfaceUtils.findContainingText("Please wait...");
 				return pleaseWait == null || pleaseWait.isHidden();
 			}
 		};
 	}
 	
-	public static Condition positionEquals(Positionable p)
+	public static Condition positionEquals(final Positionable p)
 	{
 		return new Condition()
 		{
@@ -568,7 +574,7 @@ public class FCConditions
 		};
 	}
 
-	public static Condition tileOnScreen(RSTile tile)
+	public static Condition tileOnScreen(final RSTile tile)
 	{
 		return new Condition()
 		{
@@ -581,7 +587,7 @@ public class FCConditions
 		};
 	}
 
-	public static Condition uptextContains(String str)
+	public static Condition uptextContains(final String str)
 	{
 		return new Condition()
 		{
@@ -594,7 +600,7 @@ public class FCConditions
 		};
 	}
 
-	public static Condition tradeContains(String name, boolean other)
+	public static Condition tradeContains(final String name, final boolean other)
 	{
 		return new Condition()
 		{
@@ -607,7 +613,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition tradeContains(int id, boolean other)
+	public static Condition tradeContains(final int id, final boolean other)
 	{
 		return new Condition()
 		{
@@ -620,7 +626,7 @@ public class FCConditions
 		};
 	}
 	
-	public static Condition tradeContains(String name, int amt, boolean other)
+	public static Condition tradeContains(final String name, final int amt, final boolean other)
 	{
 		return new Condition()
 		{

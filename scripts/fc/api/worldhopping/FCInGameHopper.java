@@ -77,9 +77,8 @@ public class FCInGameHopper
 					return clickWorld(WORLD_LIST.getChild(WORLD_CHILDREN_CACHE.get(world)), world) //Can't use cached TARGET_WORLD due to it's pos changing on scroll
 							&& Timing.waitCondition(FCConditions.IN_GAME_CONDITION, 6000);
 			}
-			catch(Exception e){}
+			catch(final Exception e){}
 		}
-			
 		return false;
 	}
 	
@@ -110,14 +109,14 @@ public class FCInGameHopper
 		return false;
 	}
 	
-	private static boolean isWorldVisible(RSInterface targetWorld)
+	private static boolean isWorldVisible(final RSInterface targetWorld)
 	{	
-		Rectangle rect = targetWorld.getAbsoluteBounds();
+		final Rectangle rect = targetWorld.getAbsoluteBounds();
 		
 		return rect.y > MIN_Y && rect.y < MAX_Y;
 	}
 	
-	private static boolean scrollWorldIntoView(RSInterface worldList, RSInterface targetWorld)
+	private static boolean scrollWorldIntoView(final RSInterface worldList, final RSInterface targetWorld)
 	{
 		final long START_TIME = Timing.currentTimeMillis();
 		final long TIMEOUT = 7000;
@@ -144,7 +143,7 @@ public class FCInGameHopper
 		return true;
 	}
 	
-	private static boolean clickWorld(RSInterface targetWorld, int worldNum)
+	private static boolean clickWorld(final RSInterface targetWorld, final int worldNum)
 	{
 		if(Clicking.hover(targetWorld) && Timing.waitCondition(FCConditions.uptextContains(""+worldNum), 1000))
 		{
@@ -161,7 +160,7 @@ public class FCInGameHopper
 		return false;
 	}
 	
-	private static void loadCache(RSInterface worldList)
+	private static void loadCache(final RSInterface worldList)
 	{	
 		final int FIRST_WORLD_COMPONENT = 0;
 		final int WORLD_NUMBER_OFFSET = 2;
@@ -169,8 +168,8 @@ public class FCInGameHopper
 		
 		for(int i = FIRST_WORLD_COMPONENT; i < worldList.getChildren().length; i += WORLD_OFFSET)
 		{
-			RSInterface mainChild = worldList.getChild(i);
-			RSInterface worldNumChild = worldList.getChild(i + WORLD_NUMBER_OFFSET);
+			final RSInterface mainChild = worldList.getChild(i);
+			final RSInterface worldNumChild = worldList.getChild(i + WORLD_NUMBER_OFFSET);
 			
 			if(mainChild != null && worldNumChild != null)
 				WORLD_CHILDREN_CACHE.put(Integer.parseInt(worldNumChild.getText()), i);
