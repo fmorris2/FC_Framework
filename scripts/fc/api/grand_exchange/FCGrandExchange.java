@@ -75,7 +75,7 @@ public class FCGrandExchange
 		final RSInterface itemSelection = Interfaces.get(BUY_OFFER_ITEM_SELECTION_MASTER, BUY_OFFER_ITEM_SELECTION_COMP);
 		final RSInterface[] children = itemSelection == null ? null : itemSelection.getChildren();
 		return children == null ? null 
-				: Arrays.stream(itemSelection.getChildren())
+				: Arrays.stream(children)
 					.filter(i -> {if(i == null) return false; final String text = i.getText(); return text != null && text.equalsIgnoreCase(name);})
 					.findFirst().orElse(null);
 	}
