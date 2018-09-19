@@ -50,14 +50,14 @@ public class GEOrder
 	private long lastOffer;
 	private boolean makingSpace;
 	
-	public GEOrder(FCBankObserver obs, List<SingleReqItem> reqItems)
+	public GEOrder(final FCBankObserver obs, final List<SingleReqItem> reqItems)
 	{
 		BANK_OBSERVER = obs;
 		ORDER_ITEMS = reqItems.stream().map(reqItem -> new GEOrderItem(reqItem)).collect(Collectors.toList());
 		attemptToCombine();
 	}
 	
-	public GEOrder(FCBankObserver obs, GEOrderItem... items)
+	public GEOrder(final FCBankObserver obs, final GEOrderItem... items)
 	{
 		BANK_OBSERVER = obs;
 		ORDER_ITEMS = Arrays.asList(items);
@@ -70,8 +70,8 @@ public class GEOrder
 		{
 			for(int z = i + 1; z < ORDER_ITEMS.size(); z++)
 			{
-				GEOrderItem one = ORDER_ITEMS.get(i);
-				GEOrderItem two = ORDER_ITEMS.get(z);
+				final GEOrderItem one = ORDER_ITEMS.get(i);
+				final GEOrderItem two = ORDER_ITEMS.get(z);
 				if(two.ID == one.ID)
 				{
 					General.println("GEOrder: Able to combine " + one + " with " + two);
@@ -104,7 +104,7 @@ public class GEOrder
 	private void finishOrder()
 	{
 		General.println("[GEOrder] Finish order");
-		int invSpace = Inventory.getAll().length;
+		final int invSpace = Inventory.getAll().length;
 		
 		if(GrandExchange.getWindowState() != null)
 			GrandExchange.close();
@@ -133,10 +133,16 @@ public class GEOrder
 	{
 		status = GEOrder_Status.BUY_ITEMS;
 		
-		if(GrandExchange.getWindowState() == null && InterfaceUtils.isQuestInterfaceUp())
+		final boolean GE_WINDOW_OPEN = GrandExchange.getWindowState() != null;
+		if(!GE_WINDOW_OPEN && InterfaceUtils.isQuestInterfaceUp())
 		{
 			General.println("[GEOrder] Closing quest interface");
 			InterfaceUtils.closeQuestInterface();
+		}
+		else if(!GE_WINDOW_OPEN && InterfaceUtils.isQuestJournalGuideUp())
+		{
+			General.println("[GEOrder] Closing quest journal guide interface");
+			InterfaceUtils.closeQuestJournalGuide();
 		}
 		else if(makingSpace)
 			makeSpace();
@@ -173,7 +179,7 @@ public class GEOrder
 	{
 		General.println("Modifying prices...");
 		Arrays.stream(getUnsoldOffers())
-			.forEach(unsold -> {GEOrderItem orderItem = getOrderItemForOffer(unsold); if(unsold.click("Abort offer") && orderItem != null){orderItem.resubmit();}});
+			.forEach(unsold -> {final GEOrderItem orderItem = getOrderItemForOffer(unsold); if(unsold.click("Abort offer") && orderItem != null){orderItem.resubmit();}});
 	}
 	
 	private boolean needsToMakeSpaceToCollect()
@@ -199,7 +205,7 @@ public class GEOrder
 			openGe();
 		else
 		{	
-			RSInterface collectButton = InterfaceUtils.findContainingText("Collect");
+			final RSInterface collectButton = InterfaceUtils.findContainingText("Collect");
 			
 			if(collectButton != null && Clicking.click(collectButton))
 			{
@@ -215,9 +221,9 @@ public class GEOrder
 	private void makeSpace()
 	{
 		General.println("Making space to collect items...");
-		int goldInInv = Inventory.getCount(995);
-		int goldInBank = BANK_OBSERVER.getCount(995);
-		int invSpace = Inventory.getAll().length;
+		final int goldInInv = Inventory.getCount(995);
+		final int goldInBank = BANK_OBSERVER.getCount(995);
+		final int invSpace = Inventory.getAll().length;
 		
 		if(GrandExchange.getWindowState() != null)
 			GrandExchange.close();
@@ -232,7 +238,7 @@ public class GEOrder
 		}
 	}
 	
-	private GEOrderItem getOrderItemForOffer(RSGEOffer offer)
+	private GEOrderItem getOrderItemForOffer(final RSGEOffer offer)
 	{
 		return ORDER_ITEMS.stream().filter(i -> offer.getItemID() == i.ID && offer.getQuantity() == i.AMT).findFirst().orElse(null);
 	}
@@ -272,10 +278,10 @@ public class GEOrder
 	
 	private void offerItems()
 	{
-		GEOrderItem toOffer = ORDER_ITEMS.stream().filter(i -> !i.isOffered() && Inventory.getCount(995) >= i.getPrice()).findAny().get();
+		final GEOrderItem toOffer = ORDER_ITEMS.stream().filter(i -> !i.isOffered() && Inventory.getCount(995) >= i.getPrice()).findAny().get();
 		General.println("Putting in buy offer for item " + toOffer);
 		
-		long oldEmptyOffers = getEmptyOffers();
+		final long oldEmptyOffers = getEmptyOffers();
 		if(FCGrandExchange.offer(toOffer.NAME.trim(), toOffer.getPricePer(), toOffer.AMT, false)
 				&& FCTiming.waitCondition(() -> oldEmptyOffers != getEmptyOffers(), 4000))
 		{
@@ -308,7 +314,7 @@ public class GEOrder
 		//Close collection box if necessary
 		closeCollectionBox();
 			
-		EntityInteraction inter = General.random(0, 1) == 0 
+		final EntityInteraction inter = General.random(0, 1) == 0 
 				? new ClickNpc("Exchange", "Grand Exchange Clerk", 15) : new ClickObject("Exchange", GE_BOOTH_ID, 15);
 				
 		if(inter.execute())
@@ -317,8 +323,8 @@ public class GEOrder
 	
 	private void closeCollectionBox()
 	{
-		RSInterface collectionBox = Interfaces.get(COLLECTION_BOX_MASTER, COLLECTION_BOX_CHILD);
-		RSInterface closeButton = collectionBox == null ? null : collectionBox.getChild(COLLECTION_BOX_COMP);
+		final RSInterface collectionBox = Interfaces.get(COLLECTION_BOX_MASTER, COLLECTION_BOX_CHILD);
+		final RSInterface closeButton = collectionBox == null ? null : collectionBox.getChild(COLLECTION_BOX_COMP);
 		if(closeButton != null)
 			Clicking.click(closeButton);	
 	}
@@ -368,7 +374,7 @@ public class GEOrder
 	 */
 	public int getMinGpNeeded()
 	{
-		Optional<GEOrderItem> optional = ORDER_ITEMS.stream().filter(i -> !i.isOffered()).min((one, two) -> one.getPrice() - two.getPrice());
+		final Optional<GEOrderItem> optional = ORDER_ITEMS.stream().filter(i -> !i.isOffered()).min((one, two) -> one.getPrice() - two.getPrice());
 		if(optional.isPresent())
 			return optional.get().getPrice();
 		

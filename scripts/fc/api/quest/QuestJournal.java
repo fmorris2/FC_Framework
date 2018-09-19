@@ -21,29 +21,29 @@ import scripts.fc.api.wrappers.FCTiming;
 
 public class QuestJournal
 {	
-	
+	public static final int JOURNAL_GUIDE_MASTER = 119, JOURNAL_GUIDE_CLOSE = 180;
 	public static final int JOURNAL_MASTER = 275, NAME_CHILD = 2, MIN_X = 560, MAX_X = 712, MIN_Y = 235, MAX_Y = 450;
 	private static final int KOUREND_MASTER = 245, QUEST_CHILD = 2;
 	private static final Rectangle QUEST_LIST_SCROLLABLE_AREA = new Rectangle(MIN_X, MIN_Y, (MAX_X - MIN_X), (MAX_Y - MIN_Y));
 	private static final Map<String, JournalContents> CACHE = new HashMap<>();
 	
-	public static JournalContents getJournalContents(String name)
+	public static JournalContents getJournalContents(final String name)
 	{
 		return getJournalContents(name, false);
 	}
 	
-	public static boolean isCached(String name)
+	public static boolean isCached(final String name)
 	{
 		return CACHE.get(name) != null;
 	}
 	
-	public static JournalContents getJournalContents(String name, boolean overrideCache)
+	public static JournalContents getJournalContents(final String name, final boolean overrideCache)
 	{
 		RSInterface questJournal;
 		if(overrideCache)
 			CACHE.put(name, null);
 		
-		JournalContents cached = CACHE.get(name);
+		final JournalContents cached = CACHE.get(name);
 		
 		//check the cache first
 		if(cached != null && !cached.needsCacheUpdate())
@@ -54,10 +54,10 @@ public class QuestJournal
 			return parseJournal(name, questJournal);
 		
 		//if the kourend favor tab is open
-		RSInterface kourendMain = InterfaceUtils.findContainingText("Favour Overlay");
+		final RSInterface kourendMain = InterfaceUtils.findContainingText("Favour Overlay");
 		if(kourendMain != null && !kourendMain.isHidden())
 		{
-			RSInterface kourend = Interfaces.get(KOUREND_MASTER, QUEST_CHILD);
+			final RSInterface kourend = Interfaces.get(KOUREND_MASTER, QUEST_CHILD);
 			if(kourend != null)
 				Clicking.click(kourend);
 		}
@@ -67,7 +67,7 @@ public class QuestJournal
 			return new JournalContents();
 		
 		//we attempt to scroll to the quest, click it, and wait for it to open. If success, parse it
-		RSInterface button = getQuestButton(name);
+		final RSInterface button = getQuestButton(name);
 		if(button != null && scrollToButton(button) 
 				&& clickButton(button) && FCTiming.waitCondition(() -> (getOpenQuestJournal(name)) != null, 3000))
 		{
@@ -79,11 +79,11 @@ public class QuestJournal
 		return new JournalContents();
 	}
 	
-	private static JournalContents parseJournal(String name, RSInterface journal)
+	private static JournalContents parseJournal(final String name, final RSInterface journal)
 	{
 		//collect all children which have text in the quest journal
 		//c.getText() should not change while viewing the journal, so no real risk of NPE. Can change if necessary
-		JournalContents contents = new JournalContents(
+		final JournalContents contents = new JournalContents(
 			Arrays.stream(journal.getChildren())
 			.filter(c -> c != null && c.getText() != null && !c.getText().isEmpty())
 			.map(RSInterface::getText)
@@ -96,18 +96,18 @@ public class QuestJournal
 		return contents;
 	}
 	
-	private static RSInterface getOpenQuestJournal(String name)
+	private static RSInterface getOpenQuestJournal(final String name)
 	{
-		RSInterface nameInter = Interfaces.get(JOURNAL_MASTER, NAME_CHILD);
+		final RSInterface nameInter = Interfaces.get(JOURNAL_MASTER, NAME_CHILD);
 		return nameInter == null || !nameInter.getText().contains(name) ? null : nameInter.getParent(); 
 	}
 	
-	private static boolean clickButton(RSInterface button)
+	private static boolean clickButton(final RSInterface button)
 	{
 		return Clicking.click(button) && Timing.waitCondition(FCConditions.interfaceUp(JOURNAL_MASTER), 1800);
 	}
 	
-	private static RSInterface getQuestButton(String name)
+	private static RSInterface getQuestButton(final String name)
 	{
 		return InterfaceUtils.findContainingText(name);
 	}
@@ -115,7 +115,7 @@ public class QuestJournal
 	/*
 	 * The following code is ripped & modified from FCInGameHopper
 	 */
-	private static boolean scrollToButton(RSInterface targetChild)
+	private static boolean scrollToButton(final RSInterface targetChild)
 	{
 		final long START_TIME = Timing.currentTimeMillis();
 		final long TIMEOUT = 7000;
@@ -140,9 +140,9 @@ public class QuestJournal
 		return true;
 	}
 	
-	private static boolean isQuestVisible(RSInterface target)
+	private static boolean isQuestVisible(final RSInterface target)
 	{	
-		Rectangle rect = target.getAbsoluteBounds();
+		final Rectangle rect = target.getAbsoluteBounds();
 		
 		return rect.y > MIN_Y && rect.y < MAX_Y;
 	}
