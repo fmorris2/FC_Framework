@@ -21,7 +21,7 @@ public class FCBankObserver extends Thread
 	public boolean isRunning = true;
 	public boolean hasCheckedBank = false;
 	
-	private List<RSItem> bankCache =  new ArrayList<>();
+	private final List<RSItem> bankCache =  new ArrayList<>();
 	
 	public FCBankObserver()
 	{
@@ -33,6 +33,7 @@ public class FCBankObserver extends Thread
 		bankCache.clear();
 	}
 	
+	@Override
 	public void run()
 	{
 		while(isRunning)
@@ -43,7 +44,7 @@ public class FCBankObserver extends Thread
 				{
 					synchronized(this)
 					{
-						RSItem[] bank = Banking.getAll();
+						final RSItem[] bank = Banking.getAll();
 						bankCache.clear();
 						bankCache.addAll(Arrays.asList(bank));
 						hasCheckedBank = true;
@@ -52,28 +53,28 @@ public class FCBankObserver extends Thread
 				
 				sleep(CYCLE_TIME);
 			}
-			catch(Exception e)
+			catch(final Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	public boolean containsItem(Filter<RSItem> filter)
+	public boolean containsItem(final Filter<RSItem> filter)
 	{
 		return bankCache.stream().anyMatch(i -> filter.accept(i) && MEMBERS_FILTER.accept(i));
 	}
 	
-	public boolean containsItem(int id, int amt)
+	public boolean containsItem(final int id, final int amt)
 	{
 		return bankCache.stream().anyMatch(i -> i.getID() == id && i.getStack() >= amt && MEMBERS_FILTER.accept(i));
 	}
 	
-	public boolean containsItem(String name, int amt)
+	public boolean containsItem(final String name, final int amt)
 	{
 		return bankCache.stream().anyMatch(i -> 
 		{
-			RSItemDefinition def = i.getDefinition(); 
+			final RSItemDefinition def = i.getDefinition(); 
 			return def != null && def.getName().equals(name) && i.getStack() >= amt && MEMBERS_FILTER.accept(i);
 		});
 	}
@@ -83,21 +84,21 @@ public class FCBankObserver extends Thread
 		return new Filter<RSItem>()
 		{
 			@Override
-			public boolean accept(RSItem i)
+			public boolean accept(final RSItem i)
 			{
 				return !i.getDefinition().isMembersOnly() || WorldHopper.isMembers(WorldHopper.getWorld());
 			}
 		};
 	}
 	
-	public RSItem getItem(Filter<RSItem> filter)
+	public RSItem getItem(final Filter<RSItem> filter)
 	{
 		return bankCache.stream().filter(i -> filter.accept(i)).findFirst().orElse(null);
 	}
 	
-	public int getCount(int id)
+	public int getCount(final int id)
 	{
-		Optional<RSItem> opt = bankCache.stream().filter(i -> i.getID() == id).findFirst();
+		final Optional<RSItem> opt = bankCache.stream().filter(i -> i.getID() == id).findFirst();
 		return opt.isPresent() ? opt.get().getStack() : 0;
 	}
 	
