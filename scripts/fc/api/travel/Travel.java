@@ -5,8 +5,9 @@ import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.WebWalking;
 
-import scripts.webwalker_logic.WebWalker;
-import scripts.webwalker_logic.local.walker_engine.WalkingCondition;
+import scripts.dax_api.WebWalker;
+import scripts.dax_api.api_lib.DaxWalker;
+import scripts.dax_api.walker_engine.WalkingCondition;
 
 public class Travel
 {
@@ -15,9 +16,9 @@ public class Travel
 	public static boolean shouldFallBackOnTribotWeb = true;
 	
 	private static int failures = 0;
-	public static boolean webWalkTo(Positionable p)
+	public static boolean webWalkTo(final Positionable p)
 	{
-		boolean daxSuccess = WebWalker.walkTo(p.getPosition());
+		final boolean daxSuccess = DaxWalker.walkTo(p.getPosition());
 		
 		failures = !daxSuccess ? failures + 1 : 0;
 		
@@ -30,9 +31,9 @@ public class Travel
 		return daxSuccess;
 	}
 	
-	public static boolean webWalkTo(Positionable p, Condition c)
+	public static boolean webWalkTo(final Positionable p, final Condition c)
 	{
-		boolean daxSuccess = WebWalker.walkTo(p.getPosition(), () -> {return c.active() ? WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS : WalkingCondition.State.CONTINUE_WALKER;});
+		final boolean daxSuccess = DaxWalker.walkTo(p.getPosition(), () -> {return c.active() ? WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS : WalkingCondition.State.CONTINUE_WALKER;});
 		
 		failures = !daxSuccess ? failures + 1 : 0;
 		
@@ -47,7 +48,7 @@ public class Travel
 	
 	public static boolean walkToBank()
 	{
-		boolean daxSuccess = WebWalker.walkToBank();
+		final boolean daxSuccess = WebWalker.walkToBank();
 		
 		failures = !daxSuccess ? failures + 1 : 0;
 		

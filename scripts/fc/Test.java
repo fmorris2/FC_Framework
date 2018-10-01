@@ -1,6 +1,8 @@
 package scripts.fc;
 
 import org.tribot.api2007.MessageListener;
+import org.tribot.api2007.Options;
+import org.tribot.api2007.WorldHopper;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
@@ -10,6 +12,7 @@ import org.tribot.script.interfaces.Starting;
 import scripts.fc.api.items.FCItem;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
+import scripts.fc.api.worldhopping.FCInGameHopper;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 import scripts.fc.framework.threads.FCFoodThread;
@@ -27,11 +30,12 @@ import scripts.fc.framework.threads.FCFoodThread;
 
 public class Test extends FCScript implements FCPaintable, Painting, Starting, Ending, FCSettingsListener, MessageListening07
 {	
-	private FCSettingsObserver settingsObserver = new FCSettingsObserver(this);
+	private final FCSettingsObserver settingsObserver = new FCSettingsObserver(this);
 	
+	@Override
 	protected int mainLogic()
 	{
-		//Travel.webWalkTo(new RSTile(3016, 3514, 0));
+		Options.setRunEnabled(true);
 		return 600;
 	}
 	
@@ -42,16 +46,18 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	}
 	
 	@Override
-	public void settingChanged(int index, int oldValue, int newValue)
+	public void settingChanged(final int index, final int oldValue, final int newValue)
 	{
 		println("SETTING INDEX: " + index + ", OLD: " + oldValue + ", NEW: " + newValue);
 	}
 
+	@Override
 	public void onEnd()
 	{
 		super.onEnd();
 	}
 	
+	@Override
 	public void onStart()
 	{
 		MessageListener.addListener(this);
@@ -61,39 +67,39 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	}
 
 	@Override
-	public void clanMessageReceived(String arg0, String arg1)
+	public void clanMessageReceived(final String arg0, final String arg1)
 	{
 	}
 
 	@Override
-	public void duelRequestReceived(String arg0, String arg1)
+	public void duelRequestReceived(final String arg0, final String arg1)
 	{
 	}
 
 	@Override
-	public void personalMessageReceived(String arg0, String arg1)
+	public void personalMessageReceived(final String arg0, final String arg1)
 	{
 	}
 
 	@Override
-	public void playerMessageReceived(String arg0, String arg1)
+	public void playerMessageReceived(final String arg0, final String arg1)
 	{
 	}
 
 	@Override
-	public void serverMessageReceived(String arg0)
+	public void serverMessageReceived(final String arg0)
 	{
 		println("BLA:" + arg0);
 	}
 
 	@Override
-	public void tradeRequestReceived(String arg0)
+	public void tradeRequestReceived(final String arg0)
 	{
 		
 	}
 
 	@Override
-	public void varBitChanged(int setting, int varbitIndex, int oldValue, int newValue)
+	public void varBitChanged(final int setting, final int varbitIndex, final int oldValue, final int newValue)
 	{
 		println("VARBIT " + varbitIndex + " FOR SETTING " + setting + " CHANGED FROM " + oldValue + " ---> " + newValue);
 	}

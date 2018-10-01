@@ -24,9 +24,9 @@ import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.types.RSVarBit;
 
+import scripts.dax_api.shared.helpers.BankHelper;
 import scripts.fc.api.trading.FCTrading;
 import scripts.fc.api.utils.InterfaceUtils;
-import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 public class FCConditions
 {

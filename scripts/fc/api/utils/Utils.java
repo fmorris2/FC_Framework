@@ -26,9 +26,9 @@ import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.types.RSVarBit;
 import org.tribot.util.Util;
 
+import scripts.dax_api.shared.helpers.BankHelper;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.generic.FCFilters;
-import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 public class Utils
 {

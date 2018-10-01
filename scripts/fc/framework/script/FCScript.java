@@ -15,6 +15,9 @@ import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.Painting;
 import org.tribot.script.interfaces.Starting;
 
+import scripts.dax_api.api_lib.DaxWalker;
+import scripts.dax_api.api_lib.models.DaxCredentials;
+import scripts.dax_api.api_lib.models.DaxCredentialsProvider;
 import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.banking.listening.FCBankObserver;
 import scripts.fc.framework.data.Vars;
@@ -28,7 +31,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 {	
 	private static final long serialVersionUID = 1L;
 	
-	public final ScriptManifest MANIFEST = (ScriptManifest)this.getClass().getAnnotation(ScriptManifest.class);
+	public final ScriptManifest MANIFEST = this.getClass().getAnnotation(ScriptManifest.class);
 	public final transient FCBankObserver BANK_OBSERVER = new FCBankObserver();
 	
 	public transient FCPaint paint = new FCPaint(this, Color.WHITE);
@@ -38,6 +41,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 	protected boolean isRunning = true;
 	private transient StatTracker statTracker;
 	
+	@Override
 	public void run()
 	{
 		if(statTracker != null && !statTracker.reportOnline(getScriptName()))
@@ -57,14 +61,14 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 			{
 				handleAbc2Reset();
 				
-				int sleep = mainLogic();
+				final int sleep = mainLogic();
 				
 				if(sleep == -1)
 					return;
 				
 				sleep(sleep);
 			}
-			catch(Exception e)
+			catch(final Exception e)
 			{
 				e.printStackTrace();
 				sleep(600);
@@ -72,6 +76,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 		}
 	}
 	
+	@Override
 	public void onStart()
 	{
 		//if(this instanceof StatTracking)
@@ -84,8 +89,16 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 		ThreadSettings.get().setClickingAPIUseDynamic(true);
 		BankBool.bankObserver = BANK_OBSERVER;
 		println("Started " + MANIFEST.name() + " v" + MANIFEST.version() + " by " + MANIFEST.authors()[0]);
+		
+		DaxWalker.setCredentials(new DaxCredentialsProvider() {
+            @Override
+            public DaxCredentials getDaxCredentials() {
+                return new DaxCredentials("sub_DheKsxfAiVHZMy", "1634dbb7-818e-454e-810a-74f840e5c2bd");
+            }
+        });
 	}
 	
+	@Override
 	public void onEnd()
 	{
 		((PersistantABCUtil)Vars.get().get("abc2")).close();
@@ -96,7 +109,7 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 		if(statTracker != null && statTracker.isOnline())
 		{
 			println("Reporting statistics to FCScripting database...");
-			String statsArgs = ((StatTracking)(this)).getStatsArgs();
+			final String statsArgs = ((StatTracking)(this)).getStatsArgs();
 			statTracker.report(statsArgs);
 		}
 		
@@ -109,12 +122,14 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 				"Time ran: " + paint.getTimeRan()};
 	}
 	
+	@Override
 	public String[] getPaintInfo()
 	{
 		return Stream.concat(Arrays.stream(basicPaint()), Arrays.stream(scriptSpecificPaint())).toArray(String[]::new);
 	}
 	
-	public void onPaint(Graphics g)
+	@Override
+	public void onPaint(final Graphics g)
 	{
 		paint.paint(g);
 	}
@@ -124,14 +139,14 @@ public abstract class FCScript extends Script implements FCPaintable, Painting, 
 		return paint;
 	}
 	
-	public void setIsRunning(boolean b)
+	public void setIsRunning(final boolean b)
 	{
 		isRunning = b;
 	}
 	
 	protected void handleAbc2Reset()
 	{
-		PersistantABCUtil abc2 = Vars.get().get("abc2");
+		final PersistantABCUtil abc2 = Vars.get().get("abc2");
 		if(abc2.needsReset()) //new RS account logs in
 		{
 			abc2.close();
