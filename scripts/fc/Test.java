@@ -1,8 +1,10 @@
 package scripts.fc;
 
+import java.util.Arrays;
+
+import org.tribot.api.General;
 import org.tribot.api2007.MessageListener;
-import org.tribot.api2007.Options;
-import org.tribot.api2007.WorldHopper;
+import org.tribot.api2007.NPCChat;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
@@ -12,7 +14,6 @@ import org.tribot.script.interfaces.Starting;
 import scripts.fc.api.items.FCItem;
 import scripts.fc.api.settings.FCSettingsListener;
 import scripts.fc.api.settings.FCSettingsObserver;
-import scripts.fc.api.worldhopping.FCInGameHopper;
 import scripts.fc.framework.paint.FCPaintable;
 import scripts.fc.framework.script.FCScript;
 import scripts.fc.framework.threads.FCFoodThread;
@@ -35,7 +36,8 @@ public class Test extends FCScript implements FCPaintable, Painting, Starting, E
 	@Override
 	protected int mainLogic()
 	{
-		Options.setRunEnabled(true);
+		General.println(NPCChat.getSelectOptionInterface());
+		General.println(Arrays.toString(NPCChat.getOptions()));
 		return 600;
 	}
 	
